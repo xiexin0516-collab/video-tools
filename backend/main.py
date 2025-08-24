@@ -23,8 +23,8 @@ CORS(app)  # Enable CORS for frontend
 
 # Configuration
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-app.config['UPLOAD_FOLDER'] = 'backend/uploads'
-app.config['STATIC_FOLDER'] = 'static'
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['STATIC_FOLDER'] = '../static'
 
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -45,7 +45,7 @@ def allowed_subtitle_file(filename):
 @app.route('/')
 def index():
     """Serve the main application page"""
-    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+    frontend_dir = '../frontend'
     return send_from_directory(frontend_dir, 'index.html')
 
 @app.route('/api/languages')
@@ -223,7 +223,7 @@ def uploaded_files(filename):
 @app.route('/<path:filename>')
 def serve_frontend(filename):
     """Serve frontend files (catch-all for SPA routing)"""
-    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+    frontend_dir = '../frontend'
     return send_from_directory(frontend_dir, 'index.html')
 
 @app.errorhandler(404)
