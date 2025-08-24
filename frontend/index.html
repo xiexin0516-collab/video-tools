@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubtitleEditor Web - Multi-language Video Tool Platform</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- WaveSurfer.js for audio visualization -->
+    <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        .timeline-container {
+            background: linear-gradient(90deg, #1f2937 0%, #374151 100%);
+        }
+        
+        .subtitle-item {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .subtitle-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .subtitle-item.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .waveform-container {
+            background: #1f2937;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .time-ruler {
+            background: #374151;
+            color: #9ca3af;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div id="root"></div>
+    
+    <!-- Main React Application -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+        
+        // Internationalization
+        const translations = {
+            en: {
+                title: "SubtitleEditor Web",
+                subtitle: "Multi-language Video Tool Platform",
+                uploadAudio: "Upload Audio File",
+                uploadSubtitle: "Upload Subtitle File",
+                dragDropAudio: "Drag & drop audio file here, or click to select",
+                dragDropSubtitle: "Drag & drop subtitle file here, or click to select",
+                supportedAudioFormats: "Supported formats: MP3, WAV, M4A, OGG",
+                supportedSubtitleFormats: "Supported formats: SRT, TXT",
+                play: "Play",
+                pause: "Pause",
+                stop: "Stop",
+                currentTime: "Current Time",
+                duration: "Duration",
+                subtitles: "Subtitles",
+                addSubtitle: "Add Subtitle",
+                editSubtitle: "Edit Subtitle",
+                deleteSubtitle: "Delete Subtitle",
+                startTime: "Start Time",
+                endTime: "End Time",
+                text: "Text",
+                save: "Save",
+                cancel: "Cancel",
+                export: "Export",
+                exportSRT: "Export as SRT",
+                exportTXT: "Export as TXT",
+                language: "Language",
+                english: "English",
+                chinese: "中文",
+                loading: "Loading...",
+                error: "Error",
+                success: "Success",
+                noFileSelected: "No file selected",
+                fileUploaded: "File uploaded successfully",
+                subtitleParsed: "Subtitle file parsed successfully",
+                exportSuccess: "Export successful",
+                saveSuccess: "Save successful",
+                invalidTime: "Invalid time format",
+                startTimeError: "Start time must be less than end time",
+                textRequired: "Text is required"
+            },
+            zh: {
+                title: "字幕编辑器网页版",
+                subtitle: "多语言视频工具平台",
+                uploadAudio: "上传音频文件",
+                uploadSubtitle: "上传字幕文件",
+                dragDropAudio: "拖拽音频文件到这里，或点击选择",
+                dragDropSubtitle: "拖拽字幕文件到这里，或点击选择",
+                supportedAudioFormats: "支持格式：MP3, WAV, M4A, OGG",
+                supportedSubtitleFormats: "支持格式：SRT, TXT",
+                play: "播放",
+                pause: "暂停",
+                stop: "停止",
+                currentTime: "当前时间",
+                duration: "总时长",
+                subtitles: "字幕",
+                addSubtitle: "添加字幕",
+                editSubtitle: "编辑字幕",
+                deleteSubtitle: "删除字幕",
+                startTime: "开始时间",
+                endTime: "结束时间",
+                text: "文本",
+                save: "保存",
+                cancel: "取消",
+                export: "导出",
+                exportSRT: "导出为SRT",
+                exportTXT: "导出为TXT",
+                language: "语言",
+                english: "English",
+                chinese: "中文",
+                loading: "加载中...",
+                error: "错误",
+                success: "成功",
+                noFileSelected: "未选择文件",
+                fileUploaded: "文件上传成功",
+                subtitleParsed: "字幕文件解析成功",
+                exportSuccess: "导出成功",
+                saveSuccess: "保存成功",
+                invalidTime: "时间格式无效",
+                startTimeError: "开始时间必须小于结束时间",
+                textRequired: "文本不能为空"
+            }
+        };
+        
+        // Language Context
+        const LanguageContext = React.createContext();
+        
+        // Language Provider Component
+        function LanguageProvider({ children }) {
+            const [language, setLanguage] = useState('en');
+            const t = translations[language];
+            
+            const switchLanguage = (lang) => {
+                setLanguage(lang);
+                localStorage.setItem('preferred-language', lang);
+            };
+            
+            useEffect(() => {
+                const savedLanguage = localStorage.getItem('preferred-language');
+                if (savedLanguage && translations[savedLanguage]) {
+                    setLanguage(savedLanguage);
+                }
+            }, []);
+            
+            return (
+                <LanguageContext.Provider value={{ language, t, switchLanguage }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        }
+        
+        // Language Switcher Component
+        function LanguageSwitcher() {
+            const { language, t, switchLanguage } = React.useContext(LanguageContext);
+            
+            return (
+                <div className="language-switcher">
+                    <select 
+                        value={language} 
+                        onChange={(e) => switchLanguage(e.target.value)}
+                        className="px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                        <option value="en">{t.english}</option>
+                        <option value="zh">{t.chinese}</option>
+                    </select>
+                </div>
+            );
+        }
+        
+        // File Upload Component
+        function FileUpload({ onFileUpload, accept, label, dragDropText, supportedFormats }) {
+            const { t } = React.useContext(LanguageContext);
+            const [isDragging, setIsDragging] = useState(false);
+            const fileInputRef = useRef();
+            
+            const handleFileSelect = (file) => {
+                if (file) {
+                    onFileUpload(file);
+                }
+            };
+            
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                setIsDragging(true);
+            };
+            
+            const handleDragLeave = (e) => {
+                e.preventDefault();
+                setIsDragging(false);
+            };
+            
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            };
+            
+            return (
+                <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {label}
+                    </label>
+                    <div
+                        className={`upload-area ${isDragging ? 'dragover' : ''} p-6 text-center rounded-lg cursor-pointer`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        <div className="text-gray-500">
+                            <svg className="mx-auto h-12 w-12 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <p className="text-lg font-medium">{dragDropText}</p>
+                            <p className="text-sm text-gray-400 mt-2">{supportedFormats}</p>
+                        </div>
+                    </div>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept={accept}
+                        onChange={(e) => handleFileSelect(e.target.files[0])}
+                        className="hidden"
+                    />
+                </div>
+            );
+        }
+        
+        // Audio Player Component
+        function AudioPlayer({ audioFile, currentTime, duration, onTimeUpdate, onPlay, onPause, onStop }) {
+            const { t } = React.useContext(LanguageContext);
+            const wavesurferRef = useRef();
+            const containerRef = useRef();
+            
+            useEffect(() => {
+                if (audioFile && containerRef.current) {
+                    if (wavesurferRef.current) {
+                        wavesurferRef.current.destroy();
+                    }
+                    
+                    wavesurferRef.current = WaveSurfer.create({
+                        container: containerRef.current,
+                        waveColor: '#4f46e5',
+                        progressColor: '#3b82f6',
+                        cursorColor: '#ef4444',
+                        barWidth: 2,
+                        barRadius: 3,
+                        cursorWidth: 1,
+                        height: 80,
+                        barGap: 3,
+                        responsive: true
+                    });
+                    
+                    wavesurferRef.current.loadBlob(audioFile);
+                    
+                    wavesurferRef.current.on('audioprocess', (currentTime) => {
+                        onTimeUpdate(currentTime);
+                    });
+                    
+                    wavesurferRef.current.on('finish', () => {
+                        onStop();
+                    });
+                }
+                
+                return () => {
+                    if (wavesurferRef.current) {
+                        wavesurferRef.current.destroy();
+                    }
+                };
+            }, [audioFile]);
+            
+            const formatTime = (seconds) => {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+            
+            return (
+                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.title}</h3>
+                    
+                    <div className="waveform-container mb-4">
+                        <div ref={containerRef}></div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex space-x-2">
+                            <button
+                                onClick={onPlay}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                {t.play}
+                            </button>
+                            <button
+                                onClick={onPause}
+                                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >
+                                {t.pause}
+                            </button>
+                            <button
+                                onClick={onStop}
+                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            >
+                                {t.stop}
+                            </button>
+                        </div>
+                        
+                        <div className="text-sm text-gray-600">
+                            <span>{t.currentTime}: {formatTime(currentTime)}</span>
+                            <span className="mx-2">/</span>
+                            <span>{t.duration}: {formatTime(duration)}</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Subtitle Editor Component
+        function SubtitleEditor({ subtitles, onSubtitleChange, onSubtitleAdd, onSubtitleDelete, currentTime }) {
+            const { t } = React.useContext(LanguageContext);
+            const [editingIndex, setEditingIndex] = useState(-1);
+            const [editForm, setEditForm] = useState({ startTime: '', endTime: '', text: '' });
+            
+            const formatTime = (seconds) => {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                const ms = Math.floor((seconds % 1) * 1000);
+                return `${mins}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+            };
+            
+            const parseTime = (timeStr) => {
+                const parts = timeStr.split(':');
+                if (parts.length === 2) {
+                    const mins = parseInt(parts[0]);
+                    const secs = parseFloat(parts[1]);
+                    return mins * 60 + secs;
+                }
+                return 0;
+            };
+            
+            const handleEdit = (index) => {
+                const subtitle = subtitles[index];
+                setEditForm({
+                    startTime: formatTime(subtitle.start_time),
+                    endTime: formatTime(subtitle.end_time),
+                    text: subtitle.text
+                });
+                setEditingIndex(index);
+            };
+            
+            const handleSave = () => {
+                const startTime = parseTime(editForm.startTime);
+                const endTime = parseTime(editForm.endTime);
+                
+                if (startTime >= endTime) {
+                    alert(t.startTimeError);
+                    return;
+                }
+                
+                if (!editForm.text.trim()) {
+                    alert(t.textRequired);
+                    return;
+                }
+                
+                const updatedSubtitle = {
+                    ...subtitles[editingIndex],
+                    start_time: startTime,
+                    end_time: endTime,
+                    text: editForm.text.trim()
+                };
+                
+                onSubtitleChange(editingIndex, updatedSubtitle);
+                setEditingIndex(-1);
+            };
+            
+            const handleCancel = () => {
+                setEditingIndex(-1);
+            };
+            
+            const handleAdd = () => {
+                const newSubtitle = {
+                    id: subtitles.length + 1,
+                    start_time: currentTime,
+                    end_time: currentTime + 2,
+                    text: t.text,
+                    duration: 2
+                };
+                onSubtitleAdd(newSubtitle);
+            };
+            
+            return (
+                <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">{t.subtitles}</h3>
+                        <button
+                            onClick={handleAdd}
+                            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        >
+                            {t.addSubtitle}
+                        </button>
+                    </div>
+                    
+                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                        {subtitles.map((subtitle, index) => (
+                            <div
+                                key={subtitle.id}
+                                className={`subtitle-item p-4 border rounded-lg ${
+                                    currentTime >= subtitle.start_time && currentTime <= subtitle.end_time
+                                        ? 'selected'
+                                        : ''
+                                }`}
+                            >
+                                {editingIndex === index ? (
+                                    <div className="space-y-2">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <input
+                                                type="text"
+                                                value={editForm.startTime}
+                                                onChange={(e) => setEditForm({...editForm, startTime: e.target.value})}
+                                                placeholder={t.startTime}
+                                                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editForm.endTime}
+                                                onChange={(e) => setEditForm({...editForm, endTime: e.target.value})}
+                                                placeholder={t.endTime}
+                                                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            />
+                                        </div>
+                                        <textarea
+                                            value={editForm.text}
+                                            onChange={(e) => setEditForm({...editForm, text: e.target.value})}
+                                            placeholder={t.text}
+                                            rows="2"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={handleSave}
+                                                className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                            >
+                                                {t.save}
+                                            </button>
+                                            <button
+                                                onClick={handleCancel}
+                                                className="px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                                            >
+                                                {t.cancel}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div className="text-sm text-gray-600">
+                                                {formatTime(subtitle.start_time)} - {formatTime(subtitle.end_time)}
+                                            </div>
+                                            <div className="flex space-x-2">
+                                                <button
+                                                    onClick={() => handleEdit(index)}
+                                                    className="text-blue-600 hover:text-blue-800"
+                                                >
+                                                    {t.editSubtitle}
+                                                </button>
+                                                <button
+                                                    onClick={() => onSubtitleDelete(index)}
+                                                    className="text-red-600 hover:text-red-800"
+                                                >
+                                                    {t.deleteSubtitle}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-900">{subtitle.text}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        
+        // Main App Component
+        function App() {
+            const { t } = React.useContext(LanguageContext);
+            const [audioFile, setAudioFile] = useState(null);
+            const [subtitles, setSubtitles] = useState([]);
+            const [currentTime, setCurrentTime] = useState(0);
+            const [duration, setDuration] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            
+            const handleAudioUpload = async (file) => {
+                setAudioFile(file);
+                // Here you would typically upload to server
+                console.log('Audio file uploaded:', file.name);
+            };
+            
+            const handleSubtitleUpload = async (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                try {
+                    const response = await fetch('/api/upload/subtitle', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        setSubtitles(data.subtitles);
+                        console.log('Subtitle file parsed:', data.subtitles);
+                    } else {
+                        alert(data.error);
+                    }
+                } catch (error) {
+                    console.error('Error uploading subtitle:', error);
+                    alert('Error uploading subtitle file');
+                }
+            };
+            
+            const handleSubtitleChange = (index, updatedSubtitle) => {
+                const newSubtitles = [...subtitles];
+                newSubtitles[index] = updatedSubtitle;
+                setSubtitles(newSubtitles);
+            };
+            
+            const handleSubtitleAdd = (newSubtitle) => {
+                setSubtitles([...subtitles, newSubtitle]);
+            };
+            
+            const handleSubtitleDelete = (index) => {
+                const newSubtitles = subtitles.filter((_, i) => i !== index);
+                setSubtitles(newSubtitles);
+            };
+            
+            const handlePlay = () => {
+                setIsPlaying(true);
+                // Implement actual audio playback
+            };
+            
+            const handlePause = () => {
+                setIsPlaying(false);
+                // Implement actual audio pause
+            };
+            
+            const handleStop = () => {
+                setIsPlaying(false);
+                setCurrentTime(0);
+                // Implement actual audio stop
+            };
+            
+            const handleTimeUpdate = (time) => {
+                setCurrentTime(time);
+            };
+            
+            const handleExport = async (format) => {
+                try {
+                    const response = await fetch('/api/subtitles/export', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            subtitles: subtitles,
+                            format: format
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        // Create download link
+                        const blob = new Blob([data.content], { type: 'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `subtitles.${format}`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        alert(t.exportSuccess);
+                    } else {
+                        alert(data.error);
+                    }
+                } catch (error) {
+                    console.error('Error exporting subtitles:', error);
+                    alert('Error exporting subtitles');
+                }
+            };
+            
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    <LanguageSwitcher />
+                    
+                    <div className="container mx-auto px-4 py-8">
+                        <div className="text-center mb-8">
+                            <h1 className="text-4xl font-bold text-gray-900 mb-2">{t.title}</h1>
+                            <p className="text-xl text-gray-600">{t.subtitle}</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Left Column - File Upload and Audio Player */}
+                            <div>
+                                <FileUpload
+                                    onFileUpload={handleAudioUpload}
+                                    accept=".mp3,.wav,.m4a,.ogg"
+                                    label={t.uploadAudio}
+                                    dragDropText={t.dragDropAudio}
+                                    supportedFormats={t.supportedAudioFormats}
+                                />
+                                
+                                <FileUpload
+                                    onFileUpload={handleSubtitleUpload}
+                                    accept=".srt,.txt"
+                                    label={t.uploadSubtitle}
+                                    dragDropText={t.dragDropSubtitle}
+                                    supportedFormats={t.supportedSubtitleFormats}
+                                />
+                                
+                                {audioFile && (
+                                    <AudioPlayer
+                                        audioFile={audioFile}
+                                        currentTime={currentTime}
+                                        duration={duration}
+                                        onTimeUpdate={handleTimeUpdate}
+                                        onPlay={handlePlay}
+                                        onPause={handlePause}
+                                        onStop={handleStop}
+                                    />
+                                )}
+                            </div>
+                            
+                            {/* Right Column - Subtitle Editor */}
+                            <div>
+                                <SubtitleEditor
+                                    subtitles={subtitles}
+                                    onSubtitleChange={handleSubtitleChange}
+                                    onSubtitleAdd={handleSubtitleAdd}
+                                    onSubtitleDelete={handleSubtitleDelete}
+                                    currentTime={currentTime}
+                                />
+                                
+                                {subtitles.length > 0 && (
+                                    <div className="mt-6 flex space-x-4">
+                                        <button
+                                            onClick={() => handleExport('srt')}
+                                            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            {t.exportSRT}
+                                        </button>
+                                        <button
+                                            onClick={() => handleExport('txt')}
+                                            className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        >
+                                            {t.exportTXT}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Render the application
+        ReactDOM.render(
+            <LanguageProvider>
+                <App />
+            </LanguageProvider>,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>
