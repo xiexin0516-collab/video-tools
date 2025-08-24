@@ -226,8 +226,4 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-if __name__ == '__main__':
-    print("🚀 Starting SubtitleEditor Web Server...")
-    print("📁 Upload folder:", app.config['UPLOAD_FOLDER'])
-    print("🌐 Server will be available at: http://localhost:5000")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+# Application startup is handled by run.py in the root directory
