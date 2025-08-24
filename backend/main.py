@@ -46,6 +46,11 @@ def index():
     """Serve the main application page"""
     return send_from_directory('frontend', 'index.html')
 
+@app.route('/<path:filename>')
+def serve_frontend(filename):
+    """Serve frontend files"""
+    return send_from_directory('frontend', filename)
+
 @app.route('/api/languages')
 def get_languages():
     """Get available languages for the interface"""
