@@ -45,7 +45,8 @@ def allowed_subtitle_file(filename):
 @app.route('/')
 def index():
     """Serve the main application page"""
-    return send_from_directory('frontend', 'index.html')
+    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+    return send_from_directory(frontend_dir, 'index.html')
 
 @app.route('/api/languages')
 def get_languages():
@@ -222,7 +223,8 @@ def uploaded_files(filename):
 @app.route('/<path:filename>')
 def serve_frontend(filename):
     """Serve frontend files (catch-all for SPA routing)"""
-    return send_from_directory('frontend', 'index.html')
+    frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+    return send_from_directory(frontend_dir, 'index.html')
 
 @app.errorhandler(404)
 def not_found(error):
