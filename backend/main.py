@@ -46,11 +46,6 @@ def index():
     """Serve the main application page"""
     return send_from_directory('frontend', 'index.html')
 
-@app.route('/<path:filename>')
-def serve_frontend(filename):
-    """Serve frontend files"""
-    return send_from_directory('frontend', filename)
-
 @app.route('/api/languages')
 def get_languages():
     """Get available languages for the interface"""
@@ -222,6 +217,11 @@ def static_files(filename):
 def uploaded_files(filename):
     """Serve uploaded files"""
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/<path:filename>')
+def serve_frontend(filename):
+    """Serve frontend files (catch-all for SPA routing)"""
+    return send_from_directory('frontend', 'index.html')
 
 @app.errorhandler(404)
 def not_found(error):
