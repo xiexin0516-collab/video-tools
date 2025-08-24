@@ -428,73 +428,165 @@
             const [creating, setCreating] = useState(false);
             const [createStart, setCreateStart] = useState(0);
             const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+            const [hoverTime, setHoverTime] = useState(null);
+
+            // Smart time scale calculation (参考桌面版算法)
+            const calculateTimeScale = useCallback((duration, width) => {
+                const pixelsPerSecond = width / duration;
+                
+                if (pixelsPerSecond >= 100) return 1;      // 1秒间隔
+                if (pixelsPerSecond >= 50) return 2;       // 2秒间隔
+                if (pixelsPerSecond >= 20) return 5;       // 5秒间隔
+                if (pixelsPerSecond >= 10) return 10;      // 10秒间隔
+                if (pixelsPerSecond >= 5) return 30;       // 30秒间隔
+                if (pixelsPerSecond >= 2) return 60;       // 1分钟间隔
+                return 300;                                // 5分钟间隔
+            }, []);
+
+            // Format time for display
+            const formatTime = useCallback((seconds) => {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = Math.floor(seconds % 60);
+                
+                if (hours > 0) {
+                    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+                }
+            }, []);
 
             // Canvas drawing functions
             const drawTimeline = useCallback((ctx, width, height) => {
-                // Clear canvas
-                ctx.fillStyle = '#0a0a0a';
+                // Clear canvas with gradient background
+                const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(0, '#0a0a0a');
+                gradient.addColorStop(1, '#1a1a1a');
+                ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
 
-                // Draw grid
-                ctx.strokeStyle = '#2a2a2a';
+                if (duration <= 0) return;
+
+                const timeScale = calculateTimeScale(duration, width);
+                const rulerHeight = 40;
+                const trackHeight = height - rulerHeight;
+
+                // Draw ruler background
+                ctx.fillStyle = '#2a2a2a';
+                ctx.fillRect(0, 0, width, rulerHeight);
+
+                // Draw time scale
+                ctx.strokeStyle = '#404040';
                 ctx.lineWidth = 1;
-                
-                // Vertical grid lines (time markers)
-                const timeStep = Math.max(1, Math.floor(duration / 20));
-                for (let time = 0; time <= duration; time += timeStep) {
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+
+                for (let time = 0; time <= duration; time += timeScale) {
                     const x = (time / duration) * width;
+                    
+                    // Major tick
                     ctx.beginPath();
                     ctx.moveTo(x, 0);
-                    ctx.lineTo(x, height);
+                    ctx.lineTo(x, rulerHeight);
                     ctx.stroke();
                     
-                    // Time labels
-                    ctx.fillStyle = '#9ca3af';
-                    ctx.font = '12px Arial';
-                    ctx.textAlign = 'center';
-                    const minutes = Math.floor(time / 60);
-                    const seconds = Math.floor(time % 60);
-                    ctx.fillText(`${minutes}:${seconds.toString().padStart(2, '0')}`, x, 20);
+                    // Time label
+                    ctx.fillText(formatTime(time), x, 25);
+                    
+                    // Minor ticks
+                    if (timeScale > 1) {
+                        for (let i = 1; i < timeScale && time + i <= duration; i++) {
+                            const minorX = ((time + i) / duration) * width;
+                            ctx.beginPath();
+                            ctx.moveTo(minorX, 0);
+                            ctx.lineTo(minorX, 15);
+                            ctx.stroke();
+                        }
+                    }
                 }
 
-                // Horizontal grid lines
-                for (let y = 0; y < height; y += 40) {
+                // Draw track background
+                ctx.fillStyle = '#1f1f1f';
+                ctx.fillRect(0, rulerHeight, width, trackHeight);
+
+                // Draw horizontal grid lines
+                ctx.strokeStyle = '#2a2a2a';
+                ctx.lineWidth = 1;
+                for (let y = rulerHeight; y < height; y += 40) {
                     ctx.beginPath();
                     ctx.moveTo(0, y);
                     ctx.lineTo(width, y);
                     ctx.stroke();
                 }
-            }, [duration]);
+            }, [duration, calculateTimeScale, formatTime]);
 
             const drawSubtitles = useCallback((ctx, width, height) => {
+                if (duration <= 0) return;
+
+                const rulerHeight = 40;
+                const trackHeight = height - rulerHeight;
+                const trackY = rulerHeight + 10;
+                const subtitleHeight = 30;
+                const maxTracks = Math.floor((trackHeight - 20) / (subtitleHeight + 5));
+
                 subtitles.forEach((subtitle, index) => {
                     const startX = (subtitle.startTime / duration) * width;
                     const endX = (subtitle.endTime / duration) * width;
-                    const y = 60 + (index % 3) * 80;
-                    const subtitleHeight = 60;
-                    
-                    // Subtitle block
+                    const trackIndex = index % maxTracks;
+                    const y = trackY + trackIndex * (subtitleHeight + 5);
+                    const subtitleWidth = endX - startX;
+
+                    if (subtitleWidth < 5) return; // Skip very small subtitles
+
+                    // Subtitle block with gradient
                     const isSelected = index === selectedSubtitle;
-                    ctx.fillStyle = isSelected ? '#3b82f6' : '#4b5563';
-                    ctx.strokeStyle = isSelected ? '#60a5fa' : '#6b7280';
-                    ctx.lineWidth = 2;
+                    const gradient = ctx.createLinearGradient(startX, y, endX, y + subtitleHeight);
                     
-                    ctx.fillRect(startX, y, endX - startX, subtitleHeight);
-                    ctx.strokeRect(startX, y, endX - startX, subtitleHeight);
+                    if (isSelected) {
+                        gradient.addColorStop(0, '#3b82f6');
+                        gradient.addColorStop(1, '#1d4ed8');
+                    } else {
+                        gradient.addColorStop(0, '#4b5563');
+                        gradient.addColorStop(1, '#374151');
+                    }
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.strokeStyle = isSelected ? '#60a5fa' : '#6b7280';
+                    ctx.lineWidth = isSelected ? 2 : 1;
+                    
+                    // Rounded rectangle
+                    const radius = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(startX + radius, y);
+                    ctx.lineTo(endX - radius, y);
+                    ctx.quadraticCurveTo(endX, y, endX, y + radius);
+                    ctx.lineTo(endX, y + subtitleHeight - radius);
+                    ctx.quadraticCurveTo(endX, y + subtitleHeight, endX - radius, y + subtitleHeight);
+                    ctx.lineTo(startX + radius, y + subtitleHeight);
+                    ctx.quadraticCurveTo(startX, y + subtitleHeight, startX, y + subtitleHeight - radius);
+                    ctx.lineTo(startX, y + radius);
+                    ctx.quadraticCurveTo(startX, y, startX + radius, y);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
                     
                     // Subtitle text
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '12px Arial';
-                    ctx.textAlign = 'left';
-                    const displayText = subtitle.text.length > 20 ? subtitle.text.substring(0, 20) + '...' : subtitle.text;
-                    ctx.fillText(displayText, startX + 5, y + 20);
+                    if (subtitleWidth > 30) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 11px Arial';
+                        ctx.textAlign = 'left';
+                        const displayText = subtitle.text.length > 15 ? subtitle.text.substring(0, 15) + '...' : subtitle.text;
+                        ctx.fillText(displayText, startX + 5, y + 18);
+                    }
                     
                     // Subtitle number
                     ctx.fillStyle = '#fbbf24';
                     ctx.font = 'bold 10px Arial';
-                    ctx.fillText(`#${index + 1}`, startX + 5, y + 35);
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`#${index + 1}`, startX + subtitleWidth / 2, y + 18);
                     
-                    // Resize handles
+                    // Resize handles for selected subtitle
                     if (isSelected) {
                         ctx.fillStyle = '#ffffff';
                         ctx.fillRect(startX - 2, y, 4, subtitleHeight);
@@ -504,47 +596,101 @@
             }, [subtitles, selectedSubtitle, duration]);
 
             const drawPlaybackCursor = useCallback((ctx, width, height) => {
+                if (duration <= 0) return;
+
                 const cursorX = (currentTime / duration) * width;
+                
+                // Cursor line
                 ctx.strokeStyle = '#ef4444';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(cursorX, 0);
                 ctx.lineTo(cursorX, height);
                 ctx.stroke();
                 
-                // Cursor head
+                // Cursor head (triangle)
                 ctx.fillStyle = '#ef4444';
                 ctx.beginPath();
-                ctx.moveTo(cursorX - 6, 0);
-                ctx.lineTo(cursorX + 6, 0);
-                ctx.lineTo(cursorX, 12);
+                ctx.moveTo(cursorX - 8, 0);
+                ctx.lineTo(cursorX + 8, 0);
+                ctx.lineTo(cursorX, 16);
                 ctx.closePath();
                 ctx.fill();
+                
+                // Cursor shadow
+                ctx.shadowColor = 'rgba(239, 68, 68, 0.5)';
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.fill();
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
             }, [currentTime, duration]);
 
             const drawCreationPreview = useCallback((ctx, width, height) => {
-                if (creating) {
-                    const startX = (Math.min(createStart, mousePos.x / width * duration) / duration) * width;
-                    const endX = (Math.max(createStart, mousePos.x / width * duration) / duration) * width;
-                    const y = 60;
-                    const previewHeight = 60;
-                    
-                    ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
-                    ctx.strokeStyle = '#3b82f6';
-                    ctx.lineWidth = 2;
-                    ctx.setLineDash([5, 5]);
-                    
-                    ctx.fillRect(startX, y, endX - startX, previewHeight);
-                    ctx.strokeRect(startX, y, endX - startX, previewHeight);
-                    
-                    ctx.setLineDash([]);
-                    
-                    ctx.fillStyle = '#3b82f6';
-                    ctx.font = '12px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Creating...', (startX + endX) / 2, y + 30);
-                }
+                if (!creating || duration <= 0) return;
+
+                const rulerHeight = 40;
+                const trackY = rulerHeight + 10;
+                const subtitleHeight = 30;
+                
+                const startX = (Math.min(createStart, mousePos.x / width * duration) / duration) * width;
+                const endX = (Math.max(createStart, mousePos.x / width * duration) / duration) * width;
+                const previewWidth = endX - startX;
+                
+                if (previewWidth < 5) return;
+
+                // Preview block
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                
+                const radius = 4;
+                ctx.beginPath();
+                ctx.moveTo(startX + radius, trackY);
+                ctx.lineTo(endX - radius, trackY);
+                ctx.quadraticCurveTo(endX, trackY, endX, trackY + radius);
+                ctx.lineTo(endX, trackY + subtitleHeight - radius);
+                ctx.quadraticCurveTo(endX, trackY + subtitleHeight, endX - radius, trackY + subtitleHeight);
+                ctx.lineTo(startX + radius, trackY + subtitleHeight);
+                ctx.quadraticCurveTo(startX, trackY + subtitleHeight, startX, trackY + subtitleHeight - radius);
+                ctx.lineTo(startX, trackY + radius);
+                ctx.quadraticCurveTo(startX, trackY, startX + radius, trackY);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.setLineDash([]);
+                
+                // Preview text
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Creating...', (startX + endX) / 2, trackY + 18);
             }, [creating, createStart, mousePos, duration]);
+
+            const drawHoverTime = useCallback((ctx, width, height) => {
+                if (!hoverTime || duration <= 0) return;
+
+                const hoverX = (hoverTime / duration) * width;
+                
+                // Hover line
+                ctx.strokeStyle = 'rgba(156, 163, 175, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                ctx.moveTo(hoverX, 0);
+                ctx.lineTo(hoverX, height);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Hover time label
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(formatTime(hoverTime), hoverX, 35);
+            }, [hoverTime, duration, formatTime]);
 
             // Render canvas
             useEffect(() => {
@@ -563,7 +709,8 @@
                 drawSubtitles(ctx, width, height);
                 drawPlaybackCursor(ctx, width, height);
                 drawCreationPreview(ctx, width, height);
-            }, [drawTimeline, drawSubtitles, drawPlaybackCursor, drawCreationPreview]);
+                drawHoverTime(ctx, width, height);
+            }, [drawTimeline, drawSubtitles, drawPlaybackCursor, drawCreationPreview, drawHoverTime]);
 
             // Mouse event handlers
             const handleMouseDown = useCallback((e) => {
@@ -573,12 +720,24 @@
                 const y = e.clientY - rect.top;
                 const time = (x / rect.width) * duration;
                 
+                if (y < 40) {
+                    // Clicking on ruler - just seek
+                    onTimeChange(time);
+                    return;
+                }
+                
                 // Check if clicking on a subtitle
+                const rulerHeight = 40;
+                const trackY = rulerHeight + 10;
+                const subtitleHeight = 30;
+                const maxTracks = Math.floor((rect.height - rulerHeight - 20) / (subtitleHeight + 5));
+                
                 const subtitleIndex = subtitles.findIndex((subtitle, index) => {
                     const startX = (subtitle.startTime / duration) * rect.width;
                     const endX = (subtitle.endTime / duration) * rect.width;
-                    const subtitleY = 60 + (index % 3) * 80;
-                    return x >= startX && x <= endX && y >= subtitleY && y <= subtitleY + 60;
+                    const trackIndex = index % maxTracks;
+                    const subtitleY = trackY + trackIndex * (subtitleHeight + 5);
+                    return x >= startX && x <= endX && y >= subtitleY && y <= subtitleY + subtitleHeight;
                 });
                 
                 if (subtitleIndex >= 0) {
@@ -603,7 +762,7 @@
                     setCreating(true);
                     setCreateStart(time);
                 }
-            }, [subtitles, duration, onSubtitleSelect]);
+            }, [subtitles, duration, onSubtitleSelect, onTimeChange]);
 
             const handleMouseMove = useCallback((e) => {
                 const canvas = canvasRef.current;
@@ -611,6 +770,19 @@
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 setMousePos({ x, y });
+                
+                // Update hover time
+                if (duration > 0) {
+                    const time = (x / rect.width) * duration;
+                    setHoverTime(time);
+                }
+                
+                // Update cursor style
+                if (y < 40) {
+                    canvas.style.cursor = 'pointer';
+                } else {
+                    canvas.style.cursor = dragging ? 'grabbing' : 'crosshair';
+                }
                 
                 if (!dragging && !creating) return;
                 
@@ -650,15 +822,10 @@
                 setDragType(null);
             }, [creating, createStart, mousePos, duration, onSubtitleAdd]);
 
-            const handleClick = useCallback((e) => {
-                if (dragging || creating) return;
-                
-                const canvas = canvasRef.current;
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const time = (x / rect.width) * duration;
-                onTimeChange(time);
-            }, [dragging, creating, duration, onTimeChange]);
+            const handleMouseLeave = useCallback(() => {
+                setHoverTime(null);
+                canvasRef.current.style.cursor = 'default';
+            }, []);
 
             return (
                 <div className="timeline-editor">
@@ -668,7 +835,7 @@
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
-                        onClick={handleClick}
+                        onMouseLeave={handleMouseLeave}
                     />
                 </div>
             );
