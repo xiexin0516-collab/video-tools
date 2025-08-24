@@ -11,15 +11,12 @@ import sys
 # Add backend directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'backend'))
 
-# Change to backend directory
-os.chdir('backend')
-
-# Import and run the Flask app
-from main import app
+# Import the Flask app
+from backend.main import app
 
 if __name__ == '__main__':
     print("🚀 Starting SubtitleEditor Web...")
-    print("📁 Backend directory:", os.getcwd())
+    print("📁 Project directory:", os.getcwd())
     
     # Get port from environment variable (for production) or use default
     port = int(os.environ.get('PORT', 5000))
