@@ -676,36 +676,81 @@
             }, []);
 
             const handleSubtitleUpload = useCallback((file) => {
+                if (!file) {
+                    console.error('No file selected');
+                    return;
+                }
+                
+                console.log('Uploading subtitle file:', file.name, file.size);
+                
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const content = e.target.result;
+                    console.log('File content:', content.substring(0, 200) + '...');
+                    
                     const parsedSubtitles = parseSRT(content);
+                    console.log('Parsed subtitles:', parsedSubtitles);
+                    
                     setSubtitles(parsedSubtitles);
+                    
+                    // Show success message
+                    alert(`Successfully loaded ${parsedSubtitles.length} subtitles from ${file.name}`);
                 };
-                reader.readAsText(file);
+                
+                reader.onerror = (error) => {
+                    console.error('Error reading file:', error);
+                    alert('Error reading subtitle file');
+                };
+                
+                reader.readAsText(file, 'utf-8');
             }, []);
 
             // SRT parsing
             const parseSRT = (content) => {
+                console.log('Parsing SRT content:', content.substring(0, 300) + '...');
+                
                 const blocks = content.trim().split('\n\n');
-                return blocks.map((block, index) => {
-                    const lines = block.split('\n');
+                console.log('Found', blocks.length, 'blocks');
+                
+                const subtitles = [];
+                
+                blocks.forEach((block, index) => {
+                    console.log('Processing block', index + 1, ':', block.substring(0, 100) + '...');
+                    
+                    const lines = block.split('\n').filter(line => line.trim());
+                    console.log('Block lines:', lines);
+                    
                     if (lines.length >= 3) {
                         const timeLine = lines[1];
-                        const timeMatch = timeLine.match(/(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/);
+                        console.log('Time line:', timeLine);
+                        
+                        // Support both comma and dot as milliseconds separator
+                        const timeMatch = timeLine.match(/(\d{2}:\d{2}:\d{2}[,.]\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}[,.]\d{3})/);
+                        
                         if (timeMatch) {
                             const startTime = parseTime(timeMatch[1]);
                             const endTime = parseTime(timeMatch[2]);
                             const text = lines.slice(2).join('\n');
-                            return new SubtitleItem(text, startTime, endTime);
+                            
+                            console.log('Parsed subtitle:', { startTime, endTime, text });
+                            
+                            subtitles.push(new SubtitleItem(text, startTime, endTime));
+                        } else {
+                            console.warn('Invalid time format in block', index + 1, ':', timeLine);
                         }
+                    } else {
+                        console.warn('Invalid block format at index', index, ':', block);
                     }
-                    return new SubtitleItem(`Subtitle ${index + 1}`, index * 2, index * 2 + 2);
                 });
+                
+                console.log('Final parsed subtitles:', subtitles);
+                return subtitles;
             };
 
             const parseTime = (timeStr) => {
-                const [time, ms] = timeStr.split(',');
+                // Handle both comma and dot as milliseconds separator
+                const separator = timeStr.includes(',') ? ',' : '.';
+                const [time, ms] = timeStr.split(separator);
                 const [hours, minutes, seconds] = time.split(':').map(Number);
                 return hours * 3600 + minutes * 60 + seconds + ms / 1000;
             };
