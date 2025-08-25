@@ -335,17 +335,56 @@
              border: 1px solid #60a5fa;
          }
          
-         @keyframes slideDown {
-             from {
-                 opacity: 0;
-                 transform: translateX(-50%) translateY(-20px);
-             }
-             to {
-                 opacity: 1;
-                 transform: translateX(-50%) translateY(0);
-             }
-         }
-     </style>
+                 @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        /* 移动端响应式样式 */
+        @media (max-width: 768px) {
+            .toolbar { 
+                display: grid; 
+                grid-template-columns: repeat(2, minmax(0, 1fr)); 
+                gap: 8px; 
+            }
+            .playback-controls .flex { 
+                flex-wrap: wrap; 
+                gap: 8px; 
+            }
+            .content-layout { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 12px; 
+            }
+            .columns-2 { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 12px; 
+            }
+            .btn { 
+                min-height: 44px; 
+                padding: 10px 12px; 
+                font-size: 14px; 
+            }
+            .wave-container { 
+                height: 140px; 
+            }
+            .zoom-row { 
+                display: flex; 
+                align-items: center; 
+                gap: 8px; 
+            }
+            .duplicate-player, #audioPlayer.controls, .native-audio-bar { 
+                display: none !important; 
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -377,10 +416,27 @@
                 noAudio: "No audio file loaded",
                 noSubtitles: "No subtitles loaded",
                 noText: "No text content loaded",
+                subtitlePlaceholder: "Enter subtitle text...",
+                clickToEdit: "Click to edit subtitle text",
+                audioLoadFailed: "Audio load failed",
+                audioPlayerCreateFailed: "Audio player creation failed",
+                audioPlayerInitFailed: "Audio player initialization failed",
+                pleaseSelectAudioFile: "Please select an audio file",
+                invalidAudioFormat: "Please select a valid audio file format: MP3, WAV, M4A, OGG, AAC",
+                fileTooLarge: "File size cannot exceed 100MB",
+                audioLoadSuccess: "Successfully loaded audio file",
+                audioFileLoadFailed: "Audio file load failed",
+                pleaseSelectSubtitleFile: "Please select .srt or .txt file",
+                subtitleLoadSuccess: "Successfully loaded {count} subtitles",
+                noSubtitlesFound: "No subtitles found in {filename}, please check file format",
+                subtitleFileReadFailed: "Failed to read subtitle file",
+                textLoadSuccess: "Successfully loaded text content",
+                textLoadInstructions: "Now you can:\n1. Drag on timeline to create subtitle blocks\n2. Copy text from left panel to subtitles",
                 loading: "Loading...",
                 error: "Error",
                 success: "Success",
                 confirmDelete: "Are you sure you want to delete this subtitle?",
+                clearSubtitles: "Clear Subtitles",
                 keyboardShortcuts: "Keyboard Shortcuts",
                 spacePlayPause: "Space - Play/Pause",
                 arrowsSeek: "Arrow Keys - Seek",
@@ -411,10 +467,27 @@
                 noAudio: "未加载音频文件",
                 noSubtitles: "未加载字幕文件",
                 noText: "未加载文本内容",
+                subtitlePlaceholder: "输入字幕文本...",
+                clickToEdit: "点击编辑字幕文本",
+                audioLoadFailed: "音频加载失败",
+                audioPlayerCreateFailed: "音频播放器创建失败",
+                audioPlayerInitFailed: "音频播放器初始化失败",
+                pleaseSelectAudioFile: "请选择音频文件",
+                invalidAudioFormat: "请选择有效的音频文件格式：MP3, WAV, M4A, OGG, AAC",
+                fileTooLarge: "文件大小不能超过100MB",
+                audioLoadSuccess: "成功加载音频文件",
+                audioFileLoadFailed: "音频文件加载失败",
+                pleaseSelectSubtitleFile: "请选择 .srt 或 .txt 文件",
+                subtitleLoadSuccess: "成功加载 {count} 条字幕",
+                noSubtitlesFound: "在 {filename} 中未找到字幕，请检查文件格式",
+                subtitleFileReadFailed: "读取字幕文件失败",
+                textLoadSuccess: "成功加载文本内容",
+                textLoadInstructions: "现在您可以：\n1. 在时间轴上拖拽创建字幕块\n2. 从左侧文本内容复制文字到字幕中",
                 loading: "加载中...",
                 error: "错误",
                 success: "成功",
                 confirmDelete: "确定要删除这个字幕吗？",
+                clearSubtitles: "清空字幕",
                 keyboardShortcuts: "键盘快捷键",
                 spacePlayPause: "空格键 - 播放/暂停",
                 arrowsSeek: "方向键 - 快进快退",
@@ -430,7 +503,7 @@
         const LanguageContext = React.createContext();
 
         function LanguageProvider({ children }) {
-            const [language, setLanguage] = useState('en');
+            const [language, setLanguage] = useState('zh');
             const t = translations[language];
 
             const changeLanguage = (lang) => {
@@ -982,20 +1055,20 @@
                                 
                                 wavesurferRef.current.on('error', (error) => {
                                     console.error('WaveSurfer error:', error);
-                                    alert('❌ 音频加载失败：' + error.message);
+                                    alert('❌ ' + t.audioLoadFailed + ': ' + error.message);
                                 });
                                 
                                 console.log('WaveSurfer initialization completed');
                                 
                             } catch (error) {
                                 console.error('Error in WaveSurfer creation:', error);
-                                alert('❌ 音频播放器创建失败：' + error.message);
+                                alert('❌ ' + t.audioPlayerCreateFailed + ': ' + error.message);
                             }
                         }, 100);
                         
                     } catch (error) {
                         console.error('Error in WaveSurfer initialization:', error);
-                        alert('❌ 音频播放器初始化失败：' + error.message);
+                        alert('❌ ' + t.audioPlayerInitFailed + ': ' + error.message);
                     }
                 }
             }, [audioUrl]);
@@ -1004,7 +1077,7 @@
             const handleAudioUpload = useCallback((file) => {
                 if (!file) {
                     console.error('No file selected');
-                    alert('请选择音频文件');
+                    alert(t.pleaseSelectAudioFile);
                     return;
                 }
                 
@@ -1019,14 +1092,14 @@
                 const isValidAudio = validExtensions.some(ext => fileName.endsWith(ext));
                 
                 if (!isValidAudio) {
-                    alert('请选择有效的音频文件格式：MP3, WAV, M4A, OGG, AAC');
+                    alert(t.invalidAudioFormat);
                     return;
                 }
                 
                 // Check file size (max 100MB)
                 const maxSize = 100 * 1024 * 1024; // 100MB
                 if (file.size > maxSize) {
-                    alert('文件大小不能超过100MB');
+                    alert(t.fileTooLarge);
                     return;
                 }
                 
@@ -1043,12 +1116,12 @@
                     
                     // Show success message after a short delay
                     setTimeout(() => {
-                        alert(`✅ 成功加载音频文件：${file.name}`);
+                        alert(`✅ ${t.audioLoadSuccess}: ${file.name}`);
                     }, 500);
                     
                 } catch (error) {
                     console.error('Error creating audio URL:', error);
-                    alert('❌ 音频文件加载失败：' + error.message);
+                    alert('❌ ' + t.audioFileLoadFailed + ': ' + error.message);
                 }
                 
                 console.log('=== AUDIO UPLOAD END ===');
@@ -1071,7 +1144,7 @@
                 const isTXT = fileName.endsWith('.txt');
                 
                 if (!isSRT && !isTXT) {
-                    alert('请选择 .srt 或 .txt 文件');
+                    alert(t.pleaseSelectSubtitleFile);
                     return;
                 }
                 
@@ -1093,15 +1166,15 @@
                     
                     // Show detailed result message
                     if (parsedSubtitles.length > 0) {
-                        alert(`✅ 成功加载 ${parsedSubtitles.length} 条字幕 from ${file.name}`);
+                        alert(`✅ ${t.subtitleLoadSuccess.replace('{count}', parsedSubtitles.length)} from ${file.name}`);
                     } else {
-                        alert(`⚠️ 在 ${file.name} 中未找到字幕，请检查文件格式。`);
+                        alert(`⚠️ ${t.noSubtitlesFound.replace('{filename}', file.name)}`);
                     }
                 };
                 
                 reader.onerror = (error) => {
                     console.error('Error reading file:', error);
-                    alert('❌ 读取字幕文件失败: ' + error.message);
+                    alert('❌ ' + t.subtitleFileReadFailed + ': ' + error.message);
                 };
                 
                 reader.readAsText(file, 'utf-8');
@@ -1120,7 +1193,7 @@
                     setTextContent(content);
                     
                     // 只显示文本内容，不自动转换为字幕
-                    alert(`✅ 成功加载文本内容 from ${file.name}\n\n现在您可以：\n1. 在时间轴上拖拽创建字幕块\n2. 从左侧文本内容复制文字到字幕中`);
+                    alert(`✅ ${t.textLoadSuccess} from ${file.name}\n\n${t.textLoadInstructions}`);
                 };
                 
                 reader.onerror = (error) => {
@@ -1273,9 +1346,9 @@
             }, []);
 
             const handleSubtitleAdd = useCallback((startTime, endTime) => {
-                const newSubtitle = new SubtitleItem(`[点击编辑字幕文本]`, startTime, endTime);
+                const newSubtitle = new SubtitleItem(`[${t.clickToEdit}]`, startTime, endTime);
                 setSubtitles(prev => [...prev, newSubtitle]);
-            }, []);
+            }, [t.clickToEdit]);
 
             const handleSubtitleDelete = useCallback((index) => {
                 if (confirm(t.confirmDelete)) {
@@ -1404,7 +1477,7 @@
                                 className="hidden"
                                 id="audio-upload"
                             />
-                            <label htmlFor="audio-upload" className="toolbar-button primary">
+                            <label htmlFor="audio-upload" className="toolbar-button primary btn">
                                 🎵 {t.importAudio}
                             </label>
                             
@@ -1415,56 +1488,56 @@
                                 className="hidden"
                                 id="subtitle-upload"
                             />
-                            <label htmlFor="subtitle-upload" className="toolbar-button">
+                            <label htmlFor="subtitle-upload" className="toolbar-button btn">
                                 📝 {t.importSubtitle}
                             </label>
                             
-                                                         <input
-                                 type="file"
-                                 accept=".txt"
-                                 onChange={(e) => handleTextUpload(e.target.files[0])}
-                                 className="hidden"
-                                 id="text-upload"
-                             />
-                             <label htmlFor="text-upload" className="toolbar-button">
-                                 📄 {t.importText}
-                             </label>
+                            <input
+                                type="file"
+                                accept=".txt"
+                                onChange={(e) => handleTextUpload(e.target.files[0])}
+                                className="hidden"
+                                id="text-upload"
+                            />
+                            <label htmlFor="text-upload" className="toolbar-button btn">
+                                📄 {t.importText}
+                            </label>
                             
                             <div className="flex-1"></div>
                             
-                            <button className="toolbar-button">
+                            <button className="toolbar-button btn">
                                 💾 {t.saveProject}
                             </button>
-                            <button className="toolbar-button">
+                            <button className="toolbar-button btn">
                                 📂 {t.loadProject}
                             </button>
-                                                         <button onClick={exportSRT} className="toolbar-button primary">
-                                 📤 {t.exportSRT}
-                             </button>
-                             <button onClick={() => {
-                                 if (confirm('确定要清空所有字幕吗？')) {
-                                     setSubtitles([]);
-                                     setSelectedSubtitle(-1);
-                                 }
-                             }} className="toolbar-button" style={{background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', borderColor: '#ef4444'}}>
-                                 🗑️ 清空字幕
-                             </button>
+                            <button onClick={exportSRT} className="toolbar-button primary btn">
+                                📤 {t.exportSRT}
+                            </button>
+                            <button onClick={() => {
+                                if (confirm(t.confirmDelete)) {
+                                    setSubtitles([]);
+                                    setSelectedSubtitle(-1);
+                                }
+                            }} className="toolbar-button btn" style={{background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', borderColor: '#ef4444'}}>
+                                🗑️ {t.clearSubtitles}
+                            </button>
                         </div>
                     </div>
 
                     {/* Playback Controls */}
                     <div className="playback-controls">
                         <div className="flex items-center">
-                            <button onClick={togglePlay} className="control-button play">
+                            <button onClick={togglePlay} className="control-button play btn">
                                 {isPlaying ? '⏸️ ' + t.pause : '▶️ ' + t.play}
                             </button>
-                            <button onClick={stop} className="control-button">
+                            <button onClick={stop} className="control-button btn">
                                 ⏹️ {t.stop}
                             </button>
-                            <button onClick={() => skip(-5)} className="control-button">
+                            <button onClick={() => skip(-5)} className="control-button btn">
                                 ⏪ {t.rewind}
                             </button>
-                            <button onClick={() => skip(5)} className="control-button">
+                            <button onClick={() => skip(5)} className="control-button btn">
                                 ⏩ {t.forward}
                             </button>
                             
@@ -1483,26 +1556,26 @@
                         </div>
                         
                         {/* Waveform Container */}
-                        <div className="mt-4">
+                        <div className="mt-4 wave-container">
                             <div id="waveform" className="w-full bg-gray-800 rounded-lg p-2"></div>
-                                                         {/* Hidden Audio Element (for WaveSurfer source only) */}
-                             {audioUrl && (
-                                 <audio 
-                                     ref={audioRef}
-                                     src={audioUrl} 
-                                     style={{ display: 'none' }}
-                                     onLoadedMetadata={() => {
-                                         if (audioRef.current) {
-                                             setDuration(audioRef.current.duration);
-                                         }
-                                     }}
-                                 />
-                             )}
+                            {/* Hidden Audio Element (for WaveSurfer source only) */}
+                            {audioUrl && (
+                                <audio 
+                                    ref={audioRef}
+                                    src={audioUrl} 
+                                    hidden
+                                    onLoadedMetadata={() => {
+                                        if (audioRef.current) {
+                                            setDuration(audioRef.current.duration);
+                                        }
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
 
                     {/* Timeline Editor */}
-                    <div className="p-6">
+                    <div className="p-6 content-layout">
                         <TimelineEditor
                             duration={duration}
                             currentTime={currentTime}
@@ -1515,11 +1588,10 @@
                             onSubtitleDelete={handleSubtitleDelete}
                             zoomLevel={zoomLevel}
                         />
-                    </div>
 
-                    {/* Content Area */}
-                    <div className="content-area p-6">
-                        <div className="grid grid-cols-2 gap-6">
+                        {/* Content Area */}
+                        <div className="content-area p-6">
+                            <div className="grid grid-cols-2 gap-6 columns-2">
                             {/* Text Display */}
                             <div>
                                 <h3 className="text-lg font-semibold mb-4">{t.textContent}</h3>
@@ -1558,7 +1630,7 @@
                                                              value={subtitle.text}
                                                              onChange={(e) => handleSubtitleChange(index, subtitle.startTime, subtitle.endTime, e.target.value)}
                                                              className="bg-transparent border-none outline-none w-full text-white"
-                                                             placeholder="输入字幕文本..."
+                                                             placeholder={t.subtitlePlaceholder}
                                                          />
                                                      </div>
                                                 </div>
@@ -1568,7 +1640,7 @@
                                                             e.stopPropagation();
                                                             handleSubtitleDelete(index);
                                                         }}
-                                                        className="action-button danger"
+                                                        className="action-button danger btn"
                                                     >
                                                         🗑️
                                                     </button>
@@ -1591,6 +1663,7 @@
                             <div>{t.plusMinusZoom}</div>
                         </div>
                     </div>
+                </div>
                 </div>
             );
         }
