@@ -866,58 +866,75 @@
             useEffect(() => {
                 if (audioUrl) {
                     try {
+                        console.log('=== WAVESURFER INITIALIZATION ===');
+                        
                         // Destroy previous instance if exists
                         if (wavesurferRef.current) {
+                            console.log('Destroying previous WaveSurfer instance...');
                             wavesurferRef.current.destroy();
+                            wavesurferRef.current = null;
                         }
                         
-                        console.log('Creating WaveSurfer instance...');
-                        wavesurferRef.current = WaveSurfer.create({
-                            container: '#waveform',
-                            waveColor: '#4b5563',
-                            progressColor: '#3b82f6',
-                            cursorColor: '#ef4444',
-                            barWidth: 2,
-                            barRadius: 3,
-                            cursorWidth: 1,
-                            height: 80,
-                            barGap: 3,
-                            responsive: true
-                        });
+                        // Wait a bit for DOM to update
+                        setTimeout(() => {
+                            try {
+                                console.log('Creating new WaveSurfer instance...');
+                                wavesurferRef.current = WaveSurfer.create({
+                                    container: '#waveform',
+                                    waveColor: '#4b5563',
+                                    progressColor: '#3b82f6',
+                                    cursorColor: '#ef4444',
+                                    barWidth: 2,
+                                    barRadius: 3,
+                                    cursorWidth: 1,
+                                    height: 80,
+                                    barGap: 3,
+                                    responsive: true,
+                                    normalize: true,
+                                    backend: 'WebAudio'
+                                });
 
-                        console.log('Loading audio URL:', audioUrl);
-                        wavesurferRef.current.load(audioUrl);
-                        
-                        wavesurferRef.current.on('ready', () => {
-                            console.log('WaveSurfer ready, duration:', wavesurferRef.current.getDuration());
-                            setDuration(wavesurferRef.current.getDuration());
-                        });
-                        
-                        wavesurferRef.current.on('audioprocess', () => {
-                            setCurrentTime(wavesurferRef.current.getCurrentTime());
-                        });
-                        
-                        wavesurferRef.current.on('play', () => {
-                            console.log('Audio started playing');
-                            setIsPlaying(true);
-                        });
-                        
-                        wavesurferRef.current.on('pause', () => {
-                            console.log('Audio paused');
-                            setIsPlaying(false);
-                        });
-                        
-                        wavesurferRef.current.on('seek', (progress) => {
-                            setCurrentTime(wavesurferRef.current.getCurrentTime());
-                        });
-                        
-                        wavesurferRef.current.on('error', (error) => {
-                            console.error('WaveSurfer error:', error);
-                            alert('❌ 音频加载失败：' + error.message);
-                        });
+                                console.log('Loading audio URL:', audioUrl);
+                                wavesurferRef.current.load(audioUrl);
+                                
+                                wavesurferRef.current.on('ready', () => {
+                                    console.log('WaveSurfer ready, duration:', wavesurferRef.current.getDuration());
+                                    setDuration(wavesurferRef.current.getDuration());
+                                });
+                                
+                                wavesurferRef.current.on('audioprocess', () => {
+                                    setCurrentTime(wavesurferRef.current.getCurrentTime());
+                                });
+                                
+                                wavesurferRef.current.on('play', () => {
+                                    console.log('Audio started playing');
+                                    setIsPlaying(true);
+                                });
+                                
+                                wavesurferRef.current.on('pause', () => {
+                                    console.log('Audio paused');
+                                    setIsPlaying(false);
+                                });
+                                
+                                wavesurferRef.current.on('seek', (progress) => {
+                                    setCurrentTime(wavesurferRef.current.getCurrentTime());
+                                });
+                                
+                                wavesurferRef.current.on('error', (error) => {
+                                    console.error('WaveSurfer error:', error);
+                                    alert('❌ 音频加载失败：' + error.message);
+                                });
+                                
+                                console.log('WaveSurfer initialization completed');
+                                
+                            } catch (error) {
+                                console.error('Error in WaveSurfer creation:', error);
+                                alert('❌ 音频播放器创建失败：' + error.message);
+                            }
+                        }, 100);
                         
                     } catch (error) {
-                        console.error('Error initializing WaveSurfer:', error);
+                        console.error('Error in WaveSurfer initialization:', error);
                         alert('❌ 音频播放器初始化失败：' + error.message);
                     }
                 }
@@ -954,18 +971,28 @@
                 }
                 
                 try {
+                    // Clean up previous audio URL
+                    if (audioUrl) {
+                        URL.revokeObjectURL(audioUrl);
+                    }
+                    
                     setAudioFile(file);
                     const url = URL.createObjectURL(file);
-                    setAudioUrl(url);
                     console.log('Audio URL created:', url);
-                    alert(`✅ 成功加载音频文件：${file.name}`);
+                    setAudioUrl(url);
+                    
+                    // Show success message after a short delay
+                    setTimeout(() => {
+                        alert(`✅ 成功加载音频文件：${file.name}`);
+                    }, 500);
+                    
                 } catch (error) {
                     console.error('Error creating audio URL:', error);
                     alert('❌ 音频文件加载失败：' + error.message);
                 }
                 
                 console.log('=== AUDIO UPLOAD END ===');
-            }, []);
+            }, [audioUrl]);
 
             const handleSubtitleUpload = useCallback((file) => {
                 if (!file) {
@@ -1349,6 +1376,27 @@
                         {/* Waveform Container */}
                         <div className="mt-4">
                             <div id="waveform" className="w-full bg-gray-800 rounded-lg p-2"></div>
+                            {/* Fallback Audio Player */}
+                            {audioUrl && (
+                                <audio 
+                                    ref={audioRef}
+                                    src={audioUrl} 
+                                    controls 
+                                    className="w-full mt-2"
+                                    onLoadedMetadata={() => {
+                                        if (audioRef.current) {
+                                            setDuration(audioRef.current.duration);
+                                        }
+                                    }}
+                                    onTimeUpdate={() => {
+                                        if (audioRef.current) {
+                                            setCurrentTime(audioRef.current.currentTime);
+                                        }
+                                    }}
+                                    onPlay={() => setIsPlaying(true)}
+                                    onPause={() => setIsPlaying(false)}
+                                />
+                            )}
                         </div>
                     </div>
 
