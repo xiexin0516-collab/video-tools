@@ -1011,7 +1011,7 @@
                 const isTXT = fileName.endsWith('.txt');
                 
                 if (!isSRT && !isTXT) {
-                    alert('Please select a .srt or .txt file');
+                    alert('请选择 .srt 或 .txt 文件');
                     return;
                 }
                 
@@ -1021,25 +1021,29 @@
                     console.log('Raw file content length:', content.length);
                     console.log('File content preview:', content.substring(0, 500) + '...');
                     
-                    const parsedSubtitles = parseSRT(content);
-                    console.log('Parsed subtitles count:', parsedSubtitles.length);
+                    let parsedSubtitles = [];
+                    if (isSRT) {
+                        parsedSubtitles = parseSRT(content);
+                    } else if (isTXT) {
+                        parsedSubtitles = parseTXT(content);
+                    }
                     
+                    console.log('Parsed subtitles count:', parsedSubtitles.length);
                     setSubtitles(parsedSubtitles);
                     
                     // Show detailed result message
                     if (parsedSubtitles.length > 0) {
-                        alert(`✅ Successfully loaded ${parsedSubtitles.length} subtitles from ${file.name}`);
+                        alert(`✅ 成功加载 ${parsedSubtitles.length} 条字幕 from ${file.name}`);
                     } else {
-                        alert(`⚠️ No subtitles found in ${file.name}. Please check the file format.`);
+                        alert(`⚠️ 在 ${file.name} 中未找到字幕，请检查文件格式。`);
                     }
                 };
                 
                 reader.onerror = (error) => {
                     console.error('Error reading file:', error);
-                    alert('❌ Error reading subtitle file: ' + error.message);
+                    alert('❌ 读取字幕文件失败: ' + error.message);
                 };
                 
-                // Try different encodings if UTF-8 fails
                 reader.readAsText(file, 'utf-8');
                 console.log('=== SUBTITLE UPLOAD END ===');
             }, []);
@@ -1098,7 +1102,7 @@
                             console.log('Time match found:', timeMatch);
                             const startTime = parseTime(timeMatch[1]);
                             const endTime = parseTime(timeMatch[2]);
-                            const text = lines.slice(2).join('\n');
+                            const text = lines.slice(2).join(' ').trim(); // 将多行文本合并为一行
                             
                             console.log('Parsed subtitle:', { 
                                 startTime, 
@@ -1123,6 +1127,40 @@
                 console.log('Total subtitles parsed:', subtitles.length);
                 console.log('Final subtitles:', subtitles);
                 console.log('=== SRT PARSING END ===\n');
+                
+                return subtitles;
+            };
+
+            // TXT parsing - 将文本按行分割为字幕
+            const parseTXT = (content) => {
+                console.log('=== TXT PARSING START ===');
+                console.log('Content length:', content.length);
+                console.log('Content preview:', content.substring(0, 500) + '...');
+                
+                // Handle different line endings
+                const normalizedContent = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                const lines = normalizedContent.split('\n').filter(line => line.trim());
+                console.log('Found', lines.length, 'lines');
+                
+                const subtitles = [];
+                const estimatedDuration = 120; // 假设总时长2分钟
+                const timePerLine = estimatedDuration / lines.length;
+                
+                lines.forEach((line, index) => {
+                    const text = line.trim();
+                    if (text) {
+                        const startTime = index * timePerLine;
+                        const endTime = (index + 1) * timePerLine;
+                        
+                        console.log(`Line ${index + 1}: "${text}" (${startTime.toFixed(1)}s - ${endTime.toFixed(1)}s)`);
+                        
+                        subtitles.push(new SubtitleItem(text, startTime, endTime));
+                    }
+                });
+                
+                console.log('\n=== TXT PARSING RESULT ===');
+                console.log('Total subtitles parsed:', subtitles.length);
+                console.log('=== TXT PARSING END ===\n');
                 
                 return subtitles;
             };
