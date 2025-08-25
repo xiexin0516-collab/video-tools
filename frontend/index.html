@@ -1058,7 +1058,16 @@
                 reader.onload = (e) => {
                     const content = e.target.result;
                     setTextContent(content);
-                    alert(`Successfully loaded text content from ${file.name}`);
+                    
+                    // 自动将文本转换为字幕
+                    const parsedSubtitles = parseTXT(content);
+                    setSubtitles(parsedSubtitles);
+                    
+                    if (parsedSubtitles.length > 0) {
+                        alert(`✅ 成功加载文本内容并转换为 ${parsedSubtitles.length} 条字幕 from ${file.name}`);
+                    } else {
+                        alert(`✅ 成功加载文本内容 from ${file.name}`);
+                    }
                 };
                 
                 reader.onerror = (error) => {
@@ -1143,8 +1152,9 @@
                 console.log('Found', lines.length, 'lines');
                 
                 const subtitles = [];
-                const estimatedDuration = 120; // 假设总时长2分钟
-                const timePerLine = estimatedDuration / lines.length;
+                // 使用实际音频时长，如果没有音频则使用默认时长
+                const actualDuration = duration > 0 ? duration : 120;
+                const timePerLine = actualDuration / lines.length;
                 
                 lines.forEach((line, index) => {
                     const text = line.trim();
