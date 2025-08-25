@@ -1377,12 +1377,12 @@
             );
         }
 
-        // Render the app
-        ReactDOM.render(
+        // Render the app using React 18 createRoot API
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
             <LanguageProvider>
                 <SubtitleEditor />
-            </LanguageProvider>,
-            document.getElementById('root')
+            </LanguageProvider>
         );
     </script>
 </body>
