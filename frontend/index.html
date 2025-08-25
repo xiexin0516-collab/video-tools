@@ -535,8 +535,8 @@
                 subtitles.forEach((subtitle, index) => {
                     const startX = (subtitle.startTime / duration) * width;
                     const endX = (subtitle.endTime / duration) * width;
-                    const trackIndex = index % maxTracks;
-                    const y = trackY + trackIndex * (subtitleHeight + 5);
+                    const trackIndex = 0; // 强制所有字幕显示在一行
+                    const y = trackY;
                     const subtitleWidth = endX - startX;
 
                     if (subtitleWidth < 5) return; // Skip very small subtitles
@@ -734,13 +734,13 @@
                 const subtitleHeight = 30;
                 const maxTracks = Math.floor((rect.height - rulerHeight - 20) / (subtitleHeight + 5));
                 
-                const subtitleIndex = subtitles.findIndex((subtitle, index) => {
-                    const startX = (subtitle.startTime / duration) * rect.width;
-                    const endX = (subtitle.endTime / duration) * rect.width;
-                    const trackIndex = index % maxTracks;
-                    const subtitleY = trackY + trackIndex * (subtitleHeight + 5);
-                    return x >= startX && x <= endX && y >= subtitleY && y <= subtitleY + subtitleHeight;
-                });
+                                 const subtitleIndex = subtitles.findIndex((subtitle, index) => {
+                     const startX = (subtitle.startTime / duration) * rect.width;
+                     const endX = (subtitle.endTime / duration) * rect.width;
+                     const trackIndex = 0; // 强制所有字幕显示在一行
+                     const subtitleY = trackY;
+                     return x >= startX && x <= endX && y >= subtitleY && y <= subtitleY + subtitleHeight;
+                 });
                 
                 if (subtitleIndex >= 0) {
                     const subtitle = subtitles[subtitleIndex];
