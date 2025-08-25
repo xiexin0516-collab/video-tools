@@ -306,14 +306,15 @@
         
         // Internationalization
         const translations = {
-            en: {
-                title: "Professional Subtitle Editor",
-                subtitle: "Advanced Timeline-based Subtitle Editing",
-                importAudio: "Import Audio",
-                importSubtitle: "Import Subtitle",
-                saveProject: "Save Project",
-                loadProject: "Load Project",
-                exportSRT: "Export SRT",
+                         en: {
+                 title: "Professional Subtitle Editor",
+                 subtitle: "Advanced Timeline-based Subtitle Editing",
+                 importAudio: "Import Audio",
+                 importSubtitle: "Import Subtitle",
+                 importText: "Import Text",
+                 saveProject: "Save Project",
+                 loadProject: "Load Project",
+                 exportSRT: "Export SRT",
                 play: "Play",
                 pause: "Pause",
                 stop: "Stop",
@@ -339,14 +340,15 @@
                 dragToMove: "Drag to move subtitle",
                 dragToResize: "Drag handles to resize"
             },
-            zh: {
-                title: "专业字幕编辑器",
-                subtitle: "高级时间轴字幕编辑",
-                importAudio: "导入音频",
-                importSubtitle: "导入字幕",
-                saveProject: "保存项目",
-                loadProject: "加载项目",
-                exportSRT: "导出SRT",
+                         zh: {
+                 title: "专业字幕编辑器",
+                 subtitle: "高级时间轴字幕编辑",
+                 importAudio: "导入音频",
+                 importSubtitle: "导入字幕",
+                 importText: "导入文本",
+                 saveProject: "保存项目",
+                 loadProject: "加载项目",
+                 exportSRT: "导出SRT",
                 play: "播放",
                 pause: "暂停",
                 stop: "停止",
@@ -1233,16 +1235,16 @@
                                 📝 {t.importSubtitle}
                             </label>
                             
-                            <input
-                                type="file"
-                                accept=".txt"
-                                onChange={(e) => handleTextUpload(e.target.files[0])}
-                                className="hidden"
-                                id="text-upload"
-                            />
-                            <label htmlFor="text-upload" className="toolbar-button">
-                                📄 {t.importSubtitle}
-                            </label>
+                                                         <input
+                                 type="file"
+                                 accept=".txt"
+                                 onChange={(e) => handleTextUpload(e.target.files[0])}
+                                 className="hidden"
+                                 id="text-upload"
+                             />
+                             <label htmlFor="text-upload" className="toolbar-button">
+                                 📄 {t.importText}
+                             </label>
                             
                             <div className="flex-1"></div>
                             
