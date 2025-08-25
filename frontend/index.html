@@ -865,50 +865,106 @@
             // Initialize WaveSurfer
             useEffect(() => {
                 if (audioUrl) {
-                    wavesurferRef.current = WaveSurfer.create({
-                        container: '#waveform',
-                        waveColor: '#4b5563',
-                        progressColor: '#3b82f6',
-                        cursorColor: '#ef4444',
-                        barWidth: 2,
-                        barRadius: 3,
-                        cursorWidth: 1,
-                        height: 80,
-                        barGap: 3,
-                        responsive: true
-                    });
+                    try {
+                        // Destroy previous instance if exists
+                        if (wavesurferRef.current) {
+                            wavesurferRef.current.destroy();
+                        }
+                        
+                        console.log('Creating WaveSurfer instance...');
+                        wavesurferRef.current = WaveSurfer.create({
+                            container: '#waveform',
+                            waveColor: '#4b5563',
+                            progressColor: '#3b82f6',
+                            cursorColor: '#ef4444',
+                            barWidth: 2,
+                            barRadius: 3,
+                            cursorWidth: 1,
+                            height: 80,
+                            barGap: 3,
+                            responsive: true
+                        });
 
-                    wavesurferRef.current.load(audioUrl);
-                    
-                    wavesurferRef.current.on('ready', () => {
-                        setDuration(wavesurferRef.current.getDuration());
-                    });
-                    
-                    wavesurferRef.current.on('audioprocess', () => {
-                        setCurrentTime(wavesurferRef.current.getCurrentTime());
-                    });
-                    
-                    wavesurferRef.current.on('play', () => {
-                        setIsPlaying(true);
-                    });
-                    
-                    wavesurferRef.current.on('pause', () => {
-                        setIsPlaying(false);
-                    });
-                    
-                    wavesurferRef.current.on('seek', (progress) => {
-                        setCurrentTime(wavesurferRef.current.getCurrentTime());
-                    });
+                        console.log('Loading audio URL:', audioUrl);
+                        wavesurferRef.current.load(audioUrl);
+                        
+                        wavesurferRef.current.on('ready', () => {
+                            console.log('WaveSurfer ready, duration:', wavesurferRef.current.getDuration());
+                            setDuration(wavesurferRef.current.getDuration());
+                        });
+                        
+                        wavesurferRef.current.on('audioprocess', () => {
+                            setCurrentTime(wavesurferRef.current.getCurrentTime());
+                        });
+                        
+                        wavesurferRef.current.on('play', () => {
+                            console.log('Audio started playing');
+                            setIsPlaying(true);
+                        });
+                        
+                        wavesurferRef.current.on('pause', () => {
+                            console.log('Audio paused');
+                            setIsPlaying(false);
+                        });
+                        
+                        wavesurferRef.current.on('seek', (progress) => {
+                            setCurrentTime(wavesurferRef.current.getCurrentTime());
+                        });
+                        
+                        wavesurferRef.current.on('error', (error) => {
+                            console.error('WaveSurfer error:', error);
+                            alert('❌ 音频加载失败：' + error.message);
+                        });
+                        
+                    } catch (error) {
+                        console.error('Error initializing WaveSurfer:', error);
+                        alert('❌ 音频播放器初始化失败：' + error.message);
+                    }
                 }
             }, [audioUrl]);
 
             // Handle file upload
             const handleAudioUpload = useCallback((file) => {
-                if (file) {
+                if (!file) {
+                    console.error('No file selected');
+                    alert('请选择音频文件');
+                    return;
+                }
+                
+                console.log('=== AUDIO UPLOAD START ===');
+                console.log('File name:', file.name);
+                console.log('File size:', file.size, 'bytes');
+                console.log('File type:', file.type);
+                
+                // Check file extension
+                const fileName = file.name.toLowerCase();
+                const validExtensions = ['.mp3', '.wav', '.m4a', '.ogg', '.aac'];
+                const isValidAudio = validExtensions.some(ext => fileName.endsWith(ext));
+                
+                if (!isValidAudio) {
+                    alert('请选择有效的音频文件格式：MP3, WAV, M4A, OGG, AAC');
+                    return;
+                }
+                
+                // Check file size (max 100MB)
+                const maxSize = 100 * 1024 * 1024; // 100MB
+                if (file.size > maxSize) {
+                    alert('文件大小不能超过100MB');
+                    return;
+                }
+                
+                try {
                     setAudioFile(file);
                     const url = URL.createObjectURL(file);
                     setAudioUrl(url);
+                    console.log('Audio URL created:', url);
+                    alert(`✅ 成功加载音频文件：${file.name}`);
+                } catch (error) {
+                    console.error('Error creating audio URL:', error);
+                    alert('❌ 音频文件加载失败：' + error.message);
                 }
+                
+                console.log('=== AUDIO UPLOAD END ===');
             }, []);
 
             const handleSubtitleUpload = useCallback((file) => {
@@ -1288,6 +1344,11 @@
                                 onChange={(e) => seek(parseFloat(e.target.value))}
                                 className="progress-slider"
                             />
+                        </div>
+                        
+                        {/* Waveform Container */}
+                        <div className="mt-4">
+                            <div id="waveform" className="w-full bg-gray-800 rounded-lg p-2"></div>
                         </div>
                     </div>
 
