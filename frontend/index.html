@@ -1424,27 +1424,19 @@
                         {/* Waveform Container */}
                         <div className="mt-4">
                             <div id="waveform" className="w-full bg-gray-800 rounded-lg p-2"></div>
-                            {/* Fallback Audio Player */}
-                            {audioUrl && (
-                                <audio 
-                                    ref={audioRef}
-                                    src={audioUrl} 
-                                    controls 
-                                    className="w-full mt-2"
-                                    onLoadedMetadata={() => {
-                                        if (audioRef.current) {
-                                            setDuration(audioRef.current.duration);
-                                        }
-                                    }}
-                                    onTimeUpdate={() => {
-                                        if (audioRef.current) {
-                                            setCurrentTime(audioRef.current.currentTime);
-                                        }
-                                    }}
-                                    onPlay={() => setIsPlaying(true)}
-                                    onPause={() => setIsPlaying(false)}
-                                />
-                            )}
+                                                         {/* Hidden Audio Element (for WaveSurfer source only) */}
+                             {audioUrl && (
+                                 <audio 
+                                     ref={audioRef}
+                                     src={audioUrl} 
+                                     style={{ display: 'none' }}
+                                     onLoadedMetadata={() => {
+                                         if (audioRef.current) {
+                                             setDuration(audioRef.current.duration);
+                                         }
+                                     }}
+                                 />
+                             )}
                         </div>
                     </div>
 
