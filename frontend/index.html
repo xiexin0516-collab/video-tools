@@ -1378,9 +1378,17 @@
                             <button className="toolbar-button">
                                 📂 {t.loadProject}
                             </button>
-                            <button onClick={exportSRT} className="toolbar-button primary">
-                                📤 {t.exportSRT}
-                            </button>
+                                                         <button onClick={exportSRT} className="toolbar-button primary">
+                                 📤 {t.exportSRT}
+                             </button>
+                             <button onClick={() => {
+                                 if (confirm('确定要清空所有字幕吗？')) {
+                                     setSubtitles([]);
+                                     setSelectedSubtitle(-1);
+                                 }
+                             }} className="toolbar-button" style={{background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)', borderColor: '#ef4444'}}>
+                                 🗑️ 清空字幕
+                             </button>
                         </div>
                     </div>
 
