@@ -22,6 +22,7 @@ from models import db, User, Project
 # Import blueprints
 from auth import auth_bp
 from projects import projects_bp
+from admin import admin_bp
 
 # Import subtitle parser service
 from services.subtitle_parser import SubtitleParser
@@ -56,6 +57,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(projects_bp, url_prefix='/api/projects')
+    app.register_blueprint(admin_bp, url_prefix='/api/admin')
     
     # Supported file types
     ALLOWED_AUDIO_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'aac'}
@@ -85,6 +87,12 @@ def create_app():
         """Serve the dashboard page"""
         frontend_dir = '../frontend'
         return send_from_directory(frontend_dir, 'dashboard.html')
+    
+    @app.route('/admin')
+    def admin():
+        """Serve the admin page"""
+        frontend_dir = '../frontend'
+        return send_from_directory(frontend_dir, 'admin.html')
     
     @app.route('/api/languages')
     def get_languages():
