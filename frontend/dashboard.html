@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户仪表板 - 字幕编辑器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .dashboard-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        .project-card {
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+            border: 1px solid #404040;
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: 1px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #404040 0%, #505050 100%);
+            border: 1px solid #606060;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #505050 0%, #606060 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-400">字幕编辑器</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-300" id="userInfo">欢迎回来</span>
+                    <button id="logoutBtn" class="btn-secondary px-4 py-2 rounded-lg text-white">
+                        退出登录
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="dashboard-card rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-white mb-2">欢迎回来！</h2>
+            <p class="text-gray-400">管理您的字幕项目，创建新的编辑任务。</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card rounded-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-white mb-4">快速操作</h3>
+            <div class="flex flex-wrap gap-4">
+                <button id="newProjectBtn" class="btn-primary px-6 py-3 rounded-lg text-white">
+                    🆕 创建新项目
+                </button>
+                <button id="openEditorBtn" class="btn-secondary px-6 py-3 rounded-lg text-white">
+                    ✏️ 打开编辑器
+                </button>
+                <button id="importProjectBtn" class="btn-secondary px-6 py-3 rounded-lg text-white">
+                    📁 导入项目
+                </button>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="dashboard-card rounded-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold text-white">我的项目</h3>
+                <div class="flex items-center space-x-2">
+                    <input 
+                        type="text" 
+                        id="searchProjects" 
+                        placeholder="搜索项目..."
+                        class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    >
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects will be loaded here -->
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-8">
+                <div class="text-gray-400">加载中...</div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="text-center py-8 hidden">
+                <div class="text-gray-400 mb-4">还没有项目</div>
+                <button id="createFirstProjectBtn" class="btn-primary px-6 py-3 rounded-lg text-white">
+                    创建第一个项目
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Project Modal -->
+    <div id="newProjectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="dashboard-card rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-semibold text-white mb-4">创建新项目</h3>
+            <form id="newProjectForm">
+                <div class="mb-4">
+                    <label for="projectName" class="block text-sm font-medium text-gray-300 mb-2">
+                        项目名称
+                    </label>
+                    <input
+                        type="text"
+                        id="projectName"
+                        name="name"
+                        required
+                        class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                        placeholder="输入项目名称"
+                    >
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelNewProject" class="btn-secondary px-4 py-2 rounded-lg text-white">
+                        取消
+                    </button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg text-white">
+                        创建
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let projects = [];
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            const user = localStorage.getItem('user');
+            
+            if (!token || !user) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            try {
+                currentUser = JSON.parse(user);
+                document.getElementById('userInfo').textContent = `欢迎，${currentUser.username}`;
+            } catch (error) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+            }
+        }
+
+        // API helper function
+        async function apiCall(endpoint, options = {}) {
+            const token = localStorage.getItem('access_token');
+            
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            
+            const response = await fetch(endpoint, { ...defaultOptions, ...options });
+            
+            if (response.status === 401) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+                return null;
+            }
+            
+            return response.json();
+        }
+
+        // Load projects
+        async function loadProjects() {
+            try {
+                document.getElementById('loadingState').classList.remove('hidden');
+                document.getElementById('projectsGrid').innerHTML = '';
+                
+                const result = await apiCall('/api/projects/');
+                
+                if (result && result.success) {
+                    projects = result.projects;
+                    displayProjects(projects);
+                } else {
+                    showMessage('加载项目失败', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+            }
+        }
+
+        // Display projects
+        function displayProjects(projectsToShow) {
+            const grid = document.getElementById('projectsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (projectsToShow.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            
+            grid.innerHTML = projectsToShow.map(project => `
+                <div class="project-card rounded-lg p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="text-white font-medium">${project.name}</h4>
+                        <div class="flex space-x-2">
+                            <button onclick="editProject(${project.id})" class="text-blue-400 hover:text-blue-300">
+                                ✏️
+                            </button>
+                            <button onclick="duplicateProject(${project.id})" class="text-green-400 hover:text-green-300">
+                                📋
+                            </button>
+                            <button onclick="deleteProject(${project.id})" class="text-red-400 hover:text-red-300">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-400 mb-3">
+                        <div>字幕数量: ${project.subtitles ? project.subtitles.length : 0}</div>
+                        <div>更新时间: ${new Date(project.updated_at).toLocaleString()}</div>
+                    </div>
+                    <button onclick="openProject(${project.id})" class="btn-primary w-full py-2 rounded-lg text-white text-sm">
+                        打开项目
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Project actions
+        function openProject(projectId) {
+            window.location.href = `/?project=${projectId}`;
+        }
+
+        async function editProject(projectId) {
+            // TODO: Implement edit project name
+            alert('编辑功能开发中...');
+        }
+
+        async function duplicateProject(projectId) {
+            try {
+                const result = await apiCall(`/api/projects/${projectId}/duplicate`, {
+                    method: 'POST'
+                });
+                
+                if (result && result.success) {
+                    showMessage('项目复制成功', 'success');
+                    loadProjects();
+                } else {
+                    showMessage('复制失败', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
+
+        async function deleteProject(projectId) {
+            if (!confirm('确定要删除这个项目吗？')) {
+                return;
+            }
+            
+            try {
+                const result = await apiCall(`/api/projects/${projectId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (result && result.success) {
+                    showMessage('项目删除成功', 'success');
+                    loadProjects();
+                } else {
+                    showMessage('删除失败', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        }
+
+        // Modal functions
+        function showNewProjectModal() {
+            document.getElementById('newProjectModal').classList.remove('hidden');
+            document.getElementById('newProjectModal').classList.add('flex');
+        }
+
+        function hideNewProjectModal() {
+            document.getElementById('newProjectModal').classList.add('hidden');
+            document.getElementById('newProjectModal').classList.remove('flex');
+            document.getElementById('newProjectForm').reset();
+        }
+
+        // Show message
+        function showMessage(text, type = 'info') {
+            // Simple alert for now
+            alert(text);
+        }
+
+        // Event listeners
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        });
+
+        document.getElementById('newProjectBtn').addEventListener('click', showNewProjectModal);
+        document.getElementById('createFirstProjectBtn').addEventListener('click', showNewProjectModal);
+        document.getElementById('cancelNewProject').addEventListener('click', hideNewProjectModal);
+        document.getElementById('openEditorBtn').addEventListener('click', () => {
+            window.location.href = '/';
+        });
+
+        document.getElementById('newProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name')
+            };
+            
+            try {
+                const result = await apiCall('/api/projects/', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                
+                if (result && result.success) {
+                    showMessage('项目创建成功', 'success');
+                    hideNewProjectModal();
+                    loadProjects();
+                } else {
+                    showMessage(result.error || '创建失败', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'error');
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchProjects').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredProjects = projects.filter(project => 
+                project.name.toLowerCase().includes(searchTerm)
+            );
+            displayProjects(filteredProjects);
+        });
+
+        // Initialize
+        checkAuth();
+        loadProjects();
+    </script>
+</body>
+</html>

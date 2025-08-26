@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 字幕编辑器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .input-field {
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            color: #e5e5e5;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: 1px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #404040 0%, #505050 100%);
+            border: 1px solid #606060;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #505050 0%, #606060 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="login-card rounded-lg p-8 w-full max-w-md">
+        <!-- Logo/Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-400 mb-2">字幕编辑器</h1>
+            <p class="text-gray-400">专业的多语言字幕编辑工具</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+                    用户名或邮箱
+                </label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none"
+                    placeholder="输入用户名或邮箱"
+                >
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                    密码
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none"
+                    placeholder="输入密码"
+                >
+            </div>
+
+            <div class="flex items-center justify-between">
+                <label class="flex items-center">
+                    <input type="checkbox" id="remember" class="mr-2">
+                    <span class="text-sm text-gray-400">记住我</span>
+                </label>
+                <a href="#" class="text-sm text-blue-400 hover:text-blue-300">忘记密码？</a>
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary w-full py-3 rounded-lg font-medium text-white"
+            >
+                登录
+            </button>
+
+            <div class="text-center">
+                <span class="text-gray-400">还没有账号？</span>
+                <a href="#" id="showRegister" class="text-blue-400 hover:text-blue-300 ml-1">
+                    立即注册
+                </a>
+            </div>
+        </form>
+
+        <!-- Register Form (Hidden by default) -->
+        <form id="registerForm" class="space-y-6 hidden">
+            <div>
+                <label for="regUsername" class="block text-sm font-medium text-gray-300 mb-2">
+                    用户名
+                </label>
+                <input
+                    type="text"
+                    id="regUsername"
+                    name="username"
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none"
+                    placeholder="输入用户名"
+                >
+            </div>
+
+            <div>
+                <label for="regEmail" class="block text-sm font-medium text-gray-300 mb-2">
+                    邮箱
+                </label>
+                <input
+                    type="email"
+                    id="regEmail"
+                    name="email"
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none"
+                    placeholder="输入邮箱"
+                >
+            </div>
+
+            <div>
+                <label for="regPassword" class="block text-sm font-medium text-gray-300 mb-2">
+                    密码
+                </label>
+                <input
+                    type="password"
+                    id="regPassword"
+                    name="password"
+                    required
+                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none"
+                    placeholder="输入密码（至少6位）"
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="btn-primary w-full py-3 rounded-lg font-medium text-white"
+            >
+                注册
+            </button>
+
+            <div class="text-center">
+                <span class="text-gray-400">已有账号？</span>
+                <a href="#" id="showLogin" class="text-blue-400 hover:text-blue-300 ml-1">
+                    立即登录
+                </a>
+            </div>
+        </form>
+
+        <!-- Error/Success Messages -->
+        <div id="message" class="mt-4 p-3 rounded-lg hidden"></div>
+    </div>
+
+    <script>
+        // Form switching
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const messageDiv = document.getElementById('message');
+
+        showRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        // Show message function
+        function showMessage(text, type = 'error') {
+            messageDiv.textContent = text;
+            messageDiv.className = `mt-4 p-3 rounded-lg ${type === 'error' ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}`;
+            messageDiv.classList.remove('hidden');
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(loginForm);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Store token
+                    localStorage.setItem('access_token', result.access_token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    
+                    showMessage('登录成功！正在跳转...', 'success');
+                    
+                    // Redirect to main app
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    showMessage(result.error || '登录失败');
+                }
+            } catch (error) {
+                showMessage('网络错误，请稍后重试');
+            }
+        });
+
+        // Register form submission
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(registerForm);
+            const data = {
+                username: formData.get('username'),
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Store token
+                    localStorage.setItem('access_token', result.access_token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    
+                    showMessage('注册成功！正在跳转...', 'success');
+                    
+                    // Redirect to main app
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    showMessage(result.error || '注册失败');
+                }
+            } catch (error) {
+                showMessage('网络错误，请稍后重试');
+            }
+        });
+
+        // Check if user is already logged in
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
