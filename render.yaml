@@ -1,10 +1,25 @@
 services:
+  # 前端静态网站
   - type: web
-    name: subtitleeditor-web
+    name: vidtools-frontend
+    runtime: static
+    buildCommand: echo "No build required for static site"
+    staticPublishPath: ./frontend
+    envVars:
+      - key: NODE_VERSION
+        value: 18.0.0
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # 后端API服务
+  - type: web
+    name: vidtools-backend
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && python start.py && gunicorn main:app --bind 0.0.0.0:$PORT
+    startCommand: cd backend && python app.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.16
@@ -12,9 +27,13 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
-      - key: JWT_SECRET_KEY
-        generateValue: true
+      - key: SUPABASE_URL
+        sync: false  # 需要手动配置
+      - key: SUPABASE_JWKS_URL
+        sync: false  # 需要手动配置
+      - key: SUPABASE_SERVICE_ROLE
+        sync: false  # 需要手动配置
       - key: DATABASE_URL
-        value: sqlite:///subtitle_editor.db
-    healthCheckPath: /
+        sync: false  # 需要手动配置
+    healthCheckPath: /api/health
     autoDeploy: true
