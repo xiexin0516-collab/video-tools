@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 视频工具平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .auth-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: 1px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            border: 1px solid #9ca3af;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="auth-card rounded-2xl p-8 w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-red-400 mb-2">视频工具平台</h1>
+            <p class="text-gray-400">登录您的账户</p>
+        </div>
+
+        <!-- 表单切换按钮 -->
+        <div class="flex mb-6 bg-gray-800 rounded-lg p-1">
+            <button id="loginTab" class="flex-1 py-2 px-4 rounded-md bg-blue-600 text-white font-medium">
+                登录
+            </button>
+            <button id="registerTab" class="flex-1 py-2 px-4 rounded-md text-gray-300 font-medium">
+                注册
+            </button>
+        </div>
+
+        <!-- 登录表单 -->
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">邮箱</label>
+                <input 
+                    type="email" 
+                    id="loginEmail" 
+                    required
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    placeholder="请输入邮箱"
+                >
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">密码</label>
+                <input 
+                    type="password" 
+                    id="loginPassword" 
+                    required
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    placeholder="请输入密码"
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="w-full btn-primary py-3 rounded-lg text-white font-medium"
+            >
+                登录
+            </button>
+        </form>
+
+        <!-- 注册表单 -->
+        <form id="registerForm" class="space-y-4 hidden">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">邮箱</label>
+                <input 
+                    type="email" 
+                    id="registerEmail" 
+                    required
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    placeholder="请输入邮箱"
+                >
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">密码</label>
+                <input 
+                    type="password" 
+                    id="registerPassword" 
+                    required
+                    minlength="6"
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    placeholder="请输入密码（至少6位）"
+                >
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">确认密码</label>
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    required
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                    placeholder="请再次输入密码"
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="w-full btn-primary py-3 rounded-lg text-white font-medium"
+            >
+                注册
+            </button>
+        </form>
+
+        <!-- 错误消息 -->
+        <div id="errorMessage" class="mt-4 p-3 bg-red-900 border border-red-700 rounded-lg text-red-300 hidden"></div>
+
+        <!-- 成功消息 -->
+        <div id="successMessage" class="mt-4 p-3 bg-green-900 border border-green-700 rounded-lg text-green-300 hidden"></div>
+
+        <!-- 加载状态 -->
+        <div id="loadingSpinner" class="mt-4 text-center hidden">
+            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+            <span class="ml-2 text-gray-400">处理中...</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { signIn, signUp, onAuthStateChange } from '../js/supabaseClient.js'
+
+        // 全局变量
+        let currentForm = 'login'
+
+        // DOM元素
+        const loginTab = document.getElementById('loginTab')
+        const registerTab = document.getElementById('registerTab')
+        const loginForm = document.getElementById('loginForm')
+        const registerForm = document.getElementById('registerForm')
+        const errorMessage = document.getElementById('errorMessage')
+        const successMessage = document.getElementById('successMessage')
+        const loadingSpinner = document.getElementById('loadingSpinner')
+
+        // 表单切换
+        function switchForm(form) {
+            currentForm = form
+            
+            if (form === 'login') {
+                loginTab.className = 'flex-1 py-2 px-4 rounded-md bg-blue-600 text-white font-medium'
+                registerTab.className = 'flex-1 py-2 px-4 rounded-md text-gray-300 font-medium'
+                loginForm.classList.remove('hidden')
+                registerForm.classList.add('hidden')
+            } else {
+                registerTab.className = 'flex-1 py-2 px-4 rounded-md bg-blue-600 text-white font-medium'
+                loginTab.className = 'flex-1 py-2 px-4 rounded-md text-gray-300 font-medium'
+                registerForm.classList.remove('hidden')
+                loginForm.classList.add('hidden')
+            }
+            
+            hideMessages()
+        }
+
+        // 显示/隐藏消息
+        function showError(message) {
+            errorMessage.textContent = message
+            errorMessage.classList.remove('hidden')
+            successMessage.classList.add('hidden')
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message
+            successMessage.classList.remove('hidden')
+            errorMessage.classList.add('hidden')
+        }
+
+        function hideMessages() {
+            errorMessage.classList.add('hidden')
+            successMessage.classList.add('hidden')
+        }
+
+        // 显示/隐藏加载状态
+        function showLoading() {
+            loadingSpinner.classList.remove('hidden')
+        }
+
+        function hideLoading() {
+            loadingSpinner.classList.add('hidden')
+        }
+
+        // 登录处理
+        async function handleLogin(e) {
+            e.preventDefault()
+            
+            const email = document.getElementById('loginEmail').value
+            const password = document.getElementById('loginPassword').value
+            
+            if (!email || !password) {
+                showError('请填写所有字段')
+                return
+            }
+            
+            showLoading()
+            hideMessages()
+            
+            try {
+                const { data, error } = await signIn(email, password)
+                
+                if (error) {
+                    showError(error.message)
+                } else {
+                    showSuccess('登录成功！正在跳转...')
+                    setTimeout(() => {
+                        window.location.href = '/'
+                    }, 1000)
+                }
+            } catch (error) {
+                showError('登录失败，请重试')
+            } finally {
+                hideLoading()
+            }
+        }
+
+        // 注册处理
+        async function handleRegister(e) {
+            e.preventDefault()
+            
+            const email = document.getElementById('registerEmail').value
+            const password = document.getElementById('registerPassword').value
+            const confirmPassword = document.getElementById('confirmPassword').value
+            
+            if (!email || !password || !confirmPassword) {
+                showError('请填写所有字段')
+                return
+            }
+            
+            if (password !== confirmPassword) {
+                showError('两次输入的密码不一致')
+                return
+            }
+            
+            if (password.length < 6) {
+                showError('密码长度至少6位')
+                return
+            }
+            
+            showLoading()
+            hideMessages()
+            
+            try {
+                const { data, error } = await signUp(email, password)
+                
+                if (error) {
+                    showError(error.message)
+                } else {
+                    showSuccess('注册成功！请检查邮箱验证，然后登录。')
+                    // 切换到登录表单
+                    setTimeout(() => {
+                        switchForm('login')
+                    }, 2000)
+                }
+            } catch (error) {
+                showError('注册失败，请重试')
+            } finally {
+                hideLoading()
+            }
+        }
+
+        // 监听认证状态变化
+        onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                window.location.href = '/'
+            }
+        })
+
+        // 事件监听
+        loginTab.addEventListener('click', () => switchForm('login'))
+        registerTab.addEventListener('click', () => switchForm('register'))
+        loginForm.addEventListener('submit', handleLogin)
+        registerForm.addEventListener('submit', handleRegister)
+
+        // 检查是否已登录
+        window.addEventListener('load', async () => {
+            try {
+                const { data: { session } } = await import('../js/supabaseClient.js').then(m => m.sb.auth.getSession())
+                if (session) {
+                    window.location.href = '/'
+                }
+            } catch (error) {
+                console.error('检查登录状态失败:', error)
+            }
+        })
+    </script>
+</body>
+</html>
