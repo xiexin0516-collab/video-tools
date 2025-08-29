@@ -5,6 +5,10 @@ services:
     runtime: static
     buildCommand: echo "No build required for static site"
     staticPublishPath: ./frontend
+    routes:
+      - type: rewrite
+        source: /subtitle-editor/*
+        destination: /subtitle-editor/index.html
     envVars:
       - key: NODE_VERSION
         value: 18.0.0
