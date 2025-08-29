@@ -172,8 +172,9 @@
     </main>
 
     <script type="module">
-        import { getCurrentUser, signOut, onAuthStateChange } from './js/supabaseClient.js'
-        import { projectsAPI } from './js/api.js'
+        // 临时禁用API功能，专注于基本功能
+        // import { getCurrentUser, signOut, onAuthStateChange } from './js/supabaseClient.js'
+        // import { projectsAPI } from './js/api.js'
 
         // 全局变量
         let currentUser = null
@@ -209,7 +210,7 @@
         // 处理退出登录
         async function handleSignOut() {
             try {
-                await signOut()
+                // await signOut()
                 updateAuthUI(null)
                 projects = []
             } catch (error) {
@@ -224,16 +225,19 @@
             showLoading()
             
             try {
-                const result = await projectsAPI.getProjects()
+                // 临时禁用API调用
+                // const result = await projectsAPI.getProjects()
                 
-                if (result && result.success) {
-                    projects = result.projects || []
-                    displayProjects()
-                } else {
-                    console.error('加载项目失败:', result?.error)
-                    projects = []
-                    displayProjects()
-                }
+                // if (result && result.success) {
+                //     projects = result.projects || []
+                //     displayProjects()
+                // } else {
+                //     console.error('加载项目失败:', result?.error)
+                //     projects = []
+                //     displayProjects()
+                // }
+                projects = []
+                displayProjects()
             } catch (error) {
                 console.error('加载项目失败:', error)
                 projects = []
@@ -310,15 +314,17 @@
             }
             
             try {
-                const result = await projectsAPI.deleteProject(projectId)
+                // 临时禁用API调用
+                // const result = await projectsAPI.deleteProject(projectId)
                 
-                if (result && result.success) {
-                    // 从列表中移除
-                    projects = projects.filter(p => p.id !== projectId)
-                    displayProjects()
-                } else {
-                    alert('删除失败: ' + (result?.error || '未知错误'))
-                }
+                // if (result && result.success) {
+                //     // 从列表中移除
+                //     projects = projects.filter(p => p.id !== projectId)
+                //     displayProjects()
+                // } else {
+                //     alert('删除失败: ' + (result?.error || '未知错误'))
+                // }
+                alert('删除功能暂时不可用')
             } catch (error) {
                 console.error('删除项目失败:', error)
                 alert('删除失败，请重试')
@@ -326,13 +332,13 @@
         }
 
         // 监听认证状态变化
-        onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' && session) {
-                updateAuthUI(session.user)
-            } else if (event === 'SIGNED_OUT') {
-                updateAuthUI(null)
-            }
-        })
+        // onAuthStateChange((event, session) => {
+        //     if (event === 'SIGNED_IN' && session) {
+        //         updateAuthUI(session.user)
+        //     } else if (event === 'SIGNED_OUT') {
+        //         updateAuthUI(null)
+        //     }
+        // })
 
         // 事件监听
         refreshProjectsBtn.addEventListener('click', loadProjects)
@@ -340,8 +346,9 @@
         // 初始化
         window.addEventListener('load', async () => {
             try {
-                const user = await getCurrentUser()
-                updateAuthUI(user)
+                // const user = await getCurrentUser()
+                // updateAuthUI(user)
+                updateAuthUI(null) // 暂时显示未登录状态
             } catch (error) {
                 console.error('初始化失败:', error)
                 updateAuthUI(null)
