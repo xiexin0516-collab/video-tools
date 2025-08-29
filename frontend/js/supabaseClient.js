@@ -1,8 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-// Supabase配置 - 这些值需要在Supabase控制台获取
-const SUPABASE_URL = 'https://your-project.supabase.co'  // 替换为您的Supabase URL
-const SUPABASE_ANON_KEY = 'your-anon-key'  // 替换为您的匿名密钥
+// Supabase配置 - 已配置
+const SUPABASE_URL = 'https://smzmgemipnxcimsxhewi.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtem1nZW1pcG54Y2ltc3hoZXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NzUyMjIsImV4cCI6MjA3MjA1MTIyMn0.b2H8EFSlUIGL7DwcNWjAG1Ox0FS6Hil8zagHp4rBfUM'
 
 // 创建Supabase客户端
 export const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
