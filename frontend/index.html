@@ -172,10 +172,76 @@
         </div>
     </main>
 
+    <!-- 认证模态框 -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-white" id="authModalTitle">登录</h3>
+                    <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 登录表单 -->
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">邮箱</label>
+                        <input type="email" id="loginEmail" required 
+                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">密码</label>
+                        <input type="password" id="loginPassword" required 
+                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button type="submit" class="btn-primary w-full py-2 rounded-lg text-white">
+                        登录
+                    </button>
+                </form>
+
+                <!-- 注册表单 -->
+                <form id="registerForm" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">邮箱</label>
+                        <input type="email" id="registerEmail" required 
+                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">密码</label>
+                        <input type="password" id="registerPassword" required minlength="6"
+                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">确认密码</label>
+                        <input type="password" id="registerPasswordConfirm" required minlength="6"
+                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button type="submit" class="btn-primary w-full py-2 rounded-lg text-white">
+                        注册
+                    </button>
+                </form>
+
+                <!-- 切换按钮 -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-400">
+                        <span id="authToggleText">还没有账号？</span>
+                        <button id="authToggleBtn" class="text-blue-400 hover:text-blue-300 ml-1">
+                            立即注册
+                        </button>
+                    </p>
+                </div>
+
+                <!-- 错误信息 -->
+                <div id="authError" class="mt-4 p-3 bg-red-600 text-white rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        // 临时禁用API功能，专注于基本功能
-        // import { getCurrentUser, signOut, onAuthStateChange } from './js/supabaseClient.js'
-        // import { projectsAPI } from './js/api.js'
+        import { getCurrentUser, signOut, onAuthStateChange, signIn, signUp } from './js/supabaseClient.js'
 
         // 全局变量
         let currentUser = null
@@ -203,7 +269,7 @@
             } else {
                 userInfo.textContent = '未登录'
                 authBtn.textContent = '登录'
-                authBtn.onclick = () => window.location.href = '/login/'
+                authBtn.onclick = showAuthModal
                 myProjectsSection.classList.add('hidden')
             }
         }
@@ -211,7 +277,7 @@
         // 处理退出登录
         async function handleSignOut() {
             try {
-                // await signOut()
+                await signOut()
                 updateAuthUI(null)
                 projects = []
             } catch (error) {
@@ -334,24 +400,140 @@
             }
         }
 
+        // 认证模态框功能
+        let isLoginMode = true
+
+        // 显示认证模态框
+        window.showAuthModal = function() {
+            document.getElementById('authModal').classList.remove('hidden')
+            resetAuthForms()
+        }
+
+        // 关闭认证模态框
+        window.closeAuthModal = function() {
+            document.getElementById('authModal').classList.add('hidden')
+            resetAuthForms()
+        }
+
+        // 重置表单
+        function resetAuthForms() {
+            document.getElementById('loginForm').reset()
+            document.getElementById('registerForm').reset()
+            document.getElementById('authError').classList.add('hidden')
+            document.getElementById('authError').textContent = ''
+        }
+
+        // 切换登录/注册模式
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode
+            
+            const loginForm = document.getElementById('loginForm')
+            const registerForm = document.getElementById('registerForm')
+            const modalTitle = document.getElementById('authModalTitle')
+            const toggleText = document.getElementById('authToggleText')
+            const toggleBtn = document.getElementById('authToggleBtn')
+            
+            if (isLoginMode) {
+                loginForm.classList.remove('hidden')
+                registerForm.classList.add('hidden')
+                modalTitle.textContent = '登录'
+                toggleText.textContent = '还没有账号？'
+                toggleBtn.textContent = '立即注册'
+            } else {
+                loginForm.classList.add('hidden')
+                registerForm.classList.remove('hidden')
+                modalTitle.textContent = '注册'
+                toggleText.textContent = '已有账号？'
+                toggleBtn.textContent = '立即登录'
+            }
+            
+            resetAuthForms()
+        }
+
+        // 显示错误信息
+        function showAuthError(message) {
+            const errorDiv = document.getElementById('authError')
+            errorDiv.textContent = message
+            errorDiv.classList.remove('hidden')
+        }
+
+        // 处理登录
+        async function handleLogin(email, password) {
+            try {
+                const { data, error } = await signIn(email, password)
+                if (error) throw error
+                
+                closeAuthModal()
+                updateAuthUI(data.user)
+            } catch (error) {
+                console.error('登录失败:', error)
+                showAuthError(error.message || '登录失败，请检查邮箱和密码')
+            }
+        }
+
+        // 处理注册
+        async function handleRegister(email, password) {
+            try {
+                const { data, error } = await signUp(email, password)
+                if (error) throw error
+                
+                closeAuthModal()
+                showAuthError('注册成功！请检查邮箱并点击验证链接完成注册。')
+            } catch (error) {
+                console.error('注册失败:', error)
+                showAuthError(error.message || '注册失败，请稍后重试')
+            }
+        }
+
         // 监听认证状态变化
-        // onAuthStateChange((event, session) => {
-        //     if (event === 'SIGNED_IN' && session) {
-        //         updateAuthUI(session.user)
-        //     } else if (event === 'SIGNED_OUT') {
-        //         updateAuthUI(null)
-        //     }
-        // })
+        onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                updateAuthUI(session.user)
+            } else if (event === 'SIGNED_OUT') {
+                updateAuthUI(null)
+            }
+        })
 
         // 事件监听
         refreshProjectsBtn.addEventListener('click', loadProjects)
 
+        // 表单提交事件
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const email = document.getElementById('loginEmail').value
+            const password = document.getElementById('loginPassword').value
+            await handleLogin(email, password)
+        })
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const email = document.getElementById('registerEmail').value
+            const password = document.getElementById('registerPassword').value
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value
+            
+            if (password !== passwordConfirm) {
+                showAuthError('两次输入的密码不一致')
+                return
+            }
+            
+            await handleRegister(email, password)
+        })
+
+        // 切换认证模式
+        document.getElementById('authToggleBtn').addEventListener('click', toggleAuthMode)
+
+        // 点击模态框背景关闭
+        document.getElementById('authModal').addEventListener('click', (e) => {
+            if (e.target.id === 'authModal') {
+                closeAuthModal()
+            }
+        })
+
         // 初始化
         window.addEventListener('load', async () => {
             try {
-                // const user = await getCurrentUser()
-                // updateAuthUI(user)
-                updateAuthUI(null) // 暂时显示未登录状态
+                const user = await getCurrentUser()
+                updateAuthUI(user)
             } catch (error) {
                 console.error('初始化失败:', error)
                 updateAuthUI(null)
