@@ -418,10 +418,10 @@
             // 根据模式设置初始状态
             if (mode === 'register') {
                 isLoginMode = false
-                toggleAuthMode()
+                setAuthMode()
             } else {
                 isLoginMode = true
-                toggleAuthMode()
+                setAuthMode()
             }
         }
 
@@ -439,10 +439,8 @@
             document.getElementById('authError').textContent = ''
         }
 
-        // 切换登录/注册模式
-        function toggleAuthMode() {
-            isLoginMode = !isLoginMode
-            
+        // 设置认证模式
+        function setAuthMode() {
             const loginForm = document.getElementById('loginForm')
             const registerForm = document.getElementById('registerForm')
             const modalTitle = document.getElementById('authModalTitle')
@@ -464,6 +462,12 @@
             }
             
             resetAuthForms()
+        }
+
+        // 切换登录/注册模式
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode
+            setAuthMode()
         }
 
         // 显示错误信息
