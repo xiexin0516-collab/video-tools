@@ -37,6 +37,7 @@ venv.bak/
 backend/.env
 backend/config.env
 config.env
+frontend/js/config.js
 
 # IDE
 .vscode/

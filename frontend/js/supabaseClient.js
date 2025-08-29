@@ -1,8 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-// Supabase配置 - 已配置
-const SUPABASE_URL = 'https://smzmgemipnxcimsxhewi.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtem1nZW1pcG54Y2ltc3hoZXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NzUyMjIsImV4cCI6MjA3MjA1MTIyMn0.b2H8EFSlUIGL7DwcNWjAG1Ox0FS6Hil8zagHp4rBfUM'
+// Supabase配置 - 从环境变量或配置文件读取
+const SUPABASE_URL = window.SUPABASE_URL || 'https://smzmgemipnxcimsxhewi.supabase.co'
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtem1nZW1pcG54Y2ltc3hoZXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NzUyMjIsImV4cCI6MjA3MjA1MTIyMn0.b2H8EFSlUIGL7DwcNWjAG1Ox0FS6Hil8zagHp4rBfUM'
 
 // 创建Supabase客户端
 export const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
