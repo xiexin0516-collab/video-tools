@@ -1,8 +1,2 @@
-# 确保字幕编辑器目录下的文件能正常访问
-/subtitle-editor/* /subtitle-editor/:splat 200
-
-# 主页重定向
-/ /index.html 200
-
-# 其他页面
-/* /:splat 200
+# 让静态文件服务器自然处理路由，不进行重写
+# 这样每个目录下的 index.html 都能正常访问
