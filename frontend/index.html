@@ -57,8 +57,11 @@
                     <h1 class="text-2xl font-bold text-red-400">视频工具平台</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-300" id="userInfo">未登录</span>
-                    <button id="authBtn" class="btn-primary px-4 py-2 rounded-lg text-white">
+                    <span class="text-gray-300" id="userInfo"></span>
+                    <button id="registerBtn" class="btn-secondary px-4 py-2 rounded-lg text-white">
+                        注册
+                    </button>
+                    <button id="loginBtn" class="btn-primary px-4 py-2 rounded-lg text-white">
                         登录
                     </button>
                 </div>
@@ -250,7 +253,8 @@
 
         // DOM元素
         const userInfo = document.getElementById('userInfo')
-        const authBtn = document.getElementById('authBtn')
+        const registerBtn = document.getElementById('registerBtn')
+        const loginBtn = document.getElementById('loginBtn')
         const myProjectsSection = document.getElementById('myProjectsSection')
         const projectsGrid = document.getElementById('projectsGrid')
         const noProjectsMessage = document.getElementById('noProjectsMessage')
@@ -263,14 +267,16 @@
             
             if (user) {
                 userInfo.textContent = `欢迎，${user.email}`
-                authBtn.textContent = '退出登录'
-                authBtn.onclick = handleSignOut
+                registerBtn.style.display = 'none'
+                loginBtn.textContent = '退出登录'
+                loginBtn.onclick = handleSignOut
                 myProjectsSection.classList.remove('hidden')
                 loadProjects()
             } else {
-                userInfo.textContent = '未登录'
-                authBtn.textContent = '登录'
-                authBtn.onclick = showAuthModal
+                userInfo.textContent = ''
+                registerBtn.style.display = 'inline-block'
+                loginBtn.textContent = '登录'
+                loginBtn.onclick = () => showAuthModal('login')
                 myProjectsSection.classList.add('hidden')
             }
         }
@@ -405,9 +411,18 @@
         let isLoginMode = true
 
         // 显示认证模态框
-        window.showAuthModal = function() {
+        window.showAuthModal = function(mode = 'login') {
             document.getElementById('authModal').classList.remove('hidden')
             resetAuthForms()
+            
+            // 根据模式设置初始状态
+            if (mode === 'register') {
+                isLoginMode = false
+                toggleAuthMode()
+            } else {
+                isLoginMode = true
+                toggleAuthMode()
+            }
         }
 
         // 关闭认证模态框
@@ -497,6 +512,7 @@
 
         // 事件监听
         refreshProjectsBtn.addEventListener('click', loadProjects)
+        registerBtn.addEventListener('click', () => showAuthModal('register'))
 
         // 表单提交事件
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
