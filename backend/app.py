@@ -7,10 +7,6 @@ Video Tools Platform - Flask Backend (Minimal Version)
 import os
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
-from dotenv import load_dotenv
-
-# 加载环境变量
-load_dotenv()
 
 # 创建Flask应用
 app = Flask(__name__)
