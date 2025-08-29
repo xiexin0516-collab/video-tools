@@ -15,7 +15,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && python app.py
+    startCommand: cd backend && python test.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.16
