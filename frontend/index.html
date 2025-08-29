@@ -500,8 +500,8 @@
                 const { data, error } = await signUp(email, password)
                 if (error) throw error
                 
-                closeAuthModal()
                 showSuccessMessage('注册成功！请检查邮箱并点击验证链接完成注册。')
+                // 注册成功后不关闭模态框，让用户看到成功消息
             } catch (error) {
                 console.error('注册失败:', error)
                 showAuthError(error.message || '注册失败，请稍后重试')
