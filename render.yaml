@@ -8,16 +8,14 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18.0.0
-    # 移除全局重写规则，让静态文件服务器自然处理路由
-    # 这样 /subtitle-editor/ 目录下的 index.html 就能正常访问了
 
   # 后端API服务
   - type: web
     name: vidtools-backend
     runtime: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && python app.py
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.16
