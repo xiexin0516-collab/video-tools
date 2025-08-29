@@ -520,6 +520,7 @@
         // 事件监听
         refreshProjectsBtn.addEventListener('click', loadProjects)
         registerBtn.addEventListener('click', () => showAuthModal('register'))
+        loginBtn.addEventListener('click', () => showAuthModal('login'))
 
         // 表单提交事件
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
