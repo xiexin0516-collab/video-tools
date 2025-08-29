@@ -39,6 +39,9 @@ class SubtitleEditor {
             // 设置事件回调
             this.setupCallbacks();
             
+            // 加载示例字幕数据
+            this.loadDemoSubtitles();
+            
             this.isInitialized = true;
             console.log('=== 字幕编辑器初始化完成 ===');
             
@@ -180,34 +183,18 @@ class SubtitleEditor {
     // 初始化文件上传
     initFileUploads() {
         // 音频文件上传
-        const audioUpload = document.getElementById('audio-upload');
-        if (audioUpload) {
-            audioUpload.addEventListener('change', (e) => {
+        const audioFileInput = document.getElementById('audioFileInput');
+        const fileUpload = document.getElementById('fileUpload');
+        
+        if (audioFileInput && fileUpload) {
+            fileUpload.addEventListener('click', () => {
+                audioFileInput.click();
+            });
+            
+            audioFileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     this.loadAudioFile(file);
-                }
-            });
-        }
-        
-        // 字幕文件上传
-        const subtitleUpload = document.getElementById('subtitle-upload');
-        if (subtitleUpload) {
-            subtitleUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    this.loadSubtitleFile(file);
-                }
-            });
-        }
-        
-        // 文本文件上传
-        const textUpload = document.getElementById('text-upload');
-        if (textUpload) {
-            textUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    this.loadTextFile(file);
                 }
             });
         }
@@ -216,42 +203,34 @@ class SubtitleEditor {
     // 初始化播放控制
     initPlaybackControls() {
         // 播放/暂停按钮
-        const playButton = document.querySelector('.control-button.play');
-        if (playButton) {
-            playButton.addEventListener('click', () => {
+        const playBtn = document.getElementById('playBtn');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => {
                 this.audioPlayer.playPause();
             });
         }
         
         // 停止按钮
-        const stopButton = document.querySelector('.control-button');
-        if (stopButton) {
-            stopButton.addEventListener('click', () => {
+        const stopBtn = document.getElementById('stopBtn');
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => {
                 this.audioPlayer.stop();
             });
         }
         
-        // 快进快退按钮
-        const rewindButton = document.querySelector('.control-button:nth-child(3)');
-        if (rewindButton) {
-            rewindButton.addEventListener('click', () => {
-                this.audioPlayer.skipTime(-5);
+        // 添加字幕按钮
+        const addSubtitleBtn = document.getElementById('addSubtitleBtn');
+        if (addSubtitleBtn) {
+            addSubtitleBtn.addEventListener('click', () => {
+                this.addNewSubtitle();
             });
         }
         
-        const forwardButton = document.querySelector('.control-button:nth-child(4)');
-        if (forwardButton) {
-            forwardButton.addEventListener('click', () => {
-                this.audioPlayer.skipTime(5);
-            });
-        }
-        
-        // 进度条
-        const progressSlider = document.querySelector('.progress-slider');
-        if (progressSlider) {
-            progressSlider.addEventListener('input', (e) => {
-                const time = parseFloat(e.target.value);
-                this.audioPlayer.seekTo(time);
+        // 删除字幕按钮
+        const deleteSubtitleBtn = document.getElementById('deleteSubtitleBtn');
+        if (deleteSubtitleBtn) {
+            deleteSubtitleBtn.addEventListener('click', () => {
+                this.deleteSelectedSubtitle();
             });
         }
     }
@@ -259,22 +238,29 @@ class SubtitleEditor {
     // 初始化工具栏按钮
     initToolbarButtons() {
         // 保存项目按钮
-        const saveButton = document.querySelector('.toolbar-button:nth-child(5)');
-        if (saveButton) {
-            saveButton.addEventListener('click', () => {
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
                 this.saveProject();
             });
         }
         
-        // 加载项目按钮
-        const loadButton = document.querySelector('.toolbar-button:nth-child(6)');
-        if (loadButton) {
-            loadButton.addEventListener('click', () => {
-                this.showProjectList();
+        // 导出字幕按钮
+        const exportBtn = document.getElementById('exportBtn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                this.exportSubtitles();
             });
         }
         
-        // 导出SRT按钮
+        // 登录按钮
+        const authBtn = document.getElementById('authBtn');
+        if (authBtn) {
+            authBtn.addEventListener('click', () => {
+                this.handleAuth();
+            });
+        }
+    }
         const exportButton = document.querySelector('.toolbar-button.primary');
         if (exportButton) {
             exportButton.addEventListener('click', () => {
@@ -456,7 +442,8 @@ class SubtitleEditor {
             const result = await this.textManager.importTextFile(file);
             
             // 更新项目数据
-            this.projectManager.currentProject.importTextLines(result.content.split('\n'));
+            this.projectManager.currentProject.importedTextLines = result.content.split('\n');
+            this.projectManager.currentProject.currentTextLineIndex = 0;
             
             // 更新UI显示
             this.updateTextDisplay(result.content);
@@ -475,14 +462,16 @@ class SubtitleEditor {
         const text = this.textManager.getNextTextLine();
         const subtitle = new SubtitleItem(text, startTime, endTime);
         
-        this.projectManager.currentProject.addSubtitle(subtitle);
+        this.projectManager.currentProject.subtitles.push(subtitle);
         this.timeline.setSubtitles(this.projectManager.currentProject.subtitles);
         
         this.updateSubtitleList();
     }
     
     onSubtitleSelected(index) {
-        this.projectManager.currentProject.clearSelection();
+        // 清除所有选中状态
+        this.projectManager.currentProject.subtitles.forEach(s => s.selected = false);
+        // 设置当前选中
         this.projectManager.currentProject.subtitles[index].selected = true;
         
         this.timeline.setSelectedSubtitle(index);
@@ -498,10 +487,11 @@ class SubtitleEditor {
     }
     
     onSubtitleDeleted(index) {
-        this.projectManager.currentProject.removeSubtitle(index);
-        this.timeline.setSubtitles(this.projectManager.currentProject.subtitles);
-        
-        this.updateSubtitleList();
+        if (index >= 0 && index < this.projectManager.currentProject.subtitles.length) {
+            this.projectManager.currentProject.subtitles.splice(index, 1);
+            this.timeline.setSubtitles(this.projectManager.currentProject.subtitles);
+            this.updateSubtitleList();
+        }
     }
     
     // 文本导入事件处理
@@ -537,25 +527,22 @@ class SubtitleEditor {
     
     // 更新时间显示
     updateTimeDisplay(time) {
-        const timeDisplay = document.querySelector('.time-display');
+        const timeDisplay = document.getElementById('currentTime');
         if (timeDisplay) {
             const currentTime = this.formatTime(time);
-            const duration = this.formatTime(this.projectManager.currentProject.duration);
-            timeDisplay.textContent = `${currentTime} / ${duration}`;
+            timeDisplay.textContent = currentTime;
         }
     }
     
     // 更新时长显示
     updateDurationDisplay(duration) {
-        const progressSlider = document.querySelector('.progress-slider');
-        if (progressSlider) {
-            progressSlider.max = duration;
-        }
+        // 这里可以添加更新音频播放器时长的逻辑
+        console.log('Duration updated:', duration);
     }
     
     // 更新播放按钮
     updatePlayButton(isPlaying) {
-        const playButton = document.querySelector('.control-button.play');
+        const playButton = document.getElementById('playBtn');
         if (playButton) {
             playButton.textContent = isPlaying ? '⏸️ 暂停' : '▶️ 播放';
         }
@@ -563,7 +550,7 @@ class SubtitleEditor {
     
     // 更新字幕列表
     updateSubtitleList() {
-        const subtitleList = document.querySelector('.subtitle-list');
+        const subtitleList = document.getElementById('subtitleList');
         if (!subtitleList) return;
         
         const subtitles = this.projectManager.currentProject.subtitles;
@@ -599,7 +586,7 @@ class SubtitleEditor {
     
     // 更新文本显示
     updateTextDisplay(content) {
-        const textDisplay = document.querySelector('.text-display');
+        const textDisplay = document.getElementById('textDisplay');
         if (textDisplay) {
             if (content && content.trim()) {
                 textDisplay.innerHTML = `<pre class="whitespace-pre-wrap">${content}</pre>`;
@@ -713,6 +700,26 @@ class SubtitleEditor {
         console.log('Zoom out');
     }
     
+    // 添加新字幕
+    addNewSubtitle() {
+        const currentTime = this.audioPlayer.getCurrentTime() || 0;
+        const startTime = currentTime;
+        const endTime = currentTime + 3; // 默认3秒长度
+        
+        const newSubtitle = {
+            text: "[点击编辑字幕文本]",
+            startTime: startTime,
+            endTime: endTime,
+            selected: false
+        };
+        
+        this.projectManager.currentProject.subtitles.push(newSubtitle);
+        this.timeline.setSubtitles(this.projectManager.currentProject.subtitles);
+        this.updateSubtitleList();
+        
+        console.log('新字幕已添加');
+    }
+    
     // 删除选中的字幕
     deleteSelectedSubtitle() {
         const selectedIndex = this.projectManager.currentProject.subtitles.findIndex(s => s.selected);
@@ -721,11 +728,85 @@ class SubtitleEditor {
         }
     }
     
+    // 导出字幕
+    exportSubtitles() {
+        const subtitles = this.projectManager.currentProject.subtitles;
+        if (subtitles.length === 0) {
+            this.showInfo('没有字幕可以导出');
+            return;
+        }
+        
+        let srtContent = '';
+        subtitles.forEach((subtitle, index) => {
+            const startTime = this.formatTimeForSRT(subtitle.startTime);
+            const endTime = this.formatTimeForSRT(subtitle.endTime);
+            srtContent += `${index + 1}\n${startTime} --> ${endTime}\n${subtitle.text}\n\n`;
+        });
+        
+        // 创建下载链接
+        const blob = new Blob([srtContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'subtitles.srt';
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        this.showSuccess('字幕已导出为SRT文件');
+    }
+    
+    // 处理认证
+    handleAuth() {
+        // 这里可以添加登录逻辑
+        console.log('处理认证');
+    }
+    
+    // 格式化时间为SRT格式
+    formatTimeForSRT(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        const ms = Math.floor((seconds % 1) * 1000);
+        
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')},${ms.toString().padStart(3, '0')}`;
+    }
+    
     // 语言切换
     changeLanguage(language) {
         this.currentLanguage = language;
         // 实现语言切换逻辑
         console.log('Language changed to:', language);
+    }
+    
+    // 加载示例字幕数据
+    loadDemoSubtitles() {
+        const demoSubtitles = [
+            { text: "欢迎使用字幕编辑器网页版", startTime: 0, endTime: 3, selected: false },
+            { text: "这是一个多语言视频工具平台", startTime: 3, endTime: 6, selected: false },
+            { text: "支持中英文双语界面", startTime: 6, endTime: 9, selected: false },
+            { text: "您可以上传音频文件和字幕文件", startTime: 9, endTime: 12, selected: false },
+            { text: "进行实时编辑和同步", startTime: 12, endTime: 15, selected: false },
+            { text: "导出为SRT或TXT格式", startTime: 15, endTime: 18, selected: false },
+            { text: "开始您的字幕编辑之旅吧！", startTime: 18, endTime: 21, selected: false },
+            { text: "Welcome to SubtitleEditor Web", startTime: 21, endTime: 24, selected: false },
+            { text: "A multi-language video tool platform", startTime: 24, endTime: 27, selected: false },
+            { text: "Supporting Chinese and English interfaces", startTime: 27, endTime: 30, selected: false }
+        ];
+        
+        // 设置项目数据
+        this.projectManager.currentProject.subtitles = demoSubtitles;
+        this.projectManager.currentProject.duration = 30;
+        this.projectManager.currentProject.projectName = "示例项目";
+        
+        // 更新时间轴
+        this.timeline.setSubtitles(demoSubtitles);
+        this.timeline.setDuration(30);
+        
+        // 更新UI
+        this.updateSubtitleList();
+        this.updateTextDisplay("欢迎使用字幕编辑器网页版\n\n这是一个多语言视频工具平台，支持中英文双语界面。您可以上传音频文件和字幕文件，进行实时编辑和同步，导出为SRT或TXT格式。\n\n开始您的字幕编辑之旅吧！");
+        
+        console.log('示例字幕数据已加载');
     }
     
     // 工具方法

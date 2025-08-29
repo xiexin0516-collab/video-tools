@@ -286,6 +286,11 @@ class AudioPlayer {
         return this.audio.src;
     }
     
+    // 获取当前播放时间
+    getCurrentTime() {
+        return this.audio.currentTime;
+    }
+    
     // 检查是否已加载
     isLoaded() {
         return this.audio.readyState >= 2; // HAVE_CURRENT_DATA
