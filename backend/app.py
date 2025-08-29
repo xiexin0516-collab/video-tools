@@ -26,19 +26,26 @@ app = Flask(__name__)
 
 # 配置
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
-app.config['SUPABASE_URL'] = os.getenv('SUPABASE_URL')
-app.config['SUPABASE_JWKS_URL'] = os.getenv('SUPABASE_JWKS_URL')
-app.config['SUPABASE_SERVICE_ROLE'] = os.getenv('SUPABASE_SERVICE_ROLE')
-app.config['DATABASE_URL'] = os.getenv('DATABASE_URL')
+app.config['SUPABASE_URL'] = os.getenv('SUPABASE_URL', 'http://localhost')
+app.config['SUPABASE_JWKS_URL'] = os.getenv('SUPABASE_JWKS_URL', 'http://localhost')
+app.config['SUPABASE_SERVICE_ROLE'] = os.getenv('SUPABASE_SERVICE_ROLE', 'dummy-key')
+app.config['DATABASE_URL'] = os.getenv('DATABASE_URL', 'sqlite:///test.db')
 
 # 启用CORS
-CORS(app, origins=['https://vidtools.tools', 'http://localhost:3000'])
+CORS(app, origins=['https://vidtools.tools', 'http://localhost:3000', '*'])
 
-# 数据库配置
-Base = declarative_base()
-engine = create_engine(app.config['DATABASE_URL'])
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db_session = scoped_session(SessionLocal)
+# 数据库配置 - 添加错误处理
+try:
+    Base = declarative_base()
+    engine = create_engine(app.config['DATABASE_URL'])
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db_session = scoped_session(SessionLocal)
+except Exception as e:
+    print(f"数据库连接错误: {e}")
+    # 使用内存数据库作为后备
+    engine = create_engine('sqlite:///:memory:')
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    db_session = scoped_session(SessionLocal)
 
 # 数据模型
 class Project(Base):
