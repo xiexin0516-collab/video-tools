@@ -19,9 +19,9 @@ import uuid
 app = Flask(__name__)
 
 # 配置
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
-app.config['SUPABASE_URL'] = os.getenv('SUPABASE_URL')
-app.config['SUPABASE_SERVICE_ROLE'] = os.getenv('SUPABASE_SERVICE_ROLE')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'vidtools-dev-secret-key-2024')
+app.config['SUPABASE_URL'] = os.getenv('SUPABASE_URL', 'https://smzmgemipnxcimsxhewi.supabase.co')
+app.config['SUPABASE_SERVICE_ROLE'] = os.getenv('SUPABASE_SERVICE_ROLE', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtem1nZW1pcG54Y2ltc3hoZXdpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjQ3NTIyMiwiZXhwIjoyMDcyMDUxMjIyfQ.V4KQFlIjXAsuT8lAJlWC7Y0OFIyChvVYfkFOjPib3mM')
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB
 

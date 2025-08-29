@@ -435,7 +435,7 @@
         function resetAuthForms() {
             document.getElementById('loginForm').reset()
             document.getElementById('registerForm').reset()
-            document.getElementById('authError').classList.add('hidden')
+            document.getElementById('authError').className = 'mt-4 p-3 bg-red-600 text-white rounded-lg hidden'
             document.getElementById('authError').textContent = ''
         }
 
@@ -470,7 +470,14 @@
         function showAuthError(message) {
             const errorDiv = document.getElementById('authError')
             errorDiv.textContent = message
-            errorDiv.classList.remove('hidden')
+            errorDiv.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg'
+        }
+
+        // 显示成功信息
+        function showSuccessMessage(message) {
+            const errorDiv = document.getElementById('authError')
+            errorDiv.textContent = message
+            errorDiv.className = 'mt-4 p-3 bg-green-600 text-white rounded-lg'
         }
 
         // 处理登录
@@ -494,7 +501,7 @@
                 if (error) throw error
                 
                 closeAuthModal()
-                showAuthError('注册成功！请检查邮箱并点击验证链接完成注册。')
+                showSuccessMessage('注册成功！请检查邮箱并点击验证链接完成注册。')
             } catch (error) {
                 console.error('注册失败:', error)
                 showAuthError(error.message || '注册失败，请稍后重试')
