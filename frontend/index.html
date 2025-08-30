@@ -57,13 +57,7 @@
                     <h1 class="text-2xl font-bold text-red-400">视频工具平台</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-300" id="userInfo"></span>
-                    <button id="registerBtn" class="btn-secondary px-4 py-2 rounded-lg text-white">
-                        注册
-                    </button>
-                    <button id="loginBtn" class="btn-primary px-4 py-2 rounded-lg text-white">
-                        登录
-                    </button>
+                    <span class="text-gray-300 text-sm">专业的视频处理工具</span>
                 </div>
             </div>
         </div>
@@ -151,98 +145,10 @@
             </div>
         </div>
 
-        <!-- My Projects Section (Only for logged in users) -->
-        <div id="myProjectsSection" class="hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white">我的项目</h3>
-                <button id="refreshProjectsBtn" class="btn-secondary px-4 py-2 rounded-lg text-white">
-                    刷新
-                </button>
-            </div>
-            
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Projects will be loaded here -->
-            </div>
-            
-            <div id="noProjectsMessage" class="text-center py-8 hidden">
-                <p class="text-gray-400 text-lg">您还没有项目，开始创建您的第一个项目吧！</p>
-            </div>
-        </div>
 
-        <!-- Loading Spinner -->
-        <div id="loadingSpinner" class="text-center py-8 hidden">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            <span class="ml-2 text-gray-400">加载中...</span>
-        </div>
     </main>
 
-    <!-- 认证模态框 -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white" id="authModalTitle">登录</h3>
-                    <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
 
-                <!-- 登录表单 -->
-                <form id="loginForm" class="space-y-4">
-                    <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">邮箱</label>
-                        <input type="email" id="loginEmail" required 
-                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">密码</label>
-                        <input type="password" id="loginPassword" required 
-                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <button type="submit" class="btn-primary w-full py-2 rounded-lg text-white">
-                        登录
-                    </button>
-                </form>
-
-                <!-- 注册表单 -->
-                <form id="registerForm" class="space-y-4 hidden">
-                    <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">邮箱</label>
-                        <input type="email" id="registerEmail" required 
-                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">密码</label>
-                        <input type="password" id="registerPassword" required minlength="6"
-                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">确认密码</label>
-                        <input type="password" id="registerPasswordConfirm" required minlength="6"
-                               class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <button type="submit" class="btn-primary w-full py-2 rounded-lg text-white">
-                        注册
-                    </button>
-                </form>
-
-                <!-- 切换按钮 -->
-                <div class="mt-6 text-center">
-                    <p class="text-gray-400">
-                        <span id="authToggleText">还没有账号？</span>
-                        <button id="authToggleBtn" class="text-blue-400 hover:text-blue-300 ml-1">
-                            立即注册
-                        </button>
-                    </p>
-                </div>
-
-                <!-- 错误信息 -->
-                <div id="authError" class="mt-4 p-3 bg-red-600 text-white rounded-lg hidden"></div>
-            </div>
-        </div>
-    </div>
 
     <!-- 下载模态框 -->
     <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
@@ -349,131 +255,13 @@
     </div>
 
     <script type="module">
-        import { getCurrentUser, signOut, onAuthStateChange, signIn, signUp } from './js/supabaseClient.js'
 
-        // 全局变量
-        let currentUser = null
-        let projects = []
 
-        // DOM元素
-        const userInfo = document.getElementById('userInfo')
-        const registerBtn = document.getElementById('registerBtn')
-        const loginBtn = document.getElementById('loginBtn')
-        const myProjectsSection = document.getElementById('myProjectsSection')
-        const projectsGrid = document.getElementById('projectsGrid')
-        const noProjectsMessage = document.getElementById('noProjectsMessage')
-        const loadingSpinner = document.getElementById('loadingSpinner')
-        const refreshProjectsBtn = document.getElementById('refreshProjectsBtn')
 
-        // 更新UI状态
-        function updateAuthUI(user) {
-            currentUser = user
-            
-            if (user) {
-                userInfo.textContent = `欢迎，${user.email}`
-                registerBtn.style.display = 'none'
-                loginBtn.textContent = '退出登录'
-                loginBtn.onclick = handleSignOut
-                myProjectsSection.classList.remove('hidden')
-                loadProjects()
-            } else {
-                userInfo.textContent = ''
-                registerBtn.style.display = 'inline-block'
-                loginBtn.textContent = '登录'
-                loginBtn.onclick = () => showAuthModal('login')
-                myProjectsSection.classList.add('hidden')
-            }
-        }
 
-        // 处理退出登录
-        async function handleSignOut() {
-            try {
-                await signOut()
-                updateAuthUI(null)
-                projects = []
-            } catch (error) {
-                console.error('退出登录失败:', error)
-            }
-        }
 
-        // 加载项目列表
-        async function loadProjects() {
-            if (!currentUser) return
-            
-            showLoading()
-            
-            try {
-                const result = await api.getProjects()
-                projects = result.projects || []
-                displayProjects()
-            } catch (error) {
-                console.error('加载项目失败:', error)
-                // 如果API失败，使用模拟数据
-                projects = [
-                    {
-                        id: 1,
-                        name: '示例项目 1',
-                        audio_url: 'audio1.mp3',
-                        created_at: new Date().toISOString()
-                    },
-                    {
-                        id: 2,
-                        name: '示例项目 2',
-                        audio_url: null,
-                        created_at: new Date(Date.now() - 86400000).toISOString()
-                    }
-                ]
-                displayProjects()
-            } finally {
-                hideLoading()
-            }
-        }
 
-        // 显示项目列表
-        function displayProjects() {
-            if (projects.length === 0) {
-                projectsGrid.innerHTML = ''
-                noProjectsMessage.classList.remove('hidden')
-                return
-            }
-            
-            noProjectsMessage.classList.add('hidden')
-            
-            projectsGrid.innerHTML = projects.map(project => `
-                <div class="tool-card rounded-xl p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h4 class="text-lg font-semibold text-white">${project.name}</h4>
-                        <span class="text-sm text-gray-400">${formatDate(project.created_at)}</span>
-                    </div>
-                    <p class="text-gray-400 text-sm mb-4">
-                        ${project.audio_url ? '包含音频文件' : '仅字幕项目'}
-                    </p>
-                    <div class="flex space-x-2">
-                        <button onclick="openProject(${project.id})" class="btn-primary flex-1 py-2 rounded-lg text-white text-sm">
-                            打开
-                        </button>
-                        <button onclick="deleteProject(${project.id})" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-sm">
-                            删除
-                        </button>
-                    </div>
-                </div>
-            `).join('')
-        }
 
-        // 格式化日期
-        function formatDate(dateString) {
-            const date = new Date(dateString)
-            return date.toLocaleDateString('zh-CN')
-        }
-
-        // 显示/隐藏加载状态
-        function showLoading() {
-            loadingSpinner.classList.remove('hidden')
-        }
-
-        function hideLoading() {
-            loadingSpinner.classList.add('hidden')
-        }
 
         // 打开工具
         window.openTool = function(toolName) {
@@ -484,56 +272,7 @@
             }
         }
 
-        // 打开项目
-        window.openProject = function(projectId) {
-            window.location.href = `/subtitle-editor/?project=${projectId}`
-        }
 
-        // 删除项目
-        window.deleteProject = async function(projectId) {
-            if (!confirm('确定要删除这个项目吗？此操作不可撤销。')) {
-                return
-            }
-            
-            try {
-                showLoading()
-                await api.deleteProject(projectId)
-                
-                // 从列表中移除
-                projects = projects.filter(p => p.id !== projectId)
-                displayProjects()
-                alert('项目删除成功')
-            } catch (error) {
-                console.error('删除项目失败:', error)
-                alert('删除失败: ' + error.message)
-            } finally {
-                hideLoading()
-            }
-        }
-
-        // 认证模态框功能
-        let isLoginMode = true
-
-        // 显示认证模态框
-        window.showAuthModal = function(mode = 'login') {
-            document.getElementById('authModal').classList.remove('hidden')
-            resetAuthForms()
-            
-            // 根据模式设置初始状态
-            if (mode === 'register') {
-                isLoginMode = false
-                setAuthMode()
-            } else {
-                isLoginMode = true
-                setAuthMode()
-            }
-        }
-
-        // 关闭认证模态框
-        window.closeAuthModal = function() {
-            document.getElementById('authModal').classList.add('hidden')
-            resetAuthForms()
-        }
 
         // 显示下载模态框
         window.showDownloadModal = function() {
@@ -573,101 +312,7 @@
             }
         }
 
-        // 重置表单
-        function resetAuthForms() {
-            document.getElementById('loginForm').reset()
-            document.getElementById('registerForm').reset()
-            document.getElementById('authError').className = 'mt-4 p-3 bg-red-600 text-white rounded-lg hidden'
-            document.getElementById('authError').textContent = ''
-        }
-
-        // 设置认证模式
-        function setAuthMode() {
-            const loginForm = document.getElementById('loginForm')
-            const registerForm = document.getElementById('registerForm')
-            const modalTitle = document.getElementById('authModalTitle')
-            const toggleText = document.getElementById('authToggleText')
-            const toggleBtn = document.getElementById('authToggleBtn')
-            
-            if (isLoginMode) {
-                loginForm.classList.remove('hidden')
-                registerForm.classList.add('hidden')
-                modalTitle.textContent = '登录'
-                toggleText.textContent = '还没有账号？'
-                toggleBtn.textContent = '立即注册'
-            } else {
-                loginForm.classList.add('hidden')
-                registerForm.classList.remove('hidden')
-                modalTitle.textContent = '注册'
-                toggleText.textContent = '已有账号？'
-                toggleBtn.textContent = '立即登录'
-            }
-            
-            resetAuthForms()
-        }
-
-        // 切换登录/注册模式
-        function toggleAuthMode() {
-            isLoginMode = !isLoginMode
-            setAuthMode()
-        }
-
-        // 显示错误信息
-        function showAuthError(message) {
-            const errorDiv = document.getElementById('authError')
-            errorDiv.textContent = message
-            errorDiv.className = 'mt-4 p-3 bg-red-600 text-white rounded-lg'
-        }
-
-        // 显示成功信息
-        function showSuccessMessage(message) {
-            const errorDiv = document.getElementById('authError')
-            errorDiv.textContent = message
-            errorDiv.className = 'mt-4 p-3 bg-green-600 text-white rounded-lg'
-        }
-
-        // 处理登录
-        async function handleLogin(email, password) {
-            try {
-                const { data, error } = await signIn(email, password)
-                if (error) throw error
-                
-                closeAuthModal()
-                updateAuthUI(data.user)
-            } catch (error) {
-                console.error('登录失败:', error)
-                showAuthError(error.message || '登录失败，请检查邮箱和密码')
-            }
-        }
-
-        // 处理注册
-        async function handleRegister(email, password) {
-            try {
-                const { data, error } = await signUp(email, password)
-                if (error) throw error
-                
-                showSuccessMessage('注册成功！请检查邮箱并点击验证链接完成注册。')
-                // 注册成功后不关闭模态框，让用户看到成功消息
-            } catch (error) {
-                console.error('注册失败:', error)
-                showAuthError(error.message || '注册失败，请稍后重试')
-            }
-        }
-
-        // 监听认证状态变化
-        onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' && session) {
-                updateAuthUI(session.user)
-            } else if (event === 'SIGNED_OUT') {
-                updateAuthUI(null)
-            }
-        })
-
         // 事件监听
-        refreshProjectsBtn.addEventListener('click', loadProjects)
-        registerBtn.addEventListener('click', () => showAuthModal('register'))
-        loginBtn.addEventListener('click', () => showAuthModal('login'))
-        
         // 桌面版下载功能
         document.getElementById('downloadDesktopBtn').addEventListener('click', () => {
             showDownloadModal()
@@ -677,38 +322,7 @@
             showFeaturesModal()
         })
 
-        // 表单提交事件
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault()
-            const email = document.getElementById('loginEmail').value
-            const password = document.getElementById('loginPassword').value
-            await handleLogin(email, password)
-        })
-
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault()
-            const email = document.getElementById('registerEmail').value
-            const password = document.getElementById('registerPassword').value
-            const passwordConfirm = document.getElementById('registerPasswordConfirm').value
-            
-            if (password !== passwordConfirm) {
-                showAuthError('两次输入的密码不一致')
-                return
-            }
-            
-            await handleRegister(email, password)
-        })
-
-        // 切换认证模式
-        document.getElementById('authToggleBtn').addEventListener('click', toggleAuthMode)
-
         // 点击模态框背景关闭
-        document.getElementById('authModal').addEventListener('click', (e) => {
-            if (e.target.id === 'authModal') {
-                closeAuthModal()
-            }
-        })
-
         document.getElementById('downloadModal').addEventListener('click', (e) => {
             if (e.target.id === 'downloadModal') {
                 closeDownloadModal()
@@ -718,17 +332,6 @@
         document.getElementById('featuresModal').addEventListener('click', (e) => {
             if (e.target.id === 'featuresModal') {
                 closeFeaturesModal()
-            }
-        })
-
-        // 初始化
-        window.addEventListener('load', async () => {
-            try {
-                const user = await getCurrentUser()
-                updateAuthUI(user)
-            } catch (error) {
-                console.error('初始化失败:', error)
-                updateAuthUI(null)
             }
         })
     </script>
