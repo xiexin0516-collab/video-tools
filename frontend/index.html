@@ -74,7 +74,15 @@
         <!-- Hero Section -->
         <div class="hero-card rounded-2xl p-8 mb-12 text-center">
             <h2 class="text-4xl font-bold text-white mb-4">专业的视频处理工具</h2>
-            <p class="text-xl text-gray-300">一站式视频编辑、字幕制作、音频处理解决方案</p>
+            <p class="text-xl text-gray-300 mb-8">一站式视频编辑、字幕制作、音频处理解决方案</p>
+            <div class="flex justify-center space-x-4">
+                <button id="downloadDesktopBtn" class="btn-primary px-8 py-3 rounded-lg text-white text-lg font-medium">
+                    📥 下载桌面版
+                </button>
+                <button id="learnMoreBtn" class="btn-secondary px-6 py-3 rounded-lg text-white text-lg font-medium">
+                    💡 了解更多
+                </button>
+            </div>
         </div>
 
         <!-- Tools Grid -->
@@ -232,6 +240,110 @@
 
                 <!-- 错误信息 -->
                 <div id="authError" class="mt-4 p-3 bg-red-600 text-white rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下载模态框 -->
+    <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-white">📥 下载桌面版</h3>
+                    <button onclick="closeDownloadModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🪟 Windows 版本</h4>
+                        <p class="text-gray-300 text-sm mb-3">支持 Windows 10/11</p>
+                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 下载 Windows 版 (v1.0.0)
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🍎 macOS 版本</h4>
+                        <p class="text-gray-300 text-sm mb-3">支持 macOS 10.15+</p>
+                        <button onclick="downloadDesktop('macos')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 下载 macOS 版 (v1.0.0)
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🐧 Linux 版本</h4>
+                        <p class="text-gray-300 text-sm mb-3">支持 Ubuntu 20.04+</p>
+                        <button onclick="downloadDesktop('linux')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 下载 Linux 版 (v1.0.0)
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-gray-400 text-sm">💡 无需注册，下载即可使用</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 功能介绍模态框 -->
+    <div id="featuresModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-white">💡 功能特色</h3>
+                    <button onclick="closeFeaturesModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🖼️ 图片处理</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• 智能图片缩放</li>
+                            <li>• 格式转换 (JPG/PNG/WEBP)</li>
+                            <li>• 图片压缩优化</li>
+                            <li>• 批量处理</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">📸 截屏工具</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• 全屏截图</li>
+                            <li>• 区域截图</li>
+                            <li>• 窗口截图</li>
+                            <li>• 延时截图</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🎬 视频处理</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• 视频格式转换</li>
+                            <li>• 字幕编辑制作</li>
+                            <li>• 音频提取</li>
+                            <li>• 视频压缩</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">⚡ 高效便捷</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• 无需注册登录</li>
+                            <li>• 离线使用</li>
+                            <li>• 界面简洁</li>
+                            <li>• 操作简单</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -423,6 +535,44 @@
             resetAuthForms()
         }
 
+        // 显示下载模态框
+        window.showDownloadModal = function() {
+            document.getElementById('downloadModal').classList.remove('hidden')
+        }
+
+        // 关闭下载模态框
+        window.closeDownloadModal = function() {
+            document.getElementById('downloadModal').classList.add('hidden')
+        }
+
+        // 显示功能介绍模态框
+        window.showFeaturesModal = function() {
+            document.getElementById('featuresModal').classList.remove('hidden')
+        }
+
+        // 关闭功能介绍模态框
+        window.closeFeaturesModal = function() {
+            document.getElementById('featuresModal').classList.add('hidden')
+        }
+
+        // 下载桌面版
+        window.downloadDesktop = function(platform) {
+            // 这里可以链接到实际的下载地址
+            const downloadUrls = {
+                windows: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-windows.exe',
+                macos: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-macos.dmg',
+                linux: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-linux.AppImage'
+            }
+            
+            const url = downloadUrls[platform]
+            if (url) {
+                window.open(url, '_blank')
+                closeDownloadModal()
+            } else {
+                alert('下载链接暂未准备好，请稍后再试')
+            }
+        }
+
         // 重置表单
         function resetAuthForms() {
             document.getElementById('loginForm').reset()
@@ -517,6 +667,15 @@
         refreshProjectsBtn.addEventListener('click', loadProjects)
         registerBtn.addEventListener('click', () => showAuthModal('register'))
         loginBtn.addEventListener('click', () => showAuthModal('login'))
+        
+        // 桌面版下载功能
+        document.getElementById('downloadDesktopBtn').addEventListener('click', () => {
+            showDownloadModal()
+        })
+        
+        document.getElementById('learnMoreBtn').addEventListener('click', () => {
+            showFeaturesModal()
+        })
 
         // 表单提交事件
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -547,6 +706,18 @@
         document.getElementById('authModal').addEventListener('click', (e) => {
             if (e.target.id === 'authModal') {
                 closeAuthModal()
+            }
+        })
+
+        document.getElementById('downloadModal').addEventListener('click', (e) => {
+            if (e.target.id === 'downloadModal') {
+                closeDownloadModal()
+            }
+        })
+
+        document.getElementById('featuresModal').addEventListener('click', (e) => {
+            if (e.target.id === 'featuresModal') {
+                closeFeaturesModal()
             }
         })
 
