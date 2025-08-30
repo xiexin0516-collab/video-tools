@@ -166,25 +166,9 @@
                 <div class="space-y-4">
                     <div class="bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-semibold text-white mb-2">🪟 Windows 版本</h4>
-                        <p class="text-gray-300 text-sm mb-3">支持 Windows 10/11</p>
+                        <p class="text-gray-300 text-sm mb-3">支持 Windows 10/11 (64位)</p>
                         <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
                             📥 下载 Windows 版 (v1.0.0)
-                        </button>
-                    </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🍎 macOS 版本</h4>
-                        <p class="text-gray-300 text-sm mb-3">支持 macOS 10.15+</p>
-                        <button onclick="downloadDesktop('macos')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 下载 macOS 版 (v1.0.0)
-                        </button>
-                    </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🐧 Linux 版本</h4>
-                        <p class="text-gray-300 text-sm mb-3">支持 Ubuntu 20.04+</p>
-                        <button onclick="downloadDesktop('linux')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 下载 Linux 版 (v1.0.0)
                         </button>
                     </div>
                 </div>
@@ -296,16 +280,11 @@
 
         // 下载桌面版
         window.downloadDesktop = function(platform) {
-            // 这里可以链接到实际的下载地址
-            const downloadUrls = {
-                windows: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-windows.exe',
-                macos: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-macos.dmg',
-                linux: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-linux.AppImage'
-            }
+            // Windows版本下载地址
+            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/video-tools-windows.exe'
             
-            const url = downloadUrls[platform]
-            if (url) {
-                window.open(url, '_blank')
+            if (downloadUrl) {
+                window.open(downloadUrl, '_blank')
                 closeDownloadModal()
             } else {
                 alert('下载链接暂未准备好，请稍后再试')
