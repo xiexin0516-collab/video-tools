@@ -18,16 +18,19 @@ class ToolsDisplay {
         if (!categoriesContainer) return;
         
         const categories = window.toolsManager.categories;
+        const currentLang = window.I18N ? window.I18N.currentLang : 'zh';
+        
         let html = `
             <button class="category-tab active" data-category="all">
-                🏠 全部工具
+                ${window.I18N ? window.I18N.t('category.all') : '🏠 全部工具'}
             </button>
         `;
         
         categories.forEach(category => {
+            const categoryName = category.name[currentLang] || category.name;
             html += `
                 <button class="category-tab" data-category="${category.id}">
-                    ${category.icon} ${category.name}
+                    ${category.icon} ${categoryName}
                 </button>
             `;
         });
@@ -58,13 +61,20 @@ class ToolsDisplay {
         tools.forEach(tool => {
             const statusBadge = this.getStatusBadge(tool.status);
             const downloadButton = this.getDownloadButton(tool);
+            const currentLang = window.I18N ? window.I18N.currentLang : 'zh';
+            
+            // 获取多语言内容
+            const toolName = typeof tool.name === 'object' ? tool.name[currentLang] || tool.name : tool.name;
+            const toolDescription = typeof tool.description === 'object' ? tool.description[currentLang] || tool.description : tool.description;
+            const toolFeatures = typeof tool.features === 'object' ? tool.features[currentLang] || tool.features : tool.features;
+            const toolRequirements = typeof tool.systemRequirements === 'object' ? tool.systemRequirements[currentLang] || tool.systemRequirements : tool.systemRequirements;
             
             html += `
                 <div class="tool-card" data-tool-id="${tool.id}">
                     <div class="tool-header">
                         <div class="tool-icon">${tool.icon}</div>
                         <div class="tool-info">
-                            <h4 class="tool-name">${tool.name}</h4>
+                            <h4 class="tool-name">${toolName}</h4>
                             <div class="tool-meta">
                                 <span class="tool-version">${tool.version}</span>
                                 <span class="tool-size">${tool.fileSize}</span>
@@ -73,14 +83,14 @@ class ToolsDisplay {
                         </div>
                     </div>
                     
-                    <p class="tool-description">${tool.description}</p>
+                    <p class="tool-description">${toolDescription}</p>
                     
                     <div class="tool-features">
-                        ${tool.features.slice(0, 3).map(feature => 
+                        ${toolFeatures.slice(0, 3).map(feature => 
                             `<span class="feature-tag">${feature}</span>`
                         ).join('')}
-                        ${tool.features.length > 3 ? 
-                            `<span class="feature-more">+${tool.features.length - 3} 更多</span>` : 
+                        ${toolFeatures.length > 3 ? 
+                            `<span class="feature-more">+${toolFeatures.length - 3} ${currentLang === 'zh' ? '更多' : 'more'}</span>` : 
                             ''
                         }
                     </div>
@@ -88,7 +98,7 @@ class ToolsDisplay {
                     <div class="tool-actions">
                         ${downloadButton}
                         <button class="btn-secondary tool-details" onclick="showToolDetails('${tool.id}')">
-                            📋 详情
+                            ${window.I18N ? window.I18N.t('btn.details') : '📋 详情'}
                         </button>
                     </div>
                 </div>

@@ -32,20 +32,38 @@ window.TOOLS_CONFIG = {
     tools: [
         {
             id: 'manual-subtitle-editor',
-            name: '手动上字幕改版新版本',
+            name: {
+                zh: '手动上字幕改版新版本',
+                en: 'Manual Subtitle Editor'
+            },
             category: 'subtitle',
             icon: '🎬',
-            description: '专业的字幕制作工具，支持音频同步、时间轴编辑、多格式导出',
+            description: {
+                zh: '专业的字幕制作工具，支持音频同步、时间轴编辑、多格式导出',
+                en: 'Professional subtitle creation tool with audio sync, timeline editing, and multi-format export'
+            },
             version: 'v1.0.0',
-            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/latest/download/ManualSubtitleEditor-v1.0.0.zip',
-            features: [
-                '基于时间轴编辑',
-                '音频同步播放',
-                '智能吸附功能',
-                '多语言支持',
-                '工程文件保存'
-            ],
-            systemRequirements: 'Windows 10/11 (64位)',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.0.0/ManualSubtitleEditor-v1.0.0.zip',
+            features: {
+                zh: [
+                    '基于时间轴编辑',
+                    '音频同步播放',
+                    '智能吸附功能',
+                    '多语言支持',
+                    '工程文件保存'
+                ],
+                en: [
+                    'Timeline-based editing',
+                    'Audio synchronization',
+                    'Smart snap function',
+                    'Multi-language support',
+                    'Project file saving'
+                ]
+            },
+            systemRequirements: {
+                zh: 'Windows 10/11 (64位)',
+                en: 'Windows 10/11 (64-bit)'
+            },
             fileSize: '38MB',
             status: 'stable' // stable, beta, alpha
         },
