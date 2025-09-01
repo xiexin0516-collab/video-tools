@@ -87,3 +87,10 @@ yarn-error.log*
 # Build outputs
 dist/
 build/
+
+# Large files (should be uploaded to Releases instead)
+*.zip
+*.exe
+*.msi
+*.dmg
+*.pkg
