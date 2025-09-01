@@ -90,7 +90,7 @@ class ToolsDisplay {
                             `<span class="feature-tag">${feature}</span>`
                         ).join('')}
                         ${toolFeatures.length > 3 ? 
-                            `<span class="feature-more">+${toolFeatures.length - 3} ${currentLang === 'zh' ? '更多' : 'more'}</span>` : 
+                            `<span class="feature-more">+${toolFeatures.length - 3} ${window.I18N ? window.I18N.t('features.more') : 'more'}</span>` : 
                             ''
                         }
                     </div>
@@ -106,11 +106,12 @@ class ToolsDisplay {
         });
         
         if (tools.length === 0) {
+            const t = (k) => window.I18N ? window.I18N.t(k) : k;
             html = `
                 <div class="no-tools">
                     <div class="no-tools-icon">🔍</div>
-                    <h3>没有找到相关工具</h3>
-                    <p>尝试调整搜索关键词或选择其他分类</p>
+                    <h3>${t('tools.no_results')}</h3>
+                    <p>${t('tools.no_results_hint')}</p>
                 </div>
             `;
         }
@@ -120,21 +121,23 @@ class ToolsDisplay {
     
     // 获取状态徽章
     getStatusBadge(status) {
+        const t = (k) => window.I18N ? window.I18N.t(k) : k;
         const badges = {
-            'stable': '<span class="status-badge stable">✅ 稳定版</span>',
-            'beta': '<span class="status-badge beta">🧪 测试版</span>',
-            'alpha': '<span class="status-badge alpha">⚠️ 预览版</span>',
-            'coming-soon': '<span class="status-badge coming-soon">🚀 即将推出</span>'
+            'stable': `<span class="status-badge stable">${t('status.stable')}</span>`,
+            'beta': `<span class="status-badge beta">${t('status.beta')}</span>`,
+            'alpha': `<span class="status-badge alpha">${t('status.alpha')}</span>`,
+            'coming-soon': `<span class="status-badge coming-soon">${t('status.coming_soon')}</span>`
         };
         return badges[status] || '';
     }
     
     // 获取下载按钮
     getDownloadButton(tool) {
+        const t = (k) => window.I18N ? window.I18N.t(k) : k;
         if (tool.status === 'coming-soon') {
             return `
                 <button class="btn-secondary coming-soon-btn" disabled>
-                    🚀 即将推出
+                    ${t('btn.coming_soon')}
                 </button>
             `;
         }
@@ -142,14 +145,14 @@ class ToolsDisplay {
         if (tool.downloadUrl && tool.downloadUrl !== '#') {
             return `
                 <button class="btn-primary download-btn" onclick="downloadTool('${tool.id}')">
-                    📥 下载桌面版
+                    ${t('btn.download')}
                 </button>
             `;
         }
         
         return `
             <button class="btn-secondary" disabled>
-                📥 下载暂不可用
+                ${t('btn.unavailable')}
             </button>
         `;
     }
@@ -211,42 +214,49 @@ function showToolDetails(toolId) {
     const statusBadge = window.toolsDisplay.getStatusBadge(tool.status);
     const downloadButton = window.toolsDisplay.getDownloadButton(tool);
     
+    const currentLang = window.I18N ? window.I18N.currentLang : 'zh';
+    const toolName = typeof tool.name === 'object' ? tool.name[currentLang] || tool.name : tool.name;
+    const toolDescription = typeof tool.description === 'object' ? tool.description[currentLang] || tool.description : tool.description;
+    const toolFeatures = typeof tool.features === 'object' ? tool.features[currentLang] || tool.features : tool.features;
+    const toolRequirements = typeof tool.systemRequirements === 'object' ? tool.systemRequirements[currentLang] || tool.systemRequirements : tool.systemRequirements;
+    
+    const t = (k) => window.I18N ? window.I18N.t(k) : k;
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h3>${tool.icon} ${tool.name}</h3>
+                <h3>${tool.icon} ${toolName}</h3>
                 <button class="close-btn" onclick="closeToolDetails()">×</button>
             </div>
             
             <div class="modal-body">
                 <div class="tool-meta-info">
                     <div class="meta-item">
-                        <span class="meta-label">版本:</span>
+                        <span class="meta-label">${t('details.version')}</span>
                         <span class="meta-value">${tool.version}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">文件大小:</span>
+                        <span class="meta-label">${t('details.size')}</span>
                         <span class="meta-value">${tool.fileSize}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">系统要求:</span>
-                        <span class="meta-value">${tool.systemRequirements}</span>
+                        <span class="meta-label">${t('details.requirements')}</span>
+                        <span class="meta-value">${toolRequirements}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">状态:</span>
+                        <span class="meta-label">${t('details.status')}</span>
                         <span class="meta-value">${statusBadge}</span>
                     </div>
                 </div>
                 
                 <div class="tool-description-full">
-                    <h4>功能描述</h4>
-                    <p>${tool.description}</p>
+                    <h4>${t('details.description')}</h4>
+                    <p>${toolDescription}</p>
                 </div>
                 
                 <div class="tool-features-full">
-                    <h4>主要功能</h4>
+                    <h4>${t('details.features')}</h4>
                     <div class="features-list">
-                        ${tool.features.map(feature => 
+                        ${toolFeatures.map(feature => 
                             `<div class="feature-item">• ${feature}</div>`
                         ).join('')}
                     </div>
@@ -255,7 +265,7 @@ function showToolDetails(toolId) {
             
             <div class="modal-footer">
                 ${downloadButton}
-                <button class="btn-secondary" onclick="closeToolDetails()">关闭</button>
+                <button class="btn-secondary" onclick="closeToolDetails()">${t('btn.close')}</button>
             </div>
         </div>
     `;
@@ -275,7 +285,8 @@ function closeToolDetails() {
 function downloadTool(toolId) {
     const tool = window.toolsManager.getToolById(toolId);
     if (!tool || !tool.downloadUrl || tool.downloadUrl === '#') {
-        alert('下载链接暂不可用');
+        const t = (k) => window.I18N ? window.I18N.t(k) : k;
+        alert(t('btn.unavailable'));
         return;
     }
     

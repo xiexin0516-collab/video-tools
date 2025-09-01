@@ -1,7 +1,7 @@
 // 国际化配置
 window.I18N = {
     // 当前语言
-    currentLang: 'zh',
+    currentLang: 'en',
     
     // 语言配置
     languages: {
@@ -71,12 +71,32 @@ window.I18N = {
             'features.screenshot': '📸 截屏工具',
             'features.video_processing': '🎬 视频处理',
             'features.efficient': '⚡ 高效便捷',
+            'features.more': '更多',
+            
+            // 功能详细描述
+            'features.smart_scaling': '智能图片缩放',
+            'features.format_conversion': '格式转换 (JPG/PNG/WEBP)',
+            'features.image_compression': '图片压缩优化',
+            'features.batch_processing': '批量处理',
+            'features.full_screenshot': '全屏截图',
+            'features.area_screenshot': '区域截图',
+            'features.window_screenshot': '窗口截图',
+            'features.delayed_screenshot': '延时截图',
+            'features.video_conversion': '视频格式转换',
+            'features.subtitle_editing': '字幕编辑制作',
+            'features.audio_extraction': '音频提取',
+            'features.video_compression': '视频压缩',
+            'features.no_registration': '无需注册登录',
+            'features.offline_use': '离线使用',
+            'features.simple_interface': '界面简洁',
+            'features.easy_operate': '操作简单',
             
             // 下载信息
             'download.windows': '🪟 Windows 版本',
             'download.windows_desc': '支持 Windows 10/11 (64位)',
             'download.windows_btn': '📥 下载 Windows 版 (v1.0.0)',
-            'download.no_registration': '💡 无需注册，下载即可使用'
+            'download.no_registration': '💡 无需注册，下载即可使用',
+            'download.link_not_ready': '下载链接暂未准备好，请稍后再试'
         },
         
         en: {
@@ -133,12 +153,32 @@ window.I18N = {
             'features.screenshot': '📸 Screenshot Tools',
             'features.video_processing': '🎬 Video Processing',
             'features.efficient': '⚡ Efficient & Convenient',
+            'features.more': 'more',
+            
+            // Feature detailed descriptions
+            'features.smart_scaling': 'Smart image scaling',
+            'features.format_conversion': 'Format conversion (JPG/PNG/WEBP)',
+            'features.image_compression': 'Image compression optimization',
+            'features.batch_processing': 'Batch processing',
+            'features.full_screenshot': 'Full-screen screenshot',
+            'features.area_screenshot': 'Area screenshot',
+            'features.window_screenshot': 'Window screenshot',
+            'features.delayed_screenshot': 'Delayed screenshot',
+            'features.video_conversion': 'Video format conversion',
+            'features.subtitle_editing': 'Subtitle editing and creation',
+            'features.audio_extraction': 'Audio extraction',
+            'features.video_compression': 'Video compression',
+            'features.no_registration': 'No registration required',
+            'features.offline_use': 'Offline use',
+            'features.simple_interface': 'Simple interface',
+            'features.easy_operate': 'Easy to operate',
             
             // Download info
             'download.windows': '🪟 Windows Version',
             'download.windows_desc': 'Supports Windows 10/11 (64-bit)',
             'download.windows_btn': '📥 Download Windows (v1.0.0)',
-            'download.no_registration': '💡 No registration required, download and use immediately'
+            'download.no_registration': '💡 No registration required, download and use immediately',
+            'download.link_not_ready': 'Download link not ready yet, please try again later'
         }
     },
     

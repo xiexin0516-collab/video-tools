@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOMEPAGE-TEST - 视频工具平台</title>
+    <title>HOMEPAGE-TEST - Video Tools Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
@@ -50,7 +50,7 @@
             transform: translateY(-1px);
         }
         
-        /* 分类标签样式 */
+        /* Category tab styles */
         .category-tab {
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -72,7 +72,7 @@
             color: white;
         }
         
-        /* 工具卡片样式 */
+        /* Tool card styles */
         .tool-card {
             background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border: 1px solid #404040;
@@ -184,7 +184,7 @@
             font-size: 0.875rem;
         }
         
-        /* 搜索框样式 */
+        /* Search box styles */
         #search-tools {
             background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border: 1px solid #404040;
@@ -195,7 +195,7 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
         
-        /* 模态框样式 */
+        /* Modal styles */
         .modal-content {
             background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border: 1px solid #404040;
@@ -297,7 +297,7 @@
             justify-content: flex-end;
         }
         
-        /* 无工具状态 */
+        /* No tools state */
         .no-tools {
             text-align: center;
             padding: 3rem;
@@ -314,7 +314,7 @@
             margin-bottom: 0.5rem;
         }
         
-        /* 语言切换按钮样式 */
+        /* Language switch button styles */
         .lang-btn {
             padding: 0.25rem 0.75rem;
             border-radius: 0.375rem;
@@ -344,13 +344,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-red-400" data-i18n="header.title">视频工具平台</h1>
+                    <h1 class="text-2xl font-bold text-red-400" data-i18n="header.title">Video Tools Platform</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-300 text-sm" data-i18n="header.subtitle">专业的视频处理工具</span>
+                    <span class="text-gray-300 text-sm" data-i18n="header.subtitle">Professional Video Processing Tools</span>
                     <div class="flex items-center space-x-2">
-                        <button onclick="switchLanguage('zh')" class="lang-btn active" data-lang="zh">中文</button>
-                        <button onclick="switchLanguage('en')" class="lang-btn" data-lang="en">English</button>
+                        <button onclick="switchLanguage('zh')" class="lang-btn" data-lang="zh">中文</button>
+                        <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en">English</button>
                     </div>
                 </div>
             </div>
@@ -361,45 +361,41 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Hero Section -->
         <div class="hero-card rounded-2xl p-8 mb-12 text-center">
-            <h2 class="text-4xl font-bold text-white mb-4" data-i18n="hero.title">专业的视频处理工具</h2>
-            <p class="text-xl text-gray-300" data-i18n="hero.subtitle">一站式视频编辑、字幕制作、音频处理解决方案</p>
+            <h2 class="text-4xl font-bold text-white mb-4" data-i18n="hero.title">Professional Video Processing Tools</h2>
+            <p class="text-xl text-gray-300" data-i18n="hero.subtitle">One-stop solution for video editing, subtitle creation, and audio processing</p>
         </div>
 
-        <!-- 搜索和分类 -->
+        <!-- Search and Categories -->
         <div class="mb-8">
             <div class="flex flex-col md:flex-row gap-4 mb-6">
                 <div class="flex-1">
-                    <input type="text" id="search-tools" placeholder="🔍 搜索工具..." 
+                    <input type="text" id="search-tools" placeholder="🔍 Search tools..." 
                            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
                            data-i18n-placeholder="search.placeholder">
                 </div>
             </div>
             
-            <!-- 分类标签 -->
+            <!-- Category tabs -->
             <div id="categories-tabs" class="flex flex-wrap gap-2 mb-6">
-                <!-- 分类标签将由JavaScript动态生成 -->
+                <!-- Category tabs will be dynamically generated by JavaScript -->
             </div>
         </div>
 
         <!-- Tools Grid -->
         <div class="mb-12">
-            <h3 class="text-2xl font-bold text-white mb-6" data-i18n="tools.title">工具列表</h3>
+            <h3 class="text-2xl font-bold text-white mb-6" data-i18n="tools.title">Tools List</h3>
             <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 工具卡片将由JavaScript动态生成 -->
+                <!-- Tool cards will be dynamically generated by JavaScript -->
             </div>
         </div>
-
-
     </main>
 
-
-
-    <!-- 下载模态框 -->
+    <!-- Download Modal -->
     <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white">📥 下载桌面版</h3>
+                    <h3 class="text-2xl font-bold text-white" data-i18n="modal.download_title">📥 Download Desktop Version</h3>
                     <button onclick="closeDownloadModal()" class="text-gray-400 hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -409,27 +405,27 @@
                 
                 <div class="space-y-4">
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🪟 Windows 版本</h4>
-                        <p class="text-gray-300 text-sm mb-3">支持 Windows 10/11 (64位)</p>
-                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 下载 Windows 版 (v1.0.0)
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="download.windows">🪟 Windows Version</h4>
+                        <p class="text-gray-300 text-sm mb-3" data-i18n="download.windows_desc">Supports Windows 10/11 (64-bit)</p>
+                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white" data-i18n="download.windows_btn">
+                            📥 Download Windows Version (v1.0.0)
                         </button>
                     </div>
                 </div>
                 
                 <div class="mt-6 text-center">
-                    <p class="text-gray-400 text-sm">💡 无需注册，下载即可使用</p>
+                    <p class="text-gray-400 text-sm" data-i18n="download.no_registration">💡 No registration required, download and use immediately</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 功能介绍模态框 -->
+    <!-- Features Modal -->
     <div id="featuresModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-gray-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white">💡 功能特色</h3>
+                    <h3 class="text-2xl font-bold text-white" data-i18n="modal.features_title">💡 Features</h3>
                     <button onclick="closeFeaturesModal()" class="text-gray-400 hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -439,42 +435,42 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🖼️ 图片处理</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.image_processing">🖼️ Image Processing</h4>
                         <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• 智能图片缩放</li>
-                            <li>• 格式转换 (JPG/PNG/WEBP)</li>
-                            <li>• 图片压缩优化</li>
-                            <li>• 批量处理</li>
+                            <li>• <span data-i18n="features.smart_scaling">Smart image scaling</span></li>
+                            <li>• <span data-i18n="features.format_conversion">Format conversion (JPG/PNG/WEBP)</span></li>
+                            <li>• <span data-i18n="features.image_compression">Image compression optimization</span></li>
+                            <li>• <span data-i18n="features.batch_processing">Batch processing</span></li>
                         </ul>
                     </div>
                     
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">📸 截屏工具</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.screenshot">📸 Screenshot Tools</h4>
                         <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• 全屏截图</li>
-                            <li>• 区域截图</li>
-                            <li>• 窗口截图</li>
-                            <li>• 延时截图</li>
+                            <li>• <span data-i18n="features.full_screenshot">Full-screen screenshot</span></li>
+                            <li>• <span data-i18n="features.area_screenshot">Area screenshot</span></li>
+                            <li>• <span data-i18n="features.window_screenshot">Window screenshot</span></li>
+                            <li>• <span data-i18n="features.delayed_screenshot">Delayed screenshot</span></li>
                         </ul>
                     </div>
                     
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🎬 视频处理</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.video_processing">🎬 Video Processing</h4>
                         <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• 视频格式转换</li>
-                            <li>• 字幕编辑制作</li>
-                            <li>• 音频提取</li>
-                            <li>• 视频压缩</li>
+                            <li>• <span data-i18n="features.video_conversion">Video format conversion</span></li>
+                            <li>• <span data-i18n="features.subtitle_editing">Subtitle editing and creation</span></li>
+                            <li>• <span data-i18n="features.audio_extraction">Audio extraction</span></li>
+                            <li>• <span data-i18n="features.video_compression">Video compression</span></li>
                         </ul>
                     </div>
                     
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">⚡ 高效便捷</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.efficient">⚡ Efficient & Convenient</h4>
                         <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• 无需注册登录</li>
-                            <li>• 离线使用</li>
-                            <li>• 界面简洁</li>
-                            <li>• 操作简单</li>
+                            <li>• <span data-i18n="features.no_registration">No registration required</span></li>
+                            <li>• <span data-i18n="features.offline_use">Offline use</span></li>
+                            <li>• <span data-i18n="features.simple_interface">Simple interface</span></li>
+                            <li>• <span data-i18n="features.easy_operate">Easy to operate</span></li>
                         </ul>
                     </div>
                 </div>
@@ -482,62 +478,50 @@
         </div>
     </div>
 
-    <!-- 工具详情模态框 -->
+    <!-- Tool Details Modal -->
     <div id="toolDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-gray-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-                <!-- 模态框内容将由JavaScript动态生成 -->
+                <!-- Modal content will be dynamically generated by JavaScript -->
             </div>
         </div>
     </div>
 
     <script type="module">
-
-
-
-
-
-
-
-
-
-
-
-
-        // 显示下载模态框
+        // Show download modal
         window.showDownloadModal = function() {
             document.getElementById('downloadModal').classList.remove('hidden')
         }
 
-        // 关闭下载模态框
+        // Close download modal
         window.closeDownloadModal = function() {
             document.getElementById('downloadModal').classList.add('hidden')
         }
 
-        // 显示功能介绍模态框
+        // Show features modal
         window.showFeaturesModal = function() {
             document.getElementById('featuresModal').classList.remove('hidden')
         }
 
-        // 关闭功能介绍模态框
+        // Close features modal
         window.closeFeaturesModal = function() {
             document.getElementById('featuresModal').classList.add('hidden')
         }
 
-        // 下载桌面版
+        // Download desktop version
         window.downloadDesktop = function(platform) {
-            // Windows版本下载地址
+            // Windows version download URL
             const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.0.0/ManualSubtitleEditor-v1.0.0.zip'
             
             if (downloadUrl) {
                 window.open(downloadUrl, '_blank')
                 closeDownloadModal()
             } else {
-                alert('下载链接暂未准备好，请稍后再试')
+                alert(window.I18N.t('download.link_not_ready'))
             }
         }
 
-        // 点击模态框背景关闭
+        // Click modal background to close
         document.getElementById('downloadModal').addEventListener('click', (e) => {
             if (e.target.id === 'downloadModal') {
                 closeDownloadModal()
@@ -551,5 +535,4 @@
         })
     </script>
 </body>
-</html>
-YI 
+</html> 
