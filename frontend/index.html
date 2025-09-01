@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/js/config.js"></script>
     <script src="/js/api.js"></script>
+    <script src="/js/tools-config.js"></script>
+    <script src="/js/tools-display.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
@@ -46,6 +48,270 @@
             background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
             transform: translateY(-1px);
         }
+        
+        /* 分类标签样式 */
+        .category-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #404040;
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-tab:hover {
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .category-tab.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        /* 工具卡片样式 */
+        .tool-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border-color: #3b82f6;
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-icon {
+            font-size: 2rem;
+        }
+        
+        .tool-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+        }
+        
+        .tool-meta {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        
+        .tool-version, .tool-size {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.stable {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-badge.beta {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-badge.alpha {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .status-badge.coming-soon {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .tool-description {
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .tool-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-tag {
+            padding: 0.25rem 0.5rem;
+            background: #374151;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            color: #d1d5db;
+        }
+        
+        .feature-more {
+            padding: 0.25rem 0.5rem;
+            background: #3b82f6;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            color: white;
+        }
+        
+        .tool-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .tool-actions .btn-primary,
+        .tool-actions .btn-secondary {
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* 搜索框样式 */
+        #search-tools {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+        }
+        
+        #search-tools:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* 模态框样式 */
+        .modal-content {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #404040;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: white;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .tool-meta-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #374151;
+            border-radius: 0.5rem;
+        }
+        
+        .meta-label {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        
+        .meta-value {
+            color: white;
+        }
+        
+        .tool-description-full h4,
+        .tool-features-full h4 {
+            color: white;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+        
+        .tool-description-full p {
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .feature-item {
+            color: #d1d5db;
+            padding: 0.5rem;
+            background: #374151;
+            border-radius: 0.25rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #404040;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        /* 无工具状态 */
+        .no-tools {
+            text-align: center;
+            padding: 3rem;
+            color: #9ca3af;
+        }
+        
+        .no-tools-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .no-tools h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -71,69 +337,26 @@
             <p class="text-xl text-gray-300">一站式视频编辑、字幕制作、音频处理解决方案</p>
         </div>
 
+        <!-- 搜索和分类 -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="flex-1">
+                    <input type="text" id="search-tools" placeholder="🔍 搜索工具..." 
+                           class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+            
+            <!-- 分类标签 -->
+            <div id="categories-tabs" class="flex flex-wrap gap-2 mb-6">
+                <!-- 分类标签将由JavaScript动态生成 -->
+            </div>
+        </div>
+
         <!-- Tools Grid -->
         <div class="mb-12">
             <h3 class="text-2xl font-bold text-white mb-6">工具列表</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                 <!-- 字幕编辑器 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">🎬</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">字幕编辑器</h4>
-                     <p class="text-gray-400 mb-4">专业的字幕制作工具，支持音频同步、时间轴编辑、多格式导出</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
-
-                 <!-- 音频提取器 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">🎵</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">音频提取器</h4>
-                     <p class="text-gray-400 mb-4">从视频中提取高质量音频，支持多种格式转换</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
-
-                 <!-- 视频光线调节 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">💡</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">视频光线调节</h4>
-                     <p class="text-gray-400 mb-4">智能调节视频亮度、对比度，改善画面质量</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
-
-                 <!-- 背景音乐生成 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">🎼</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">背景音乐生成</h4>
-                     <p class="text-gray-400 mb-4">AI智能生成背景音乐，完美匹配视频内容</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
-
-                 <!-- 视频特效 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">✨</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">视频特效</h4>
-                     <p class="text-gray-400 mb-4">丰富的视频特效库，让您的视频更加精彩</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
-
-                 <!-- 格式转换 -->
-                 <div class="tool-card rounded-xl p-6">
-                     <div class="text-3xl mb-4">🔄</div>
-                     <h4 class="text-xl font-semibold text-white mb-2">格式转换</h4>
-                     <p class="text-gray-400 mb-4">支持多种视频格式转换，适配不同平台需求</p>
-                     <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
-                         📥 下载桌面版
-                     </button>
-                 </div>
+            <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 工具卡片将由JavaScript动态生成 -->
             </div>
         </div>
 
@@ -226,6 +449,15 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工具详情模态框 -->
+    <div id="toolDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-gray-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <!-- 模态框内容将由JavaScript动态生成 -->
             </div>
         </div>
     </div>
