@@ -1,0 +1,5 @@
+// 前端配置文件
+// 这些配置会在部署时被环境变量替换
+
+window.SUPABASE_URL = 'https://smzmgemipnxcimsxhewi.supabase.co'
+window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtem1nZW1pcG54Y2ltc3hoZXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0NzUyMjIsImV4cCI6MjA3MjA1MTIyMn0.b2H8EFSlUIGL7DwcNWjAG1Ox0FS6Hil8zagHp4rBfUM'
