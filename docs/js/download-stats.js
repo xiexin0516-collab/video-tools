@@ -118,9 +118,9 @@ class DownloadStats {
 
     // 更新显示
     updateDisplay() {
+        // 更新下载计数
         const countElement = document.getElementById('downloadCount');
         if (countElement) {
-            // 格式化数字显示
             const formattedCount = this.formatNumber(this.stats.totalDownloads);
             countElement.textContent = formattedCount;
             
@@ -129,6 +129,18 @@ class DownloadStats {
             setTimeout(() => {
                 countElement.classList.remove('animate-pulse');
             }, 1000);
+        }
+
+        // 更新工具数量
+        const toolsCountElement = document.getElementById('toolsCount');
+        if (toolsCountElement) {
+            toolsCountElement.textContent = this.getToolsCount();
+        }
+
+        // 更新最后更新时间
+        const lastUpdatedElement = document.getElementById('lastUpdated');
+        if (lastUpdatedElement) {
+            lastUpdatedElement.textContent = this.formatLastUpdated();
         }
     }
 
@@ -159,6 +171,31 @@ class DownloadStats {
             platformCounts[event.platform] = (platformCounts[event.platform] || 0) + 1;
         });
         return platformCounts;
+    }
+
+    // 获取工具数量
+    getToolsCount() {
+        // 从工具配置中获取工具数量
+        if (window.toolsConfig && window.toolsConfig.tools) {
+            return window.toolsConfig.tools.length;
+        }
+        return 5; // 默认值
+    }
+
+    // 格式化最后更新时间
+    formatLastUpdated() {
+        if (!this.stats.lastUpdated) return 'Today';
+        
+        const lastUpdate = new Date(this.stats.lastUpdated);
+        const now = new Date();
+        const diffTime = Math.abs(now - lastUpdate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) return 'Today';
+        if (diffDays === 2) return 'Yesterday';
+        if (diffDays <= 7) return `${diffDays - 1} days ago`;
+        if (diffDays <= 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+        return `${Math.floor(diffDays / 30)} months ago`;
     }
 }
 
