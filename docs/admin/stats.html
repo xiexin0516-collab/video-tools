@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载统计管理 - vidtools.tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/download-stats.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            border: 1px solid #404040;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        .metric-value {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">📊 下载统计管理</h1>
+            <p class="text-gray-400">vidtools.tools 下载数据分析</p>
+        </header>
+
+        <!-- 概览统计 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="stats-card rounded-lg p-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold metric-value mb-2" id="totalDownloads">-</div>
+                    <div class="text-gray-300">总下载次数</div>
+                </div>
+            </div>
+            <div class="stats-card rounded-lg p-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold metric-value mb-2" id="lastUpdated">-</div>
+                    <div class="text-gray-300">最后更新</div>
+                </div>
+            </div>
+            <div class="stats-card rounded-lg p-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold metric-value mb-2" id="todayDownloads">-</div>
+                    <div class="text-gray-300">今日下载</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 平台统计 -->
+        <div class="stats-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">📱 平台统计</h2>
+            <div id="platformStats" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- 平台统计将在这里动态生成 -->
+            </div>
+        </div>
+
+        <!-- 最近下载记录 -->
+        <div class="stats-card rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">🕒 最近下载记录</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="text-left py-2">工具</th>
+                            <th class="text-left py-2">平台</th>
+                            <th class="text-left py-2">时间</th>
+                            <th class="text-left py-2">用户代理</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentDownloads">
+                        <!-- 最近下载记录将在这里动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="text-center space-x-4">
+            <button onclick="refreshStats()" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                🔄 刷新统计
+            </button>
+            <button onclick="exportStats()" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                📊 导出数据
+            </button>
+            <button onclick="clearLocalStats()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                🗑️ 清除本地数据
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatsDisplay();
+            
+            // 每30秒自动更新一次
+            setInterval(updateStatsDisplay, 30000);
+        });
+
+        // 更新统计显示
+        function updateStatsDisplay() {
+            if (!window.downloadStats) {
+                console.error('下载统计系统未初始化');
+                return;
+            }
+
+            const stats = window.downloadStats.getStatsSummary();
+            
+            // 更新概览统计
+            document.getElementById('totalDownloads').textContent = formatNumber(stats.totalDownloads);
+            document.getElementById('lastUpdated').textContent = formatDate(stats.lastUpdated);
+            document.getElementById('todayDownloads').textContent = getTodayDownloads(stats.recentDownloads);
+
+            // 更新平台统计
+            updatePlatformStats(stats.platformStats);
+
+            // 更新最近下载记录
+            updateRecentDownloads(stats.recentDownloads);
+        }
+
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            if (!dateString) return '未知';
+            const date = new Date(dateString);
+            return date.toLocaleString('zh-CN');
+        }
+
+        // 获取今日下载次数
+        function getTodayDownloads(recentDownloads) {
+            const today = new Date().toDateString();
+            return recentDownloads.filter(download => 
+                new Date(download.timestamp).toDateString() === today
+            ).length;
+        }
+
+        // 更新平台统计
+        function updatePlatformStats(platformStats) {
+            const container = document.getElementById('platformStats');
+            container.innerHTML = '';
+
+            Object.entries(platformStats).forEach(([platform, count]) => {
+                const platformCard = document.createElement('div');
+                platformCard.className = 'bg-gray-700 rounded-lg p-4';
+                platformCard.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-400 mb-2">${count}</div>
+                        <div class="text-gray-300">${platform}</div>
+                    </div>
+                `;
+                container.appendChild(platformCard);
+            });
+
+            if (Object.keys(platformStats).length === 0) {
+                container.innerHTML = '<div class="text-gray-400 text-center col-span-2">暂无平台数据</div>';
+            }
+        }
+
+        // 更新最近下载记录
+        function updateRecentDownloads(recentDownloads) {
+            const container = document.getElementById('recentDownloads');
+            container.innerHTML = '';
+
+            if (recentDownloads.length === 0) {
+                container.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400 py-4">暂无下载记录</td></tr>';
+                return;
+            }
+
+            recentDownloads.reverse().forEach(download => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-600';
+                row.innerHTML = `
+                    <td class="py-2">${download.tool}</td>
+                    <td class="py-2">${download.platform}</td>
+                    <td class="py-2">${formatDate(download.timestamp)}</td>
+                    <td class="py-2 text-xs text-gray-400 max-w-xs truncate" title="${download.userAgent}">${download.userAgent}</td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // 刷新统计
+        function refreshStats() {
+            if (window.downloadStats) {
+                window.downloadStats.fetchGitHubStats();
+                updateStatsDisplay();
+            }
+        }
+
+        // 导出统计数据
+        function exportStats() {
+            if (!window.downloadStats) return;
+
+            const stats = window.downloadStats.getStatsSummary();
+            const dataStr = JSON.stringify(stats, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `vidtools-download-stats-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // 清除本地数据
+        function clearLocalStats() {
+            if (confirm('确定要清除所有本地下载统计数据吗？此操作不可恢复。')) {
+                localStorage.removeItem('vidtools_download_stats');
+                if (window.downloadStats) {
+                    window.downloadStats.stats = {
+                        totalDownloads: 0,
+                        lastUpdated: null,
+                        downloadHistory: []
+                    };
+                    updateStatsDisplay();
+                }
+                alert('本地数据已清除');
+            }
+        }
+    </script>
+</body>
+</html>
