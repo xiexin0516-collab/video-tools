@@ -96,7 +96,12 @@ window.I18N = {
             'download.windows_desc': '支持 Windows 10/11 (64位)',
             'download.windows_btn': '📥 下载 Windows 版 (v1.0.0)',
             'download.no_registration': '💡 无需注册，下载即可使用',
-            'download.link_not_ready': '下载链接暂未准备好，请稍后再试'
+            'download.link_not_ready': '下载链接暂未准备好，请稍后再试',
+        
+        // Stats section
+        'stats.downloads': '下载次数',
+        'stats.tools': '工具数量',
+        'stats.updated': '最后更新'
         },
         
         en: {
@@ -178,7 +183,12 @@ window.I18N = {
             'download.windows_desc': 'Supports Windows 10/11 (64-bit)',
             'download.windows_btn': '📥 Download Windows (v1.0.0)',
             'download.no_registration': '💡 No registration required, download and use immediately',
-            'download.link_not_ready': 'Download link not ready yet, please try again later'
+            'download.link_not_ready': 'Download link not ready yet, please try again later',
+        
+        // Stats section
+        'stats.downloads': 'Downloads',
+        'stats.tools': 'Tools',
+        'stats.updated': 'Updated'
         }
     },
     
