@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>联系我们 - Video Tools Platform</title>
+    <title data-i18n="pages.contact.title">Contact Us - Video Tools Platform</title>
+    <script src="js/i18n.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -149,7 +150,14 @@
     </div>
 
     <div class="back-link">
-        <a href="index.html">← 返回首页</a>
+        <a href="index.html" data-i18n="pages.contact.back_home">← Back to Home</a>
     </div>
+    <script>
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('lang') || 'en';
+            switchLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
