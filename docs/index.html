@@ -456,29 +456,184 @@
             </div>
         </div>
 
-        <!-- 统计信息区域 -->
-        <div class="mt-16 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 下载统计 -->
-                <div class="stats-card rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold stats-number mb-1" id="downloadCount">-</div>
-                    <div class="stats-label" data-i18n="stats.downloads">Downloads</div>
+        <!-- 功能介绍区域 -->
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="features.core_features_title">🎯 Core Features Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                 <!-- 图像处理 -->
+                 <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                     <div class="flex items-center mb-4">
+                         <span class="text-3xl mr-3">🖼️</span>
+                         <h4 class="text-xl font-bold text-white" data-i18n="features.image_processing_title">Image Processing Tools</h4>
+                     </div>
+                                           <div class="mb-4">
+                          <img src="picture/Snipaste_2025-09-03_20-59-45.jpeg" alt="Image Processing Demo" title="Image Processing Demo" class="w-full h-32 object-cover rounded-lg" style="max-height: 120px;">
+                      </div>
+                     <p class="text-gray-300 mb-4" data-i18n="features.image_processing_desc">Professional image processing solutions supporting multiple formats and batch operations</p>
+                     <ul class="text-gray-400 space-y-2 mb-6">
+                                                 <li>• <span data-i18n="features.smart_scaling_full">Smart image scaling - Keep clarity while adjusting size</span></li>
+                        <li>• <span data-i18n="features.format_conversion_full">Format conversion (JPG/PNG/WEBP) - Support mainstream formats</span></li>
+                        <li>• <span data-i18n="features.image_compression_full">Image compression optimization - Reduce file size while maintaining visual quality</span></li>
+                        <li>• <span data-i18n="features.batch_processing_full">Batch processing - Process multiple images at once, improving efficiency</span></li>
+                     </ul>
+                     <button onclick="showFeaturesModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                         <span data-i18n="features.learn_more">Learn More</span>
+                     </button>
+                 </div>
+
+                <!-- 截图工具 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">📸</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="features.screenshot_tools_title">Screenshot Tools</h4>
+                    </div>
+                    <p class="text-gray-300 mb-4" data-i18n="features.screenshot_tools_desc">Powerful screenshot tools for various capture needs</p>
+                    <ul class="text-gray-400 space-y-2 mb-6">
+                        <li>• <span data-i18n="features.full_screenshot_full">Full-screen screenshot - One-click capture of entire screen</span></li>
+                        <li>• <span data-i18n="features.area_screenshot_full">Area screenshot - Freely select capture area</span></li>
+                        <li>• <span data-i18n="features.window_screenshot_full">Window screenshot - Precisely capture specified window</span></li>
+                        <li>• <span data-i18n="features.delayed_screenshot_full">Delayed screenshot - Set delay time, capture dynamic content</span></li>
+                    </ul>
+                    <button onclick="showFeaturesModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                        <span data-i18n="features.learn_more">Learn More</span>
+                    </button>
                 </div>
-                
-                <!-- 工具数量 -->
-                <div class="stats-card rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold stats-number mb-1" id="toolsCount">-</div>
-                    <div class="stats-label" data-i18n="stats.tools">Tools</div>
+
+                <!-- 视频处理 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">🎬</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="features.video_processing_title">Video Processing Center</h4>
+                    </div>
+                    <p class="text-gray-300 mb-4" data-i18n="features.video_processing_desc">Comprehensive video editing and processing features supporting multiple formats</p>
+                    <ul class="text-gray-400 space-y-2 mb-6">
+                        <li>• <span data-i18n="features.video_conversion_full">Video format conversion - Support MP4, AVI, MOV and other mainstream formats</span></li>
+                        <li>• <span data-i18n="features.subtitle_editing_full">Subtitle editing and creation - Create, edit and sync subtitle files</span></li>
+                        <li>• <span data-i18n="features.audio_extraction_full">Audio extraction - Extract high-quality audio from videos</span></li>
+                        <li>• <span data-i18n="features.video_compression_full">Video compression - Reduce file size while maintaining quality</span></li>
+                    </ul>
+                    <button onclick="showFeaturesModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                        <span data-i18n="features.learn_more">Learn More</span>
+                    </button>
                 </div>
-                
-                <!-- 最后更新 -->
-                <div class="stats-card rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold stats-number mb-1" id="lastUpdated">-</div>
-                    <div class="text-gray-400 text-sm" data-i18n="stats.updated">Updated</div>
+
+                <!-- 使用优势 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">⚡</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="features.advantages_title">Why Choose Us</h4>
+                    </div>
+                    <p class="text-gray-300 mb-4" data-i18n="features.advantages_desc">Why choose our tools platform</p>
+                    <ul class="text-gray-400 space-y-2 mb-6">
+                        <li>• <span data-i18n="features.no_registration_full">No registration required - All features free to use, no hidden fees</span></li>
+                        <li>• <span data-i18n="features.cross_platform_full">Cross-platform support - Works on Windows, macOS, and Linux</span></li>
+                        <li>• <span data-i18n="features.offline_use_full">Offline use - Completely local operation, no internet required, protecting privacy and security</span></li>
+                        <li>• <span data-i18n="features.simple_interface_full">Simple interface - Easy operation, suitable for all users</span></li>
+                    </ul>
+                    <button onclick="showDownloadModal()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                        <span data-i18n="features.download_now">Download Now</span>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- 使用教程区域 -->
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="tutorial.title">📚 User Guide</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.quick_start">Quick Start</h4>
+                    <p class="text-gray-400 mb-4" data-i18n="tutorial.quick_start_desc">Learn how to download and install our tools</p>
+                    <a href="about-us.html" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.view_details">View Details →</a>
+                </div>
+                
+                                 <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                     <div class="text-4xl mb-4">💡</div>
+                     <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.demo">Feature Demo</h4>
+                     <p class="text-gray-400 mb-4" data-i18n="tutorial.demo_desc">Watch actual operation demos of various tools</p>
+                                           <div class="mb-4">
+                          <img src="picture/Snipaste_2025-09-03_21-24-28.jpeg" alt="Tool Demo Screenshot" title="Tool Demo Screenshot" class="w-full h-32 object-cover rounded-lg mx-auto" style="max-width: 200px;">
+                      </div>
+                     <button onclick="showFeaturesModal()" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.start_demo">Start Demo →</button>
+                 </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="text-4xl mb-4">❓</div>
+                    <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.faq">FAQ</h4>
+                    <p class="text-gray-400 mb-4" data-i18n="tutorial.faq_desc">Answer common questions during use</p>
+                    <a href="contact.html" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.contact_us">Contact Us →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计信息区域 -->
+        <div class="mt-16 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                 <!-- 下载统计 -->
+                 <div class="stats-card rounded-lg p-4 text-center">
+                     <div class="text-2xl font-bold stats-number mb-1" id="downloadCount">100+</div>
+                     <div class="stats-label" data-i18n="stats.downloads">Downloads</div>
+                 </div>
+                 
+                 <!-- 工具数量 -->
+                 <div class="stats-card rounded-lg p-4 text-center">
+                     <div class="text-2xl font-bold stats-number mb-1" id="toolsCount">2</div>
+                     <div class="stats-label" data-i18n="stats.tools">Tools</div>
+                 </div>
+                 
+                 <!-- 最后更新 -->
+                 <div class="stats-card rounded-lg p-4 text-center">
+                     <div class="text-2xl font-bold stats-number mb-1" id="lastUpdated">2025-09-03</div>
+                     <div class="text-gray-400 text-sm" data-i18n="stats.updated">Updated</div>
+                 </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-bold text-white mb-4">Video Tools Platform</h3>
+                    <p class="text-gray-400 mb-4">Professional video processing tools for creators worldwide. Free, safe, and easy to use.</p>
+                    <div class="flex space-x-4">
+                        <a href="mailto:weswestonshow@gmail.com" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" data-i18n="footer.quick_links">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.home">Home</a></li>
+                        <li><a href="about-us.html" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.about">About Us</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" data-i18n="footer.legal">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="privacy-policy.html" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.privacy">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm" data-i18n="footer.copyright">&copy; 2025 Video Tools Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Download Modal -->
     <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
