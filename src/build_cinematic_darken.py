@@ -76,7 +76,7 @@ def main():
     shutil.copy2(exe_path, release_dir / "CinematicDarken.exe")
     
     # 创建说明文件
-    readme_content = """# 电影级调暗工具 v1.0.0
+    readme_content = """# 电影级调暗工具 v1.1.1
 
 ## 🎯 软件介绍
 专业的电影级视频调暗工具，智能调节亮度，改善画面质量。
@@ -112,7 +112,7 @@ MIT License - 免费使用和修改
     
     # 创建版本信息文件
     version_info = """[Version]
-Version=1.0.0
+Version=1.1.1
 BuildDate=2025-01-27
 Author=Video Tools Platform
 Description=Cinematic Darken Tool
