@@ -1,5 +1,5 @@
 [Version]
-Version=1.0.0
+Version=1.1.0
 BuildDate=2025-01-27
 Author=Video Tools Platform
 Description=Video Format Converter

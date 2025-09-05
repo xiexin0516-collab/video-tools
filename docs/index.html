@@ -653,7 +653,7 @@
                         <h4 class="text-lg font-semibold text-white mb-2" data-i18n="download.windows">🪟 Windows Version</h4>
                         <p class="text-gray-300 text-sm mb-3" data-i18n="download.windows_desc">Supports Windows 10/11 (64-bit)</p>
                         <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white" data-i18n="download.windows_btn">
-                            📥 Download Windows Version (v1.0.0)
+                            📥 Download Windows Version (v1.1.0)
                         </button>
                     </div>
                 </div>
@@ -756,21 +756,21 @@
         // Download desktop version
         window.downloadDesktop = function(platform) {
             // Windows version download URL
-            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.0.0/ManualSubtitleEditor-v1.0.0.zip'
+            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.0/FormatConverter-v1.1.0.zip'
             
             if (downloadUrl) {
                 // 记录下载统计
                 if (window.recordDownload) {
-                    window.recordDownload('ManualSubtitleEditor', platform);
+                    window.recordDownload('FormatConverter', platform);
                 }
                 
                 // 发送Google Analytics事件
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'download', {
                         'event_category': 'software_download',
-                        'event_label': 'ManualSubtitleEditor',
+                        'event_label': 'FormatConverter',
                         'custom_parameter_1': platform,
-                        'custom_parameter_2': 'ManualSubtitleEditor'
+                        'custom_parameter_2': 'FormatConverter'
                     });
                 }
                 

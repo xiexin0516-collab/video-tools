@@ -244,7 +244,7 @@ window.TOOLS_CONFIG = {
                 en: 'Professional video format conversion tool with multi-format support, parameter adjustment and batch conversion'
             },
             version: 'v1.1.0',
-            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.0/FormatConverter-v1.0.0.zip',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.0/FormatConverter-v1.1.0.zip',
             features: {
                 zh: [
                     '多格式支持',
