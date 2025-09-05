@@ -127,30 +127,30 @@ window.TOOLS_CONFIG = {
             status: 'coming-soon'
         },
         {
-            id: 'video-light-adjuster',
+            id: 'cinematic-darken',
             name: {
-                zh: '视频光线调节',
-                en: 'Video Light Adjuster'
+                zh: '电影级调暗工具',
+                en: 'Cinematic Darken Tool'
             },
             category: 'video',
-            icon: '💡',
+            icon: '🎬',
             description: {
-                zh: '智能调节视频亮度、对比度，改善画面质量',
-                en: 'Intelligently adjust video brightness and contrast to improve image quality'
+                zh: '专业的电影级视频调暗工具，智能调节亮度，改善画面质量',
+                en: 'Professional cinematic video darkening tool with intelligent brightness adjustment'
             },
-            version: 'v1.0.0',
-            downloadUrl: '#',
+            version: 'v1.1.1',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.1/CinematicDarken-v1.1.1.zip',
             features: {
                 zh: [
+                    '电影级调暗',
                     '智能亮度调节',
-                    '对比度优化',
-                    '批量处理',
+                    '多格式支持',
                     '实时预览'
                 ],
                 en: [
+                    'Cinematic darkening',
                     'Smart brightness adjustment',
-                    'Contrast optimization',
-                    'Batch processing',
+                    'Multi-format support',
                     'Real-time preview'
                 ]
             },
@@ -159,7 +159,7 @@ window.TOOLS_CONFIG = {
                 en: 'Windows 10/11 (64-bit)'
             },
             fileSize: '30MB',
-            status: 'coming-soon'
+            status: 'stable'
         },
         {
             id: 'background-music-generator',

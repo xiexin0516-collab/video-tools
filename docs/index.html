@@ -650,16 +650,16 @@
                 
                 <div class="space-y-4">
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="download.windows">🪟 Windows Version</h4>
-                        <p class="text-gray-300 text-sm mb-3" data-i18n="download.windows_desc">Supports Windows 10/11 (64-bit)</p>
-                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white" data-i18n="download.windows_btn">
-                            📥 Download Windows Version (v1.1.0)
+                        <h4 class="text-lg font-semibold text-white mb-2">🎬 Cinematic Darken Tool</h4>
+                        <p class="text-gray-300 text-sm mb-3">专业的电影级视频调暗工具 - Windows 10/11 (64-bit)</p>
+                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 Download Cinematic Darken Tool (v1.1.1)
                         </button>
                     </div>
                 </div>
                 
                 <div class="mt-6 text-center">
-                    <p class="text-gray-400 text-sm" data-i18n="download.no_registration">💡 No registration required, download and use immediately</p>
+                    <p class="text-gray-400 text-sm">💡 无需注册，下载即用 - 智能调节视频亮度，改善画面质量</p>
                 </div>
             </div>
         </div>
@@ -756,21 +756,21 @@
         // Download desktop version
         window.downloadDesktop = function(platform) {
             // Windows version download URL
-            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.0/FormatConverter-v1.1.0.zip'
+            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.1/CinematicDarken-v1.1.1.zip'
             
             if (downloadUrl) {
                 // 记录下载统计
                 if (window.recordDownload) {
-                    window.recordDownload('FormatConverter', platform);
+                    window.recordDownload('CinematicDarken', platform);
                 }
                 
                 // 发送Google Analytics事件
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'download', {
                         'event_category': 'software_download',
-                        'event_label': 'FormatConverter',
+                        'event_label': 'CinematicDarken',
                         'custom_parameter_1': platform,
-                        'custom_parameter_2': 'FormatConverter'
+                        'custom_parameter_2': 'CinematicDarken'
                     });
                 }
                 

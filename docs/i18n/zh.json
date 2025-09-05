@@ -522,5 +522,21 @@
   "artificial": "人工",
   "natural": "自然",
   "organic": "有机",
-  "synthetic": "合成"
+  "synthetic": "合成",
+  "cinematic_darken": {
+    "title": "电影级调暗工具",
+    "select_video": "选择视频文件",
+    "output_path": "输出路径",
+    "brightness": "亮度",
+    "start_processing": "开始处理",
+    "processing": "处理中...",
+    "success": "视频处理成功！",
+    "error": "错误",
+    "file_not_found": "文件未找到",
+    "invalid_brightness": "无效的亮度值",
+    "processing_failed": "处理失败",
+    "select_output": "选择输出位置",
+    "supported_formats": "支持格式：MP4, AVI, MOV, MKV",
+    "brightness_tooltip": "调整视频亮度 (0.1-2.0, 1.0=原始)"
+  }
 }

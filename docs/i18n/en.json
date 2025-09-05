@@ -522,5 +522,21 @@
   "artificial": "Artificial",
   "natural": "Natural",
   "organic": "Organic",
-  "synthetic": "Synthetic"
+  "synthetic": "Synthetic",
+  "cinematic_darken": {
+    "title": "Cinematic Darken Tool",
+    "select_video": "Select Video File",
+    "output_path": "Output Path",
+    "brightness": "Brightness",
+    "start_processing": "Start Processing",
+    "processing": "Processing...",
+    "success": "Video processed successfully!",
+    "error": "Error",
+    "file_not_found": "File not found",
+    "invalid_brightness": "Invalid brightness value",
+    "processing_failed": "Processing failed",
+    "select_output": "Select Output Location",
+    "supported_formats": "Supported formats: MP4, AVI, MOV, MKV",
+    "brightness_tooltip": "Adjust video brightness (0.1-2.0, 1.0=original)"
+  }
 }
