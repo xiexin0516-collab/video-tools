@@ -164,37 +164,39 @@ window.TOOLS_CONFIG = {
         {
             id: 'background-music-generator',
             name: {
-                zh: '背景音乐生成',
+                zh: '背景音乐生成器',
                 en: 'Background Music Generator'
             },
             category: 'audio',
             icon: '🎼',
             description: {
-                zh: 'AI智能生成背景音乐，完美匹配视频内容',
-                en: 'AI-powered background music generation that perfectly matches video content'
+                zh: '专业的轻量级背景音乐生成器，专为YouTube短视频和内容创作者设计',
+                en: 'Professional lightweight background music generator designed for YouTube short videos and content creators'
             },
-            version: 'v1.0.0',
-            downloadUrl: '#',
+            version: 'v1.1.3',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.3/BackgroundMusic-v1.1.3.zip',
             features: {
                 zh: [
-                    'AI智能生成',
-                    '风格匹配',
-                    '时长调节',
-                    '版权免费'
+                    '4种音乐风格',
+                    '高级旋律引擎',
+                    '管弦级编曲',
+                    '多语言界面',
+                    '自定义参数'
                 ],
                 en: [
-                    'AI-powered generation',
-                    'Style matching',
-                    'Duration adjustment',
-                    'Copyright free'
+                    '4 Music Styles',
+                    'Advanced Melody Engine',
+                    'Orchestral Arrangement',
+                    'Multi-language UI',
+                    'Customizable Parameters'
                 ]
             },
             systemRequirements: {
                 zh: 'Windows 10/11 (64位)',
                 en: 'Windows 10/11 (64-bit)'
             },
-            fileSize: '45MB',
-            status: 'coming-soon'
+            fileSize: '25MB',
+            status: 'stable'
         },
         {
             id: 'cinematic-photo-fx',
