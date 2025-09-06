@@ -1,3 +1,8 @@
+，怎么
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -578,13 +583,13 @@
                  
                  <!-- 工具数量 -->
                  <div class="stats-card rounded-lg p-4 text-center">
-                     <div class="text-2xl font-bold stats-number mb-1" id="toolsCount">2</div>
+                     <div class="text-2xl font-bold stats-number mb-1" id="toolsCount">3</div>
                      <div class="stats-label" data-i18n="stats.tools">Tools</div>
                  </div>
                  
                  <!-- 最后更新 -->
                  <div class="stats-card rounded-lg p-4 text-center">
-                     <div class="text-2xl font-bold stats-number mb-1" id="lastUpdated">2025-09-03</div>
+                     <div class="text-2xl font-bold stats-number mb-1" id="lastUpdated">2025-01-27</div>
                      <div class="text-gray-400 text-sm" data-i18n="stats.updated">Updated</div>
                  </div>
             </div>
@@ -652,8 +657,16 @@
                     <div class="bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-semibold text-white mb-2">🎬 Cinematic Darken Tool</h4>
                         <p class="text-gray-300 text-sm mb-3" data-i18n="modal.cinematic_darken_desc">专业的电影级视频调暗工具 - Windows 10/11 (64-bit)</p>
-                        <button onclick="downloadDesktop('windows')" class="btn-primary w-full py-2 rounded-lg text-white">
+                        <button onclick="downloadDesktop('windows', 'CinematicDarken')" class="btn-primary w-full py-2 rounded-lg text-white">
                             📥 Download Cinematic Darken Tool (v1.1.1)
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">🎵 Background Music Generator</h4>
+                        <p class="text-gray-300 text-sm mb-3">专业的背景音乐生成器 - Windows 10/11 (64-bit)</p>
+                        <button onclick="downloadDesktop('windows', 'BackgroundMusic')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 Download Background Music Generator (v1.1.3)
                         </button>
                     </div>
                 </div>
@@ -754,23 +767,28 @@
         }
 
         // Download desktop version
-        window.downloadDesktop = function(platform) {
-            // Windows version download URL
-            const downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.1/CinematicDarken-v1.1.1.zip'
+        window.downloadDesktop = function(platform, toolName = 'CinematicDarken') {
+            let downloadUrl = '';
+            
+            if (toolName === 'CinematicDarken') {
+                downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.1/CinematicDarken-v1.1.1.zip';
+            } else if (toolName === 'BackgroundMusic') {
+                downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.3/BackgroundMusic-v1.1.3.zip';
+            }
             
             if (downloadUrl) {
                 // 记录下载统计
                 if (window.recordDownload) {
-                    window.recordDownload('CinematicDarken', platform);
+                    window.recordDownload(toolName, platform);
                 }
                 
                 // 发送Google Analytics事件
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'download', {
                         'event_category': 'software_download',
-                        'event_label': 'CinematicDarken',
+                        'event_label': toolName,
                         'custom_parameter_1': platform,
-                        'custom_parameter_2': 'CinematicDarken'
+                        'custom_parameter_2': toolName
                     });
                 }
                 
