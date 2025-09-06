@@ -1,0 +1,46 @@
+🎬 Cinematic Photo FX - User Guide
+
+📋 Quick Start:
+1. Double-click CinematicPhotoFX.exe to launch
+2. Select language (中文/English)
+3. Select image files to process (multi-select supported)
+4. Choose effect combinations (recommended presets available)
+5. Configure video parameters (image duration, fade effects, etc.)
+6. Set output filename
+7. Start video generation
+
+🎨 Recommended Effect Combinations:
+- Historical style: 10,13,14 (Sepia + Grain + Scratches)
+- Scientific style: 2,11,12 (Zoom Out + Cold Blue + B&W)
+- Mystery style: 1,7,10 (Zoom In + Rotate + Sepia)
+- Psychological style: 3,8,10 (Pan Right + Flip + Sepia)
+- Exploration style: 1,5,6 (Zoom In + Pan Up + Pan Down)
+- High Energy style: 1,7 (Zoom In + Rotate)
+
+📁 Supported Formats:
+- Input: PNG, JPG, JPEG, BMP, TIFF
+- Output: MP4 (H.264 encoding)
+
+⚙️ System Requirements:
+- Windows 10/11 (64-bit)
+- Recommended RAM: 8GB+
+- Recommended Storage: 1GB+ free space
+
+💡 Usage Tips:
+- Recommend processing no more than 50 images at once
+- Single image resolution no more than 4K
+- Image selection order determines video sequence
+- Combine multiple effects for better results
+
+❓ FAQ:
+Q: Program won't start?
+A: Ensure system is Windows 10/11 64-bit and check for antivirus blocking
+
+Q: Slow processing speed?
+A: Recommend reducing image count or lowering image resolution
+
+Q: Video quality?
+A: Output is high-quality 1920x1080 resolution, 24fps, H.264 encoded video
+
+📞 Technical Support:
+For issues, contact: weswestonshow@gmail.com
