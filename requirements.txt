@@ -1,3 +1,22 @@
-PyQt5==5.15.9
+# Video Tools Platform - All Dependencies
+# ======================================
+
+# Core build tools
 pyinstaller==5.13.2
+
+# GUI frameworks
+PyQt5==5.15.9
+
+# Video processing
+moviepy==1.0.3
 ffmpeg-python==0.2.0
+
+# Image processing
+Pillow==10.0.1
+numpy==1.24.3
+
+# Data handling
+json5==0.9.14
+
+# Note: tkinter is included with Python standard library
+# Note: All tools support both Chinese and English languages

@@ -197,39 +197,43 @@ window.TOOLS_CONFIG = {
             status: 'coming-soon'
         },
         {
-            id: 'video-effects',
+            id: 'cinematic-photo-fx',
             name: {
-                zh: '视频特效',
-                en: 'Video Effects'
+                zh: '电影级图片特效',
+                en: 'Cinematic Photo FX'
             },
-            category: 'video',
-            icon: '✨',
+            category: 'image',
+            icon: '🎬',
             description: {
-                zh: '丰富的视频特效库，让您的视频更加精彩',
-                en: 'Rich video effects library to make your videos more exciting'
+                zh: '专业的电影级图片特效工具，将静态图片转换为动态视频，支持多种电影级特效',
+                en: 'Professional cinematic photo effects tool that converts static images to dynamic videos with multiple cinematic effects'
             },
-            version: 'v1.0.0',
-            downloadUrl: '#',
+            version: 'v1.1.2',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.2/CinematicPhotoFX-v1.1.2.zip',
             features: {
                 zh: [
-                    '特效库',
-                    '实时预览',
-                    '参数调节',
-                    '批量应用'
+                    '14种电影级特效',
+                    '推拉镜头效果',
+                    '移动旋转效果',
+                    '滤镜特效',
+                    '淡入淡出过渡',
+                    '批量处理'
                 ],
                 en: [
-                    'Effects library',
-                    'Real-time preview',
-                    'Parameter adjustment',
-                    'Batch application'
+                    '14 cinematic effects',
+                    'Zoom in/out effects',
+                    'Pan and rotation effects',
+                    'Filter effects',
+                    'Fade transitions',
+                    'Batch processing'
                 ]
             },
             systemRequirements: {
                 zh: 'Windows 10/11 (64位)',
                 en: 'Windows 10/11 (64-bit)'
             },
-            fileSize: '50MB',
-            status: 'coming-soon'
+            fileSize: '35MB',
+            status: 'stable'
         },
         {
             id: 'format-converter',

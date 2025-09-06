@@ -151,6 +151,14 @@ window.I18N = {
             'download.windows_btn': '📥 下载 Windows 版 (v1.0.0)',
             'download.no_registration': '💡 无需注册，下载即可使用',
             'download.link_not_ready': '下载链接暂未准备好，请稍后再试',
+            
+            // 语言
+            'language.chinese': '中文',
+            'language.english': 'English',
+            
+            // 模态框
+            'modal.cinematic_darken_desc': '专业的电影级视频调暗工具 - Windows 10/11 (64-bit)',
+            'modal.download_tip': '💡 无需注册，下载即用 - 智能调节视频亮度，改善画面质量',
         
         // Stats section
         'stats.downloads': '下载次数',
@@ -292,6 +300,14 @@ window.I18N = {
             'download.windows_btn': '📥 Download Windows (v1.0.0)',
             'download.no_registration': '💡 No registration required, download and use immediately',
             'download.link_not_ready': 'Download link not ready yet, please try again later',
+            
+            // Language
+            'language.chinese': '中文',
+            'language.english': 'English',
+            
+            // Modal
+            'modal.cinematic_darken_desc': 'Professional cinematic video darkening tool - Windows 10/11 (64-bit)',
+            'modal.download_tip': '💡 No registration required, download and use - Smart video brightness adjustment, improve picture quality',
         
         // Stats section
         'stats.downloads': 'Downloads',
