@@ -18,7 +18,6 @@ pyinstaller --onefile ^
     --distpath "releases\MP3SubtitleExtractor-v1.0.0" ^
     --workpath "build" ^
     --specpath "build" ^
-    --add-data "docs/i18n;i18n" ^
     --hidden-import "tkinter" ^
     --hidden-import "tkinter.ttk" ^
     --hidden-import "tkinter.filedialog" ^
