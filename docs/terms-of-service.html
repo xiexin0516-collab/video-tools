@@ -1,143 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="pages.terms.title">服务条款 - Video Tools Platform</title>
-    <script src="js/i18n.js"></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            color: #333;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin-bottom: 25px;
-        }
-        .section h2 {
-            color: #007bff;
-            border-left: 4px solid #007bff;
-            padding-left: 15px;
-        }
-        .contact-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #28a745;
-        }
-        .lang-btn {
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.375rem;
-            border: 1px solid #404040;
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-            color: #9ca3af;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
-            margin-left: 0.5rem;
-        }
-        .lang-btn:hover {
-            border-color: #3b82f6;
-            color: white;
-        }
-        .lang-btn.active {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            border-color: #3b82f6;
-            color: white;
-        }
-        .back-link {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .back-link a {
-            color: #007bff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        .back-link a:hover {
-            background: #007bff;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - Video Tools Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #222;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div style="text-align: right; margin-bottom: 20px;">
-            <button onclick="switchLanguage('zh')" class="lang-btn" data-lang="zh" data-i18n="language.chinese">中文</button>
-            <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en" data-i18n="language.english">English</button>
-        </div>
-        <h1 data-i18n="terms.title">服务条款</h1>
-        <p data-i18n="terms.last_updated">最后更新：2025年1月</p>
-    </div>
+  <h1>Terms of Service</h1>
+  <p><strong>Last updated:</strong> January 2025</p>
 
-    <div class="section">
-        <h2 data-i18n="terms.welcome">欢迎使用 vidtools.tools</h2>
-        <p data-i18n="terms.welcome_desc">使用我们的网站和工具，即表示您同意以下条款：</p>
-    </div>
+  <p>
+    These Terms of Service ("Terms") govern your use of the Video Tools Platform website and software ("Services"). 
+    By accessing or using our Services, you agree to be bound by these Terms.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.service_use">服务使用</h2>
-        <p data-i18n="terms.service_use_desc1">我们的工具仅供个人和非商业用途使用，除非另有说明。</p>
-        <p data-i18n="terms.service_use_desc2">您同意不会滥用我们的服务，例如尝试黑客攻击、逆向工程或过载我们的网站。</p>
-    </div>
+  <h2>Use of Services</h2>
+  <ul>
+    <li>You may use our tools for personal or commercial video processing purposes.</li>
+    <li>You agree not to misuse the Services, attempt unauthorized access, or disrupt normal operation.</li>
+    <li>All downloads provided are at your own risk; we disclaim liability for data loss or damages.</li>
+  </ul>
 
-    <div class="section">
-        <h2 data-i18n="terms.intellectual_property">知识产权</h2>
-        <p data-i18n="terms.intellectual_property_desc1">本网站提供的所有内容、品牌和原创软件仍然是 vidtools.tools 的财产。</p>
-        <p data-i18n="terms.intellectual_property_desc2">未经许可，您不得复制、分发或转售我们的工具。</p>
-    </div>
+  <h2>Intellectual Property</h2>
+  <p>
+    The software and website content are protected by copyright and open-source licenses (where applicable). 
+    You may not copy, distribute, or modify the content except as permitted under the relevant license.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.disclaimer">免责声明</h2>
-        <p data-i18n="terms.disclaimer_desc1">我们的服务按"原样"提供，不提供任何形式的保证。</p>
-        <p data-i18n="terms.disclaimer_desc2">我们不保证服务不间断、无错误运行或与所有系统兼容。</p>
-    </div>
+  <h2>Disclaimer of Warranties</h2>
+  <p>
+    The Services are provided on an "as is" basis without warranties of any kind, whether express or implied. 
+    We do not guarantee that the Services will be uninterrupted or error-free.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.liability">责任限制</h2>
-        <p data-i18n="terms.liability_desc1">vidtools.tools 不对使用我们的工具而产生的任何数据丢失、损坏或问题负责。</p>
-        <p data-i18n="terms.liability_desc2">我们的工具完全在本地运行，不会向服务器发送任何数据。用户有责任备份他们的文件。</p>
-    </div>
+  <h2>Limitation of Liability</h2>
+  <p>
+    To the fullest extent permitted by law, Video Tools Platform shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Services.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.third_party">第三方服务</h2>
-        <p data-i18n="terms.third_party_desc">我们可能显示第三方广告（如 Google AdSense）。我们不对这些广告的内容负责。</p>
-    </div>
+  <h2>Third-Party Services</h2>
+  <p>
+    Our Services may integrate with third-party tools (e.g., Google AdSense, Google Analytics). 
+    These third-party services are governed by their own terms and policies.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.terms_changes">条款变更</h2>
-        <p data-i18n="terms.terms_changes_desc">我们可能会不时更新这些服务条款。继续使用我们的服务意味着您接受任何变更。</p>
-    </div>
+  <h2>Changes to Terms</h2>
+  <p>
+    We may update these Terms from time to time. Any changes will be effective upon posting to this page.
+  </p>
 
-    <div class="section">
-        <h2 data-i18n="terms.contact_us">联系我们</h2>
-        <div class="contact-info">
-            <p data-i18n="terms.contact_desc">如果您对这些条款有任何疑问，请联系：</p>
-            <p><strong data-i18n="terms.email">邮箱：</strong> <a href="mailto:weswestonshow@gmail.com">weswestonshow@gmail.com</a></p>
-        </div>
-    </div>
+  <h2>Governing Law</h2>
+  <p>
+    These Terms shall be governed by the laws of the United States, without regard to conflict of law principles.
+  </p>
 
-    <div class="back-link">
-        <a href="index.html" data-i18n="terms.back_home">← Back to Home</a>
-    </div>
-    <script>
-        // Initialize language on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('lang') || 'en';
-            switchLanguage(savedLang);
-        });
-    </script>
+  <h2>Contact Us</h2>
+  <p>
+    If you have any questions about these Terms, please contact us at:
+    <a href="mailto:weswestonshow@gmail.com">weswestonshow@gmail.com</a>
+  </p>
 </body>
 </html>
