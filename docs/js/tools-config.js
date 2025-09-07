@@ -92,39 +92,43 @@ window.TOOLS_CONFIG = {
             status: 'stable' // stable, beta, alpha
         },
         {
-            id: 'audio-extractor',
+            id: 'mp3-subtitle-extractor',
             name: {
-                zh: '音频提取器',
-                en: 'Audio Extractor'
+                zh: 'MP3字幕提取器',
+                en: 'MP3 Subtitle Extractor'
             },
             category: 'audio',
             icon: '🎵',
             description: {
-                zh: '从视频中提取高质量音频，支持多种格式转换',
-                en: 'Extract high-quality audio from videos with multi-format conversion support'
+                zh: '专业的MP3音频转字幕工具，使用Whisper AI进行语音识别，支持自动翻译为中文',
+                en: 'Professional MP3 audio to subtitle tool, uses Whisper AI for speech recognition with automatic Chinese translation'
             },
-            version: 'v1.0.0',
-            downloadUrl: '#',
+            version: 'v1.1.4',
+            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.4/MP3SubtitleExtractor-v1.1.4.zip',
             features: {
                 zh: [
-                    '多格式支持',
-                    '高质量提取',
-                    '批量处理',
-                    '格式转换'
+                    'Whisper AI语音识别',
+                    '自动中文翻译',
+                    '图形界面操作',
+                    '中英文界面切换',
+                    '批量处理支持',
+                    '双语字幕输出'
                 ],
                 en: [
-                    'Multi-format support',
-                    'High-quality extraction',
-                    'Batch processing',
-                    'Format conversion'
+                    'Whisper AI speech recognition',
+                    'Automatic Chinese translation',
+                    'Graphical interface',
+                    'Chinese/English UI switching',
+                    'Batch processing support',
+                    'Bilingual subtitle output'
                 ]
             },
             systemRequirements: {
                 zh: 'Windows 10/11 (64位)',
                 en: 'Windows 10/11 (64-bit)'
             },
-            fileSize: '25MB',
-            status: 'coming-soon'
+            fileSize: '456MB',
+            status: 'stable'
         },
         {
             id: 'cinematic-darken',
@@ -272,45 +276,6 @@ window.TOOLS_CONFIG = {
                 en: 'Windows 10/11 (64-bit)'
             },
             fileSize: '25MB',
-            status: 'stable'
-        },
-        {
-            id: 'mp3-subtitle-extractor',
-            name: {
-                zh: 'MP3字幕提取器',
-                en: 'MP3 Subtitle Extractor'
-            },
-            category: 'audio',
-            icon: '🎵',
-            description: {
-                zh: '专业的MP3音频转字幕工具，使用Whisper AI进行语音识别，支持自动翻译为中文',
-                en: 'Professional MP3 audio to subtitle tool, uses Whisper AI for speech recognition with automatic Chinese translation'
-            },
-            version: 'v1.1.4',
-            downloadUrl: 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.4/MP3SubtitleExtractor-v1.1.4.zip',
-            features: {
-                zh: [
-                    'Whisper AI语音识别',
-                    '自动中文翻译',
-                    '图形界面操作',
-                    '中英文界面切换',
-                    '批量处理支持',
-                    '双语字幕输出'
-                ],
-                en: [
-                    'Whisper AI speech recognition',
-                    'Automatic Chinese translation',
-                    'Graphical interface',
-                    'Chinese/English UI switching',
-                    'Batch processing support',
-                    'Bilingual subtitle output'
-                ]
-            },
-            systemRequirements: {
-                zh: 'Windows 10/11 (64位)',
-                en: 'Windows 10/11 (64-bit)'
-            },
-            fileSize: '456MB',
             status: 'stable'
         }
     ]
