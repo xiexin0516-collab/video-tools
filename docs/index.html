@@ -745,7 +745,7 @@
     <!-- Download Modal -->
     <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full">
+            <div class="bg-gray-800 rounded-xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-white" data-i18n="modal.download_title">📥 Download Desktop Version</h3>
                     <button onclick="closeDownloadModal()" class="text-gray-400 hover:text-white">
@@ -755,30 +755,8 @@
                     </button>
                 </div>
                 
-                <div class="space-y-4">
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🎬 Cinematic Darken Tool</h4>
-                        <p class="text-gray-300 text-sm mb-3" data-i18n="modal.cinematic_darken_desc">专业的电影级视频调暗工具 - Windows 10/11 (64-bit)</p>
-                        <button onclick="downloadDesktop('windows', 'CinematicDarken')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 Download Cinematic Darken Tool (v1.1.1)
-                        </button>
-                    </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🎵 Background Music Generator</h4>
-                        <p class="text-gray-300 text-sm mb-3" data-i18n="modal.bgm_desc">专业的背景音乐生成器 - Windows 10/11 (64-bit)</p>
-                        <button onclick="downloadDesktop('windows', 'BackgroundMusic')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 Download Background Music Generator (v1.1.3)
-                        </button>
-                    </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2">🎵 MP3 Subtitle Extractor</h4>
-                        <p class="text-gray-300 text-sm mb-3" data-i18n="modal.mp3_desc">专业的MP3音频转字幕工具 - Windows 10/11 (64-bit)</p>
-                        <button onclick="downloadDesktop('windows', 'MP3SubtitleExtractor')" class="btn-primary w-full py-2 rounded-lg text-white">
-                            📥 Download MP3 Subtitle Extractor (v1.1.4)
-                        </button>
-                    </div>
+                <div id="download-tools-container" class="space-y-4">
+                    <!-- 工具列表将动态生成 -->
                 </div>
                 
                 <div class="mt-6 text-center">
@@ -849,12 +827,41 @@
     <script type="module">
         // Show download modal
         window.showDownloadModal = function() {
+            generateDownloadTools();
             document.getElementById('downloadModal').classList.remove('hidden')
         }
 
         // Close download modal
         window.closeDownloadModal = function() {
             document.getElementById('downloadModal').classList.add('hidden')
+        }
+
+        // Generate download tools list dynamically
+        function generateDownloadTools() {
+            const container = document.getElementById('download-tools-container');
+            if (!container || !window.toolsManager) return;
+            
+            const stableTools = window.toolsManager.getStableTools();
+            const currentLang = window.I18N ? window.I18N.currentLang : 'zh';
+            
+            let html = '';
+            stableTools.forEach(tool => {
+                const toolName = typeof tool.name === 'object' ? tool.name[currentLang] || tool.name : tool.name;
+                const toolDescription = typeof tool.description === 'object' ? tool.description[currentLang] || tool.description : tool.description;
+                const toolRequirements = typeof tool.systemRequirements === 'object' ? tool.systemRequirements[currentLang] || tool.systemRequirements : tool.systemRequirements;
+                
+                html += `
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">${tool.icon} ${toolName}</h4>
+                        <p class="text-gray-300 text-sm mb-3">${toolDescription} - ${toolRequirements}</p>
+                        <button onclick="downloadTool('${tool.id}')" class="btn-primary w-full py-2 rounded-lg text-white">
+                            📥 Download ${toolName} (${tool.version})
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
         }
 
         // Show features modal
@@ -867,39 +874,32 @@
             document.getElementById('featuresModal').classList.add('hidden')
         }
 
-        // Download desktop version
-        window.downloadDesktop = function(platform, toolName = 'CinematicDarken') {
-            let downloadUrl = '';
-            
-            if (toolName === 'CinematicDarken') {
-                downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.1/CinematicDarken-v1.1.1.zip';
-            } else if (toolName === 'BackgroundMusic') {
-                downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.3/BackgroundMusic-v1.1.3.zip';
-            } else if (toolName === 'MP3SubtitleExtractor') {
-                downloadUrl = 'https://github.com/xiexin0516-collab/video-tools/releases/download/v1.1.4/MP3SubtitleExtractor-v1.1.4.zip';
+        // Download tool by ID
+        window.downloadTool = function(toolId) {
+            const tool = window.toolsManager.getToolById(toolId);
+            if (!tool || !tool.downloadUrl || tool.downloadUrl === '#') {
+                const t = (k) => window.I18N ? window.I18N.t(k) : k;
+                alert(t('download.link_not_ready'));
+                return;
             }
             
-            if (downloadUrl) {
-                // 记录下载统计
-                if (window.recordDownload) {
-                    window.recordDownload(toolName, platform);
-                }
-                
-                // 发送Google Analytics事件
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'download', {
-                        'event_category': 'software_download',
-                        'event_label': toolName,
-                        'custom_parameter_1': platform,
-                        'custom_parameter_2': toolName
-                    });
-                }
-                
-                window.open(downloadUrl, '_blank')
-                closeDownloadModal()
-            } else {
-                alert(window.I18N.t('download.link_not_ready'))
+            // 记录下载统计
+            if (window.recordDownload) {
+                window.recordDownload(toolId, 'windows');
             }
+            
+            // 发送Google Analytics事件
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'download', {
+                    'event_category': 'software_download',
+                    'event_label': toolId,
+                    'custom_parameter_1': 'windows',
+                    'custom_parameter_2': toolId
+                });
+            }
+            
+            window.open(tool.downloadUrl, '_blank');
+            closeDownloadModal();
         }
 
         // Click modal background to close
