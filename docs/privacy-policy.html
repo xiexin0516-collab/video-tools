@@ -34,6 +34,26 @@
             border-radius: 8px;
             border-left: 4px solid #28a745;
         }
+        .lang-btn {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid #404040;
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+        .lang-btn:hover {
+            border-color: #3b82f6;
+            color: white;
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-color: #3b82f6;
+            color: white;
+        }
         .back-link {
             text-align: center;
             margin-top: 30px;
@@ -54,46 +74,50 @@
 </head>
 <body>
     <div class="header">
-        <h1>隐私政策</h1>
-        <p>最后更新：2025年1月</p>
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button onclick="switchLanguage('zh')" class="lang-btn" data-lang="zh" data-i18n="language.chinese">中文</button>
+            <button onclick="switchLanguage('en')" class="lang-btn active" data-lang="en" data-i18n="language.english">English</button>
+        </div>
+        <h1 data-i18n="privacy.title">隐私政策</h1>
+        <p data-i18n="privacy.last_updated">最后更新：2025年1月</p>
     </div>
 
     <div class="section">
-        <h2>欢迎使用 vidtools.tools</h2>
-        <p>我们尊重您的隐私，并致力于保护您的个人信息安全。</p>
+        <h2 data-i18n="privacy.welcome">欢迎使用 vidtools.tools</h2>
+        <p data-i18n="privacy.welcome_desc">我们尊重您的隐私，并致力于保护您的个人信息安全。</p>
     </div>
 
     <div class="section">
-        <h2>我们收集的信息</h2>
-        <p>我们不会收集用户的个人身份信息。我们的工具只能下载到本地使用，完全在您的计算机上运行，不会向我们的服务器发送任何数据，我们也不会跟踪您在此网站之外的活动。</p>
+        <h2 data-i18n="privacy.info_collection">我们收集的信息</h2>
+        <p data-i18n="privacy.info_collection_desc">我们不会收集用户的个人身份信息。我们的工具只能下载到本地使用，完全在您的计算机上运行，不会向我们的服务器发送任何数据，我们也不会跟踪您在此网站之外的活动。</p>
     </div>
 
     <div class="section">
-        <h2>Cookie 和第三方服务</h2>
-        <p>本网站可能使用 Google AdSense 和 Google Analytics，这些服务可能会在您的设备上放置 cookie 以显示个性化广告。</p>
-        <p>您可以通过访问 <a href="https://adssettings.google.com" target="_blank">Google 广告设置</a> 选择退出个性化广告。</p>
+        <h2 data-i18n="privacy.cookies">Cookie 和第三方服务</h2>
+        <p data-i18n="privacy.cookies_desc1">本网站可能使用 Google AdSense 和 Google Analytics，这些服务可能会在您的设备上放置 cookie 以显示个性化广告。</p>
+        <p><span data-i18n="privacy.cookies_desc2">您可以通过访问</span> <a href="https://adssettings.google.com" target="_blank" data-i18n="privacy.google_ads">Google 广告设置</a> <span data-i18n="privacy.cookies_desc3">选择退出个性化广告。</span></p>
     </div>
 
     <div class="section">
-        <h2>数据安全</h2>
-        <p>我们不存储个人数据。我们的工具完全在本地运行，所有文件处理都在您的计算机上进行，不会上传到任何服务器。您的数据完全由您控制。</p>
+        <h2 data-i18n="privacy.data_security">数据安全</h2>
+        <p data-i18n="privacy.data_security_desc">我们不存储个人数据。我们的工具完全在本地运行，所有文件处理都在您的计算机上进行，不会上传到任何服务器。您的数据完全由您控制。</p>
     </div>
 
     <div class="section">
-        <h2>儿童隐私</h2>
-        <p>我们的服务不针对13岁以下的儿童。</p>
+        <h2 data-i18n="privacy.children_privacy">儿童隐私</h2>
+        <p data-i18n="privacy.children_privacy_desc">我们的服务不针对13岁以下的儿童。</p>
     </div>
 
     <div class="section">
-        <h2>联系我们</h2>
+        <h2 data-i18n="privacy.contact_us">联系我们</h2>
         <div class="contact-info">
-            <p>如果您对本隐私政策有任何疑问，请联系我们：</p>
-            <p><strong>邮箱：</strong> <a href="mailto:weswestonshow@gmail.com">weswestonshow@gmail.com</a></p>
+            <p data-i18n="privacy.contact_desc">如果您对本隐私政策有任何疑问，请联系我们：</p>
+            <p><strong data-i18n="privacy.email">邮箱：</strong> <a href="mailto:weswestonshow@gmail.com">weswestonshow@gmail.com</a></p>
         </div>
     </div>
 
     <div class="back-link">
-        <a href="index.html" data-i18n="pages.privacy.back_home">← Back to Home</a>
+        <a href="index.html" data-i18n="privacy.back_home">← Back to Home</a>
     </div>
     <script>
         // Initialize language on page load
