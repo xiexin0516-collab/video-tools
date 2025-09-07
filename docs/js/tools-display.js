@@ -9,6 +9,7 @@ class ToolsDisplay {
     init() {
         this.renderCategories();
         this.renderTools();
+        this.updateToolsCount();
         this.bindEvents();
     }
     
@@ -200,6 +201,15 @@ class ToolsDisplay {
     searchTools(keyword) {
         this.searchKeyword = keyword;
         this.renderTools();
+    }
+    
+    // 更新工具数量统计
+    updateToolsCount() {
+        const toolsCountElement = document.getElementById('toolsCount');
+        if (toolsCountElement && window.toolsManager) {
+            const stableToolsCount = window.toolsManager.getStableTools().length;
+            toolsCountElement.textContent = stableToolsCount;
+        }
     }
 }
 
