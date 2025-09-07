@@ -18,5 +18,9 @@ numpy==1.24.3
 # Data handling
 json5==0.9.14
 
+# Audio processing and AI
+whisper-openai>=20231117
+argostranslate>=1.9.0
+
 # Note: tkinter is included with Python standard library
 # Note: All tools support both Chinese and English languages
