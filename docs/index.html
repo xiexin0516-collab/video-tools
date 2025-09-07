@@ -460,44 +460,24 @@
         <div class="mb-16">
             <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="features.core_features_title">🎯 Core Features Details</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                 <!-- 图像处理 -->
+                                 <!-- 电影级图片特效 -->
                  <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
                      <div class="flex items-center mb-4">
-                         <span class="text-3xl mr-3">🖼️</span>
-                         <h4 class="text-xl font-bold text-white" data-i18n="features.image_processing_title">Image Processing Tools</h4>
+                         <span class="text-3xl mr-3">🎬</span>
+                         <h4 class="text-xl font-bold text-white" data-i18n="features.cinematic_photo_fx_title">电影级图片特效</h4>
                      </div>
-                                           <div class="mb-4">
-                          <img src="picture/Snipaste_2025-09-03_20-59-45.jpeg" alt="Image Processing Demo" title="Image Processing Demo" class="w-full h-32 object-cover rounded-lg" style="max-height: 120px;">
-                      </div>
-                     <p class="text-gray-300 mb-4" data-i18n="features.image_processing_desc">Professional image processing solutions supporting multiple formats and batch operations</p>
+                     <p class="text-gray-300 mb-4" data-i18n="features.cinematic_photo_fx_desc">将静态图片转换为动态视频，支持多种电影级特效</p>
                      <ul class="text-gray-400 space-y-2 mb-6">
-                                                 <li>• <span data-i18n="features.smart_scaling_full">Smart image scaling - Keep clarity while adjusting size</span></li>
-                        <li>• <span data-i18n="features.format_conversion_full">Format conversion (JPG/PNG/WEBP) - Support mainstream formats</span></li>
-                        <li>• <span data-i18n="features.image_compression_full">Image compression optimization - Reduce file size while maintaining visual quality</span></li>
-                        <li>• <span data-i18n="features.batch_processing_full">Batch processing - Process multiple images at once, improving efficiency</span></li>
+                        <li>• <span data-i18n="features.cinematic_photo_fx_item1">14种电影级特效</span></li>
+                        <li>• <span data-i18n="features.cinematic_photo_fx_item2">推拉镜头效果</span></li>
+                        <li>• <span data-i18n="features.cinematic_photo_fx_item3">移动旋转效果</span></li>
+                        <li>• <span data-i18n="features.cinematic_photo_fx_item4">滤镜特效和淡入淡出过渡</span></li>
                      </ul>
                      <button onclick="showFeaturesModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
                          <span data-i18n="features.learn_more">Learn More</span>
                      </button>
                  </div>
 
-                <!-- 截图工具 -->
-                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                    <div class="flex items-center mb-4">
-                        <span class="text-3xl mr-3">📸</span>
-                        <h4 class="text-xl font-bold text-white" data-i18n="features.screenshot_tools_title">Screenshot Tools</h4>
-                    </div>
-                    <p class="text-gray-300 mb-4" data-i18n="features.screenshot_tools_desc">Powerful screenshot tools for various capture needs</p>
-                    <ul class="text-gray-400 space-y-2 mb-6">
-                        <li>• <span data-i18n="features.full_screenshot_full">Full-screen screenshot - One-click capture of entire screen</span></li>
-                        <li>• <span data-i18n="features.area_screenshot_full">Area screenshot - Freely select capture area</span></li>
-                        <li>• <span data-i18n="features.window_screenshot_full">Window screenshot - Precisely capture specified window</span></li>
-                        <li>• <span data-i18n="features.delayed_screenshot_full">Delayed screenshot - Set delay time, capture dynamic content</span></li>
-                    </ul>
-                    <button onclick="showFeaturesModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
-                        <span data-i18n="features.learn_more">Learn More</span>
-                    </button>
-                </div>
 
                 <!-- 视频处理 -->
                 <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
@@ -534,35 +514,125 @@
                         <span data-i18n="features.download_now">Download Now</span>
                     </button>
                 </div>
+
+                <!-- 安全说明 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">🛡️</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="pages.about.security_download_title">安全下载说明</h4>
+                    </div>
+                    <div class="bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-lg p-4 mb-4">
+                        <p class="text-yellow-200 text-sm mb-2"><strong data-i18n="pages.about.security_download_warning">⚠️ 重要提示：病毒误报说明</strong></p>
+                        <p class="text-gray-300 text-sm mb-3" data-i18n="pages.about.security_download_desc">我们的工具使用 PyInstaller 打包，可能被某些杀毒软件误报为病毒。这是正常现象，文件完全安全。</p>
+                        <ul class="text-gray-400 text-sm space-y-1">
+                            <li>• <span data-i18n="pages.about.security_download_item1">所有工具均为开源软件，代码透明可查</span></li>
+                            <li>• <span data-i18n="pages.about.security_download_item2">使用 Python + PyInstaller 技术栈，无恶意代码</span></li>
+                            <li>• <span data-i18n="pages.about.security_download_item3">如遇误报，请添加到白名单或选择"保留文件"</span></li>
+                            <li>• <span data-i18n="pages.about.security_download_item4">所有工具均经过严格测试，确保安全可靠</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4" data-i18n="pages.about.security_download_promise">我们承诺所有工具均为安全、合法的开源软件，不会对您的系统造成任何损害。</p>
+                    <div class="text-center">
+                        <a href="https://github.com/xiexin0516-collab/video-tools" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors text-sm" data-i18n="pages.about.security_download_source">
+                            查看源代码 → GitHub 仓库
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 使用教程区域 -->
         <div class="mb-16">
-            <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="tutorial.title">📚 User Guide</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
-                    <div class="text-4xl mb-4">🚀</div>
-                    <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.quick_start">Quick Start</h4>
-                    <p class="text-gray-400 mb-4" data-i18n="tutorial.quick_start_desc">Learn how to download and install our tools</p>
-                    <a href="about-us.html" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.view_details">View Details →</a>
+            <h3 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="pages.about.tutorial_guide_title">📚 实用教程指南</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 背景音乐生成器教程 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">🎵</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="pages.about.bgm_tutorial_title">背景音乐生成器使用教程</h4>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-2" data-i18n="pages.about.bgm_download_title">📥 下载与安装</h5>
+                            <ol class="text-gray-300 text-sm space-y-1 list-decimal list-inside">
+                                <li data-i18n="pages.about.bgm_download_step1">点击下载按钮获取 BackgroundMusic-v1.1.3.zip</li>
+                                <li data-i18n="pages.about.bgm_download_step2">如遇杀毒软件误报，选择"保留文件"或添加到白名单</li>
+                                <li data-i18n="pages.about.bgm_download_step3">解压到任意文件夹，双击 BackgroundMusic.exe 运行</li>
+                            </ol>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-2" data-i18n="pages.about.bgm_usage_title">🎼 实际使用步骤</h5>
+                            <ol class="text-gray-300 text-sm space-y-1 list-decimal list-inside">
+                                <li data-i18n="pages.about.bgm_usage_step1">选择音乐风格：神秘悬疑/平静舒缓/紧张氛围/希望向上</li>
+                                <li data-i18n="pages.about.bgm_usage_step2">设置时长：建议15-60秒，默认30秒</li>
+                                <li data-i18n="pages.about.bgm_usage_step3">点击"开始生成"，等待1-3分钟</li>
+                                <li data-i18n="pages.about.bgm_usage_step4">生成完成后，WAV文件保存在同目录下</li>
+                            </ol>
+                        </div>
+                        <div class="bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-lg p-3">
+                            <p class="text-yellow-200 text-sm" data-i18n="pages.about.bgm_usage_tip"><strong>💡 使用建议：</strong>适合短视频背景音乐，音质中等，如需专业级音质请使用专业软件。</p>
+                        </div>
+                    </div>
                 </div>
                 
-                                 <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
-                     <div class="text-4xl mb-4">💡</div>
-                     <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.demo">Feature Demo</h4>
-                     <p class="text-gray-400 mb-4" data-i18n="tutorial.demo_desc">Watch actual operation demos of various tools</p>
-                                           <div class="mb-4">
-                          <img src="picture/Snipaste_2025-09-03_21-24-28.jpeg" alt="Tool Demo Screenshot" title="Tool Demo Screenshot" class="w-full h-32 object-cover rounded-lg mx-auto" style="max-width: 200px;">
+                <!-- MP3字幕提取器教程 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">🎤</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="pages.about.mp3_tutorial_title">MP3字幕提取器使用教程</h4>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-2" data-i18n="pages.about.mp3_download_title">📥 下载与安装</h5>
+                            <ol class="text-gray-300 text-sm space-y-1 list-decimal list-inside">
+                                <li data-i18n="pages.about.mp3_download_step1">下载 MP3SubtitleExtractor-v1.1.4.zip (456MB)</li>
+                                <li data-i18n="pages.about.mp3_download_step2">首次运行需要下载AI模型，请保持网络连接</li>
+                                <li data-i18n="pages.about.mp3_download_step3">解压后双击 MP3SubtitleExtractor.exe 运行</li>
+                            </ol>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <h5 class="text-white font-semibold mb-2" data-i18n="pages.about.mp3_usage_title">🎯 实际使用步骤</h5>
+                            <ol class="text-gray-300 text-sm space-y-1 list-decimal list-inside">
+                                <li data-i18n="pages.about.mp3_usage_step1">选择MP3音频文件（支持常见音频格式）</li>
+                                <li data-i18n="pages.about.mp3_usage_step2">点击"开始提取"，AI会自动识别语音</li>
+                                <li data-i18n="pages.about.mp3_usage_step3">等待处理完成（时长取决于音频长度）</li>
+                                <li data-i18n="pages.about.mp3_usage_step4">获得双语字幕文件：英文原文+中文翻译</li>
+                            </ol>
+                        </div>
+                        <div class="bg-blue-900 bg-opacity-30 border border-blue-600 rounded-lg p-3">
+                            <p class="text-blue-200 text-sm" data-i18n="pages.about.mp3_usage_tip"><strong>⚡ 处理时间：</strong>1分钟音频约需30秒处理，首次使用需下载模型。</p>
+                        </div>
                       </div>
-                     <button onclick="showFeaturesModal()" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.start_demo">Start Demo →</button>
                  </div>
                 
-                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
-                    <div class="text-4xl mb-4">❓</div>
-                    <h4 class="text-lg font-bold text-white mb-3" data-i18n="tutorial.faq">FAQ</h4>
-                    <p class="text-gray-400 mb-4" data-i18n="tutorial.faq_desc">Answer common questions during use</p>
-                    <a href="contact.html" class="text-blue-400 hover:text-blue-300 transition-colors" data-i18n="tutorial.contact_us">Contact Us →</a>
+                <!-- 常见问题解答 -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <span class="text-3xl mr-3">❓</span>
+                        <h4 class="text-xl font-bold text-white" data-i18n="pages.about.faq_title">常见问题与解决方案</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div class="bg-gray-700 rounded-lg p-3">
+                                <h6 class="text-white font-semibold text-sm" data-i18n="pages.about.faq_virus_q">Q: 软件被误报病毒怎么办？</h6>
+                                <p class="text-gray-300 text-xs" data-i18n="pages.about.faq_virus_a">A: 这是PyInstaller打包的正常现象，选择"保留文件"或添加到白名单即可。</p>
+                            </div>
+                            <div class="bg-gray-700 rounded-lg p-3">
+                                <h6 class="text-white font-semibold text-sm" data-i18n="pages.about.faq_output_q">Q: 生成的文件在哪里？</h6>
+                                <p class="text-gray-300 text-xs" data-i18n="pages.about.faq_output_a">A: 输出文件保存在软件同目录下，文件名包含时间戳。</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-gray-700 rounded-lg p-3">
+                                <h6 class="text-white font-semibold text-sm" data-i18n="pages.about.faq_speed_q">Q: 为什么处理速度慢？</h6>
+                                <p class="text-gray-300 text-xs" data-i18n="pages.about.faq_speed_a">A: AI处理需要时间，建议关闭其他程序释放CPU资源。</p>
+                            </div>
+                            <div class="bg-gray-700 rounded-lg p-3">
+                                <h6 class="text-white font-semibold text-sm" data-i18n="pages.about.faq_format_q">Q: 支持哪些文件格式？</h6>
+                                <p class="text-gray-300 text-xs" data-i18n="pages.about.faq_format_a">A: 支持MP3、WAV、M4A等常见音频格式。</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -659,7 +729,7 @@
                     
                     <div class="bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-semibold text-white mb-2">🎵 Background Music Generator</h4>
-                        <p class="text-gray-300 text-sm mb-3">专业的背景音乐生成器 - Windows 10/11 (64-bit)</p>
+                        <p class="text-gray-300 text-sm mb-3" data-i18n="modal.bgm_desc">专业的背景音乐生成器 - Windows 10/11 (64-bit)</p>
                         <button onclick="downloadDesktop('windows', 'BackgroundMusic')" class="btn-primary w-full py-2 rounded-lg text-white">
                             📥 Download Background Music Generator (v1.1.3)
                         </button>
@@ -667,7 +737,7 @@
                     
                     <div class="bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-semibold text-white mb-2">🎵 MP3 Subtitle Extractor</h4>
-                        <p class="text-gray-300 text-sm mb-3">专业的MP3音频转字幕工具 - Windows 10/11 (64-bit)</p>
+                        <p class="text-gray-300 text-sm mb-3" data-i18n="modal.mp3_desc">专业的MP3音频转字幕工具 - Windows 10/11 (64-bit)</p>
                         <button onclick="downloadDesktop('windows', 'MP3SubtitleExtractor')" class="btn-primary w-full py-2 rounded-lg text-white">
                             📥 Download MP3 Subtitle Extractor (v1.1.4)
                         </button>
@@ -696,24 +766,15 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.image_processing">🖼️ Image Processing</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.cinematic_photo_fx_title">🎬 电影级图片特效</h4>
                         <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• <span data-i18n="features.smart_scaling">Smart image scaling</span></li>
-                            <li>• <span data-i18n="features.format_conversion">Format conversion (JPG/PNG/WEBP)</span></li>
-                            <li>• <span data-i18n="features.image_compression">Image compression optimization</span></li>
-                            <li>• <span data-i18n="features.batch_processing">Batch processing</span></li>
+                            <li>• <span data-i18n="features.cinematic_photo_fx_item1">14种电影级特效</span></li>
+                            <li>• <span data-i18n="features.cinematic_photo_fx_item2">推拉镜头效果</span></li>
+                            <li>• <span data-i18n="features.cinematic_photo_fx_item3">移动旋转效果</span></li>
+                            <li>• <span data-i18n="features.cinematic_photo_fx_item4">滤镜特效和淡入淡出过渡</span></li>
                         </ul>
                     </div>
                     
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.screenshot">📸 Screenshot Tools</h4>
-                        <ul class="text-gray-300 text-sm space-y-1">
-                            <li>• <span data-i18n="features.full_screenshot">Full-screen screenshot</span></li>
-                            <li>• <span data-i18n="features.area_screenshot">Area screenshot</span></li>
-                            <li>• <span data-i18n="features.window_screenshot">Window screenshot</span></li>
-                            <li>• <span data-i18n="features.delayed_screenshot">Delayed screenshot</span></li>
-                        </ul>
-                    </div>
                     
                     <div class="bg-gray-700 rounded-lg p-4">
                         <h4 class="text-lg font-semibold text-white mb-2" data-i18n="features.video_processing">🎬 Video Processing</h4>
