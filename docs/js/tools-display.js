@@ -207,8 +207,8 @@ class ToolsDisplay {
     updateToolsCount() {
         const toolsCountElement = document.getElementById('toolsCount');
         if (toolsCountElement && window.toolsManager) {
-            const stableToolsCount = window.toolsManager.getStableTools().length;
-            toolsCountElement.textContent = stableToolsCount;
+            const allToolsCount = window.toolsManager.getAllTools().length;
+            toolsCountElement.textContent = allToolsCount;
         }
     }
 }

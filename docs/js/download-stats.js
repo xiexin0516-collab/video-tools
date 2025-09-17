@@ -176,10 +176,10 @@ class DownloadStats {
     // 获取工具数量
     getToolsCount() {
         // 从工具配置中获取工具数量
-        if (window.toolsConfig && window.toolsConfig.tools) {
-            return window.toolsConfig.tools.length;
+        if (window.TOOLS_CONFIG && window.TOOLS_CONFIG.tools) {
+            return window.TOOLS_CONFIG.tools.length;
         }
-        return 5; // 默认值
+        return 6; // 默认值
     }
 
     // 格式化最后更新时间
